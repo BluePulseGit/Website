@@ -34,6 +34,13 @@
 /* Mouse users don't get the ring on click */
 :focus:not(:focus-visible) { outline: none; }
 
+/* ——— GLOBAL LINK RESET — the design uses color and border-bottom for
+   emphasis, never the browser's default underline. This catches any anchor
+   that forgot its own text-decoration:none (e.g. homepage film/shop cards).
+   Intentional underlines live on class selectors or inline styles, which
+   out-specify this rule, so they're unaffected. ——— */
+a { text-decoration: none; }
+
 /* Buttons and links get a subtle focus glow on dark backgrounds */
 .nav a:focus-visible,
 .nav button:focus-visible,
