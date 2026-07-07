@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Regenerate anytime: Admin Console → Export RSS. Update domain if needed. -->
+<rss version="2.0">
+<channel>
+  <title>Blue Pulse Studios — Newswire</title>
+  <link>https://bluepulsestudios.com/journal.html</link>
+  <description>Dispatches from the rooms. Production updates and field notes from Blue Pulse Studios.</description>
+  <language>en-us</language>
+  <item>
+    <title>Stay Home wraps principal photography. Now we cut.</title>
+    <link>https://bluepulsestudios.com/newswire-post.html?id=stay-home-wraps</link>
+    <guid isPermaLink="true">https://bluepulsestudios.com/newswire-post.html?id=stay-home-wraps</guid>
+    <pubDate>Sat, 18 Apr 2026 12:00:00 GMT</pubDate>
+    <description>Forty-three shooting days in the woods outside Pittsburgh, two reshoot weekends, one full-day standoff with a thunderstorm that we ended up using anyway.</description>
+  </item>
+  <item>
+    <title>The scene we cut from The Painting.</title>
+    <link>https://bluepulsestudios.com/newswire-post.html?id=painting-cut-scene</link>
+    <guid isPermaLink="true">https://bluepulsestudios.com/newswire-post.html?id=painting-cut-scene</guid>
+    <pubDate>Thu, 02 Apr 2026 12:00:00 GMT</pubDate>
+    <description>There was a four-minute scene where the painter walks the same hallway twice and the second time the door at the end is open. We loved it. It killed the entire third act.</description>
+  </item>
+  <item>
+    <title>Why we said no to the streaming deal.</title>
+    <link>https://bluepulsestudios.com/newswire-post.html?id=no-streaming-deal</link>
+    <guid isPermaLink="true">https://bluepulsestudios.com/newswire-post.html?id=no-streaming-deal</guid>
+    <pubDate>Tue, 24 Mar 2026 12:00:00 GMT</pubDate>
+    <description>Some thoughts on patience, on ownership, and on the math of a boutique studio that intends to stay one.</description>
+  </item>
+  <item>
+    <title>Drop 01 is live: The Ashen Man.</title>
+    <link>https://bluepulsestudios.com/newswire-post.html?id=drop-01-live</link>
+    <guid isPermaLink="true">https://bluepulsestudios.com/newswire-post.html?id=drop-01-live</guid>
+    <pubDate>Mon, 09 Mar 2026 12:00:00 GMT</pubDate>
+    <description>Five hundred numbered hoodies, two figurines, a board game, and a few quieter pieces. They go up tonight.</description>
+  </item>
+  <item>
+    <title>Red Winter, second printing — what changed.</title>
+    <link>https://bluepulsestudios.com/newswire-post.html?id=red-winter-second-printing</link>
+    <guid isPermaLink="true">https://bluepulsestudios.com/newswire-post.html?id=red-winter-second-printing</guid>
+    <pubDate>Sat, 21 Feb 2026 12:00:00 GMT</pubDate>
+    <description>First-edition errata, the rules clarification doc that grew into a small zine, and the four house rules we made official.</description>
+  </item>
+  <item>
+    <title>Why patient is in our manifesto.</title>
+    <link>https://bluepulsestudios.com/newswire-post.html?id=patient-manifesto</link>
+    <guid isPermaLink="true">https://bluepulsestudios.com/newswire-post.html?id=patient-manifesto</guid>
+    <pubDate>Tue, 03 Feb 2026 12:00:00 GMT</pubDate>
+    <description>Not slow, not lazy, not avoidant. Patient in the way a good interrogator is patient.</description>
+  </item>
+  <item>
+    <title>Sitges. We won. Here's the speech we didn't give.</title>
+    <link>https://bluepulsestudios.com/newswire-post.html?id=sitges-speech</link>
+    <guid isPermaLink="true">https://bluepulsestudios.com/newswire-post.html?id=sitges-speech</guid>
+    <pubDate>Wed, 14 Jan 2026 12:00:00 GMT</pubDate>
+    <description>The Painting took Best Short at Sitges and we were not in the room. Here's the speech that lived in the editing software.</description>
+  </item>
+</channel>
+</rss>

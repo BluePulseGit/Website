@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Introductions, press, partnerships. We can't accept unsolicited pitches — but we can absolutely meet the people behind them." />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="theme-color" content="#02040A" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Contact Blue Pulse Studios" />
+<meta property="og:description" content="Introductions, press, partnerships. We can't accept unsolicited pitches — but we can absolutely meet the people behind them." />
+<meta property="og:image" content="og-image.jpg" />
+<meta property="og:site_name" content="Blue Pulse Studios" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Contact Blue Pulse Studios" />
+<meta name="twitter:description" content="Introductions, press, partnerships. We can't accept unsolicited pitches — but we can absolutely meet the people behind them." />
+<meta name="twitter:image" content="og-image.jpg" />
+<title>Contact — Blue Pulse Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --abyss:  #02040A;
+    --ocean:  #060F1F;
+    --depth:  #0A1A35;
+    --tide:   #0F2A52;
+    --pulse:  #1D5FB8;
+    --glow:   #6BB4E8;
+    --foam:   #CFD9E4;
+    --stone:  #8B929C;
+    --hair:   #132341;
+    --display:'Fraunces', 'Times New Roman', serif;
+    --ui:     'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--abyss); color: var(--foam);
+    font-family: var(--ui);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+    opacity: 0.04; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 48px;
+    background: linear-gradient(to bottom, rgba(2,4,10,0.5), transparent);
+    font-size: 10.5px; letter-spacing: 0.28em; text-transform: uppercase;
+    transition: background .8s ease;
+  }
+  .nav .brand {
+    display: inline-flex; flex-direction: column; gap: 3px; line-height: 1;
+    color: var(--foam); text-decoration: none;
+  }
+  .nav .brand .line1 { font-weight: 600; letter-spacing: 0.32em; font-size: 11px; }
+  .nav .brand .line2 { font-weight: 500; letter-spacing: 0.42em; font-size: 9px; color: var(--stone); transition: color .6s; }
+  .nav .brand:hover .line2 { color: var(--foam); }
+  .nav .links a { color: var(--stone); text-decoration: none; margin-left: 34px; transition: color .6s; }
+  .nav .links a:hover, .nav .links a.on { color: var(--foam); }
+
+  /* ——— HERO ——— */
+  .hero {
+    position: relative; overflow: hidden;
+    padding: 180px 72px 100px;
+    min-height: 70vh;
+    display: flex; align-items: center;
+  }
+  .hero .bg {
+    position: absolute; inset: -4%;
+    background: url('assets/bubbles-v1.webp') center/cover no-repeat,
+                radial-gradient(ellipse at 70% 30%, #0A2448 0%, #020611 85%);
+    opacity: 0.7; filter: brightness(0.7); z-index: 0;
+  }
+  .hero .vig {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background:
+      linear-gradient(to right, rgba(2,4,10,0.5) 0%, transparent 50%, rgba(2,4,10,0.5) 100%),
+      linear-gradient(to bottom, rgba(2,4,10,0.5), transparent 30%, transparent 70%, var(--abyss));
+  }
+  .hero .content { position: relative; z-index: 2; max-width: 1200px; }
+  .hero .kicker {
+    font-size: 10.5px; letter-spacing: .5em; text-transform: uppercase;
+    color: var(--glow); font-weight: 500;
+    animation: fadeUp 1.6s ease .3s both;
+  }
+  .hero h1 {
+    margin-top: 28px;
+    font-family: var(--display); font-weight: 300;
+    font-size: clamp(56px, 9vw, 140px);
+    letter-spacing: -0.03em; line-height: 0.98;
+    color: var(--foam);
+    animation: fadeUp 2s ease .5s both;
+  }
+  .hero h1 em { font-style: italic; color: var(--glow); }
+  .hero .sub {
+    margin-top: 36px; max-width: 680px;
+    font-family: var(--display); font-style: italic; font-weight: 300;
+    font-size: clamp(18px, 1.6vw, 22px); line-height: 1.55; color: var(--stone);
+    animation: fadeUp 2s ease 1s both;
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+  .rule { height: 1px; background: var(--hair); margin: 0 72px; }
+
+  /* ——— CONTACT BODY ——— */
+  .body {
+    padding: 140px 72px;
+    background: var(--ocean);
+    position: relative;
+  }
+  .body::before {
+    content: ''; position: absolute; inset: 0;
+    background: url('assets/bubbles-v2.webp') center/cover no-repeat;
+    opacity: 0.08; mix-blend-mode: screen; pointer-events: none;
+  }
+  .split {
+    display: grid; grid-template-columns: 1.2fr 0.8fr;
+    gap: 80px;
+    position: relative; z-index: 2;
+    max-width: 1300px; margin: 0 auto;
+  }
+
+  /* FORM */
+  .form-col h2 {
+    font-family: var(--display); font-weight: 300;
+    font-size: clamp(32px, 3.6vw, 48px); letter-spacing: -0.02em;
+    line-height: 1.1; color: var(--foam); margin-bottom: 16px;
+  }
+  .form-col h2 em { font-style: italic; color: var(--glow); }
+  .form-col .blurb {
+    font-family: var(--display); font-style: italic; font-weight: 300;
+    font-size: 17px; line-height: 1.55; color: var(--stone);
+    max-width: 520px; margin-bottom: 56px;
+  }
+  form .row { margin-bottom: 36px; }
+  form label {
+    display: block; font-size: 10px; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--stone); font-weight: 500; margin-bottom: 12px;
+  }
+  form input, form select, form textarea {
+    width: 100%; font: inherit; color: var(--foam);
+    background: transparent; border: 0; border-bottom: 1px solid var(--hair);
+    padding: 14px 0 14px;
+    font-size: 16px; outline: none; font-family: var(--ui);
+    transition: border-color .5s;
+  }
+  form textarea { min-height: 140px; resize: vertical; line-height: 1.55; padding-top: 18px; }
+  form select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--stone) 50%), linear-gradient(135deg, var(--stone) 50%, transparent 50%); background-position: right 0.5em top 50%, right 0em top 50%; background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; cursor: pointer; }
+  form option { background: var(--abyss); color: var(--foam); }
+  form input::placeholder, form textarea::placeholder { color: var(--stone); opacity: .55; }
+  form input:focus, form select:focus, form textarea:focus { border-color: var(--glow); }
+  form .two { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  form .submit {
+    display: inline-flex; align-items: center; gap: 18px;
+    padding: 20px 40px; margin-top: 20px;
+    background: transparent; border: 1px solid var(--foam);
+    color: var(--foam); text-decoration: none; cursor: pointer;
+    font-size: 11px; letter-spacing: .45em; text-transform: uppercase; font-weight: 500;
+    font-family: var(--ui);
+    transition: background .5s, color .5s;
+  }
+  form .submit:hover { background: var(--foam); color: var(--abyss); }
+  form .fine {
+    margin-top: 24px;
+    font-family: var(--display); font-style: italic; font-size: 13px; color: var(--stone);
+  }
+  form .success {
+    margin-top: 24px; color: var(--glow); font-size: 13px; font-style: italic; font-family: var(--display);
+    opacity: 0; transition: opacity .6s;
+  }
+  form .success.on { opacity: 1; }
+
+  /* CONTACT CARDS */
+  .info-col { display: flex; flex-direction: column; gap: 16px; }
+  .info-card {
+    padding: 32px; border: 1px solid var(--hair);
+    background: rgba(10,26,53,0.3);
+    transition: border-color .6s, background .6s;
+  }
+  .info-card:hover { border-color: var(--pulse); background: rgba(29,95,184,0.08); }
+  .info-card .k {
+    font-size: 10px; letter-spacing: .5em; color: var(--glow); font-weight: 500; text-transform: uppercase;
+  }
+  .info-card .t { font-family: var(--display); font-weight: 400; font-size: 22px; color: var(--foam); margin-top: 12px; letter-spacing: -0.01em; }
+  .info-card .d { margin-top: 6px; font-family: var(--display); font-style: italic; font-size: 13px; color: var(--stone); line-height: 1.5; }
+  .info-card a {
+    display: inline-block; margin-top: 16px;
+    font-size: 13px; color: var(--foam); text-decoration: none;
+    border-bottom: 1px solid var(--hair); padding-bottom: 3px;
+    transition: border-color .5s, color .5s;
+    word-break: break-all;
+  }
+  .info-card a:hover { border-color: var(--glow); color: var(--glow); }
+
+  /* ——— OFFICES ——— */
+  .offices {
+    padding: 140px 72px;
+    background: var(--abyss);
+  }
+  .off-head { margin-bottom: 72px; display: flex; align-items: baseline; gap: 24px; }
+  .off-head .num { font-size: 10px; letter-spacing: .32em; color: var(--glow); font-weight: 600; text-transform: uppercase; }
+  .off-head .label { font-size: 10px; letter-spacing: .32em; color: var(--foam); font-weight: 500; text-transform: uppercase; }
+  .off-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; max-width: 1300px; margin: 0 auto; }
+  .office {
+    padding: 48px;
+    border: 1px solid var(--hair);
+    background: linear-gradient(140deg, var(--depth), var(--abyss));
+    position: relative; overflow: hidden;
+    min-height: 300px;
+  }
+  .office::after {
+    content: ''; position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    opacity: 0.18; mix-blend-mode: screen;
+  }
+  .office.la::after    { background-image: url('assets/bubbles-v2.webp'); }
+  .office.alt::after   { background-image: url('assets/bubbles-v3.webp'); }
+  .office > * { position: relative; z-index: 2; }
+  .office .k {
+    font-size: 10px; letter-spacing: .5em; color: var(--glow); font-weight: 500; text-transform: uppercase;
+  }
+  .office h3 {
+    font-family: var(--display); font-weight: 300;
+    font-size: clamp(36px, 4vw, 54px); letter-spacing: -0.02em;
+    color: var(--foam); margin-top: 14px; margin-bottom: 28px; line-height: 1;
+  }
+  .office .addr {
+    font-family: var(--display); font-style: italic; font-weight: 300;
+    font-size: 16px; line-height: 1.6; color: var(--stone);
+    margin-bottom: 20px;
+  }
+  .office .phone {
+    font-size: 11.5px; letter-spacing: .3em; text-transform: uppercase;
+    color: var(--foam); font-weight: 500;
+    display: inline-flex; gap: 14px; align-items: center;
+  }
+  .office .phone::before { content: ''; width: 20px; height: 1px; background: var(--glow); }
+
+  /* ——— FOOTER ——— */
+  footer {
+    padding: 96px 48px 56px;
+    background: var(--abyss);
+    color: var(--stone);
+    border-top: 1px solid var(--hair);
+  }
+  footer .top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 64px;
+    margin-bottom: 72px;
+  }
+  footer h4 {
+    font-size: 10px; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--foam); font-weight: 500; margin-bottom: 20px;
+  }
+  footer a { display: block; color: var(--stone); text-decoration: none; font-size: 13px; margin-bottom: 10px; transition: color .5s; }
+  footer a:hover { color: var(--foam); }
+  footer .brand-col .mark { color: var(--foam); font-size: 13px; letter-spacing: .3em; font-weight: 600; margin-bottom: 18px; }
+  footer .brand-col p { font-family: var(--display); font-style: italic; font-size: 14px; line-height: 1.55; max-width: 340px; }
+  footer .bottom {
+    display: flex; justify-content: space-between;
+    font-size: 10px; letter-spacing: .32em; text-transform: uppercase;
+    padding-top: 28px; border-top: 1px solid var(--hair);
+  }
+
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 1.4s cubic-bezier(.2,.7,.2,1), transform 1.4s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 1000px) {
+    .split { grid-template-columns: 1fr; gap: 56px; }
+  }
+  @media (max-width: 800px) {
+    .nav { padding: 18px 24px; }
+    .nav .links a { margin-left: 16px; }
+    .hero, .body, .offices, .rule { padding-left: 24px; padding-right: 24px; }
+    .rule { margin: 0 24px; }
+    .off-grid { grid-template-columns: 1fr; }
+    form .two { grid-template-columns: 1fr; gap: 36px; }
+    footer .top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  }
+</style>
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="page-transition entering" id="pageTransition" aria-hidden="true"></div>
+<nav class="nav">
+  <a class="brand" href="homepage.html">
+    <span class="line1">BLUE PULSE</span>
+    <span class="line2">STUDIOS</span>
+  </a>
+  <div class="links">
+    <a href="homepage.html#slate">Films</a>
+    <a href="shop.html">Shop</a>
+    <span class="studio-menu">
+      <a class="studio-trigger" href="studio.html">Studio</a>
+      <div class="studio-panel" role="menu">
+        <a href="press.html" role="menuitem">Press</a>
+        <a href="journal.html" role="menuitem">Newswire</a>
+      </div>
+    </span>
+    <a href="community.html">Community</a>
+    <a href="contact.html" class="on">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="main" class="hero">
+  <div class="bg"></div>
+  <div class="vig"></div>
+  <div class="content">
+    <div class="kicker">Contact</div>
+    <h1>Say <em>something.</em></h1>
+    <p class="sub">Introductions, press, partnerships, or just a hello. We read everything. Good people always get a reply.</p>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- BODY -->
+<section class="body">
+  <div class="split">
+    <div class="form-col reveal">
+      <h2>Tell us what <em>you&rsquo;re working on.</em></h2>
+      <p class="blurb">A short note is fine. A logline, a deck, a question &mdash; whatever&rsquo;s on your mind. We&rsquo;ll get back to you.</p>
+      <form id="contactForm">
+        <div class="row two">
+          <div>
+            <label for="name">Name</label>
+            <input id="name" type="text" placeholder="First and last" required />
+          </div>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="you@example.com" required />
+          </div>
+        </div>
+        <div class="row">
+          <label for="type">What&rsquo;s this about</label>
+          <select id="type" required>
+            <option value="">Choose one</option>
+            <option>General inquiry</option>
+            <option>Introducing myself</option>
+            <option>Potential collaboration</option>
+            <option>Press / interview</option>
+            <option>Partnerships</option>
+            <option>Careers</option>
+            <option>Something else</option>
+          </select>
+        </div>
+        <div class="row">
+          <label for="msg">Message</label>
+          <textarea id="msg" placeholder="Tell us the thing." required></textarea>
+        </div>
+        <button type="submit" class="submit">Send &rarr;</button>
+        <div class="success">Thanks. We&rsquo;ll read it and get back to you.</div>
+        <p class="fine">We legally can&rsquo;t accept unsolicited scripts or pitches &mdash; but if you introduce yourself and it feels like a fit, we&rsquo;ll set up a call.</p>
+      </form>
+    </div>
+
+    <div class="info-col reveal">
+      <div class="info-card">
+        <div class="k">General</div>
+        <div class="t">Everything else</div>
+        <div class="d">The inbox we actually read. Reach out for anything not covered below.</div>
+        <a href="mailto:production@bluepulsestudios.com">production@bluepulsestudios.com</a>
+      </div>
+      <div class="info-card">
+        <div class="k">Introductions</div>
+        <div class="t">We want to meet people</div>
+        <div class="d">We can&rsquo;t legally accept unsolicited scripts or pitches &mdash; but we can absolutely meet the people behind them. Introduce yourself. Tell us who you are, what you&rsquo;re working on, what keeps you up at night. If it&rsquo;s a fit, we&rsquo;ll set up a call.</div>
+        <a href="mailto:hello@bluepulsestudios.com">hello@bluepulsestudios.com</a>
+      </div>
+      <div class="info-card">
+        <div class="k">Press</div>
+        <div class="t">Media &amp; interviews</div>
+        <div class="d">Press kits, embargo inquiries, junkets, and festival coverage.</div>
+        <a href="mailto:press@bluepulsestudios.com">press@bluepulsestudios.com</a>
+      </div>
+      <div class="info-card">
+        <div class="k">Careers</div>
+        <div class="t">Join the studio</div>
+        <div class="d">We hire slowly. If we&rsquo;re not posting, send anyway &mdash; we keep good notes.</div>
+        <a href="careers.html">Open roles &amp; how to reach us &rarr;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OFFICES -->
+<section class="offices">
+  <div class="off-head reveal"><span class="num">02</span><span class="label">Offices</span></div>
+  <div class="off-grid reveal">
+    <div class="office la">
+      <div class="k">Headquarters</div>
+      <h3>Los Angeles</h3>
+      <div class="addr">Production, post, and development<br/>Los Angeles, California</div>
+      <div class="phone">By appointment</div>
+    </div>
+    <div class="office alt">
+      <div class="k">Headquarters</div>
+      <h3>Pittsburgh</h3>
+      <div class="addr">Writing, editing, and quiet work<br/>Pittsburgh, Pennsylvania</div>
+      <div class="phone">By appointment</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="top">
+    <div class="brand-col">
+      <div class="mark">BLUE PULSE STUDIOS</div>
+      <p>A boutique production house for horror and genre film, television, and video games. Small rooms, patient work, handmade stories.</p>
+    </div>
+    <div>
+      <h4>Films</h4>
+      <a href="homepage.html#slate">Stay Home</a>
+      <a href="homepage.html#slate">The Painting</a>
+      <a href="journal.html">Archive</a>
+    </div>
+    <div>
+      <h4>Shop</h4>
+      <a href="shop.html">All</a>
+      <a href="shop.html">Apparel</a>
+      <a href="shop.html">Figures</a>
+      <a href="shop.html">Prints</a>
+    </div>
+    <div>
+      <h4>Studio</h4>
+      <a href="studio.html">About</a>
+      <a href="journal.html">Newswire</a>
+      <a href="contact.html">Contact</a>
+      <a href="press.html">Press</a>
+    </div>
+  </div>
+  <div class="bottom">
+    <div>&copy; 2026 Blue Pulse Studios</div>
+    <div class="legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="shipping-returns.html">Shipping &amp; Returns</a></div>
+    <div>Made patiently</div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.14 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  const nav = document.querySelector('.nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) nav.style.background = 'rgba(2,4,10,0.82)';
+    else nav.style.background = 'linear-gradient(to bottom, rgba(2,4,10,0.5), transparent)';
+  }, { passive: true });
+
+  /* Contact form — POSTs to BPS_CONFIG.formEndpoint when configured
+     (see site.js / ADMIN-ACCESS.md); demo-confirms otherwise. */
+  document.getElementById('contactForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    const f = this, btn = f.querySelector('.submit');
+    const ep = (window.BPS_CONFIG || {}).formEndpoint;
+    btn.disabled = true;
+    let ok = true;
+    if (ep) {
+      btn.textContent = 'Sending…';
+      try {
+        const r = await fetch(ep, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            name: f.querySelector('#name').value,
+            email: f.querySelector('#email').value,
+            topic: f.querySelector('#type').value,
+            message: f.querySelector('#msg').value
+          })
+        });
+        ok = r.ok;
+      } catch (_) { ok = false; }
+    }
+    if (ok) {
+      f.querySelector('.success').classList.add('on');
+      btn.textContent = 'Sent ✓';
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Send →';
+      alert('Could not send just now — email us directly at production@bluepulsestudios.com');
+    }
+  });
+</script>
+<script src="site.js"></script>
+</body>
+</html>

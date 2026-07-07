@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- PRIVATE PAGE — unlisted admin console. Not linked from anywhere on the site. -->
+<meta name="robots" content="noindex, nofollow, noarchive" />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<meta name="theme-color" content="#02040A" />
+<title>Newswire Console — Blue Pulse Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --abyss: #02040A; --ocean: #060F1F; --depth: #0A1A35; --pulse: #1D5FB8; --glow: #6BB4E8; --foam: #CFD9E4; --stone: #8B929C; --hair: #132341; --danger: #C94F4F; --display: 'Fraunces', serif; --ui: 'Inter', sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--abyss); color: var(--foam); font-family: var(--ui); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+
+  .topbar { display: flex; justify-content: space-between; align-items: center; padding: 24px 40px; border-bottom: 1px solid var(--hair); font-size: 10.5px; letter-spacing: .28em; text-transform: uppercase; }
+  .topbar .brand { color: var(--foam); text-decoration: none; font-weight: 600; letter-spacing: .32em; }
+  .topbar .brand span { color: var(--glow); }
+  .topbar .actions { display: flex; gap: 20px; align-items: center; }
+  .topbar a, .topbar button { background: none; border: 0; color: var(--stone); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; text-decoration: none; transition: color .4s; }
+  .topbar a:hover, .topbar button:hover { color: var(--foam); }
+
+  .demo-note { padding: 12px 40px; background: rgba(29,95,184,0.12); border-bottom: 1px solid var(--hair); font-size: 11.5px; color: var(--glow); line-height: 1.5; }
+
+  /* ——— LOGIN ——— */
+  .login-wrap { min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 40px; }
+  .login { width: 380px; max-width: 100%; padding: 56px 48px; border: 1px solid var(--hair); background: linear-gradient(150deg, var(--depth), var(--abyss)); }
+  .login h1 { font-family: var(--display); font-weight: 300; font-size: 32px; letter-spacing: -0.02em; margin-bottom: 6px; }
+  .login h1 em { font-style: italic; color: var(--glow); }
+  .login .sub { font-family: var(--display); font-style: italic; font-size: 13px; color: var(--stone); margin-bottom: 40px; }
+  .login label { display: block; font-size: 10px; letter-spacing: .4em; text-transform: uppercase; color: var(--stone); font-weight: 500; margin-bottom: 10px; }
+  .login input { width: 100%; font: inherit; font-size: 15px; color: var(--foam); background: transparent; border: 0; border-bottom: 1px solid var(--hair); padding: 12px 0; outline: none; transition: border-color .4s; margin-bottom: 28px; }
+  .login input:focus { border-color: var(--glow); }
+  .login button { width: 100%; padding: 16px; background: transparent; border: 1px solid var(--foam); color: var(--foam); font-family: var(--ui); font-size: 10.5px; letter-spacing: .42em; text-transform: uppercase; font-weight: 500; cursor: pointer; transition: background .4s, color .4s; }
+  .login button:hover { background: var(--foam); color: var(--abyss); }
+  .login .err { margin-top: 18px; font-size: 12px; color: var(--danger); min-height: 16px; }
+  .login .hint { margin-top: 22px; font-size: 11px; color: var(--stone); line-height: 1.5; }
+
+  /* ——— CONSOLE ——— */
+  .console { display: none; grid-template-columns: 400px 1fr; min-height: calc(100vh - 110px); }
+  .console.on { display: grid; }
+
+  .list { border-right: 1px solid var(--hair); overflow-y: auto; }
+  .list .head { display: flex; justify-content: space-between; align-items: center; padding: 24px; border-bottom: 1px solid var(--hair); }
+  .list .head .t { font-size: 10px; letter-spacing: .4em; text-transform: uppercase; color: var(--stone); font-weight: 500; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; background: transparent; border: 1px solid var(--foam); color: var(--foam); font-family: var(--ui); font-size: 9.5px; letter-spacing: .32em; text-transform: uppercase; font-weight: 500; cursor: pointer; transition: background .4s, color .4s; text-decoration: none; }
+  .btn:hover { background: var(--foam); color: var(--abyss); }
+  .btn.ghost { border-color: var(--hair); color: var(--stone); }
+  .btn.ghost:hover { border-color: var(--stone); color: var(--foam); background: transparent; }
+  .btn.danger { border-color: var(--danger); color: var(--danger); }
+  .btn.danger:hover { background: var(--danger); color: var(--abyss); }
+
+  /* Site settings + placeholder toggle */
+  .settings { padding: 24px; border-bottom: 1px solid var(--hair); background: rgba(10,26,53,0.35); }
+  .settings .s-head { font-size: 10px; letter-spacing: .4em; text-transform: uppercase; color: var(--glow); font-weight: 600; margin-bottom: 18px; }
+  .settings .s-help { margin-top: 14px; font-size: 11px; color: var(--stone); line-height: 1.55; font-family: var(--display); font-style: italic; }
+  .toggle { display: flex; align-items: center; gap: 14px; cursor: pointer; }
+  .toggle input { display: none; }
+  .toggle .track { width: 44px; height: 24px; border-radius: 12px; background: var(--hair); border: 1px solid var(--hair); position: relative; transition: background .3s; flex: none; }
+  .toggle .knob { position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: var(--stone); transition: transform .3s, background .3s; }
+  .toggle input:checked + .track { background: var(--pulse); }
+  .toggle input:checked + .track .knob { transform: translateX(20px); background: var(--foam); }
+  .toggle .t-label { font-size: 10.5px; letter-spacing: .24em; text-transform: uppercase; color: var(--foam); font-weight: 500; }
+  .toggle .t-state { color: var(--glow); }
+
+  .item { display: block; width: 100%; text-align: left; padding: 20px 24px; background: none; border: 0; border-bottom: 1px solid var(--hair); cursor: pointer; color: inherit; font-family: var(--ui); transition: background .3s; }
+  .item:hover { background: rgba(29,95,184,0.07); }
+  .item.sel { background: rgba(29,95,184,0.14); box-shadow: inset 3px 0 0 var(--glow); }
+  .item .d { font-size: 9.5px; letter-spacing: .3em; color: var(--glow); text-transform: uppercase; font-weight: 600; }
+  .item .ti { font-family: var(--display); font-size: 17px; margin-top: 6px; line-height: 1.25; color: var(--foam); }
+  .item .tg { font-size: 9px; letter-spacing: .3em; text-transform: uppercase; color: var(--stone); margin-top: 8px; }
+  .item .star { color: var(--glow); }
+
+  .editor { padding: 40px 48px 80px; overflow-y: auto; }
+  .editor .placeholder { padding: 120px 40px; text-align: center; font-family: var(--display); font-style: italic; color: var(--stone); font-size: 17px; }
+  .editor form { max-width: 760px; display: none; }
+  .editor form.on { display: block; }
+  .fld { margin-bottom: 30px; }
+  .fld label { display: block; font-size: 10px; letter-spacing: .4em; text-transform: uppercase; color: var(--stone); font-weight: 500; margin-bottom: 10px; }
+  .fld input[type=text], .fld input[type=date], .fld textarea, .fld select {
+    width: 100%; font: inherit; font-size: 15px; color: var(--foam); background: transparent;
+    border: 0; border-bottom: 1px solid var(--hair); padding: 12px 0; outline: none; transition: border-color .4s;
+  }
+  .fld textarea { min-height: 200px; line-height: 1.6; resize: vertical; border: 1px solid var(--hair); padding: 16px; }
+  .fld input:focus, .fld textarea:focus { border-color: var(--glow); }
+  .fld .help { margin-top: 8px; font-size: 11px; color: var(--stone); font-family: var(--display); font-style: italic; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; }
+  .check { display: flex; align-items: center; gap: 12px; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--stone); cursor: pointer; }
+  .check input { accent-color: var(--pulse); width: 16px; height: 16px; }
+
+  .img-well { border: 1px dashed var(--hair); padding: 20px; display: flex; gap: 24px; align-items: center; }
+  .img-well .prev { width: 140px; height: 100px; border: 1px solid var(--hair); background: var(--depth) center/cover no-repeat; flex: none; display: flex; align-items: center; justify-content: center; font-size: 9px; letter-spacing: .3em; color: var(--stone); text-transform: uppercase; }
+  .img-well .ctrls { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+  .img-well input[type=file] { display: none; }
+
+  .bar { display: flex; gap: 16px; align-items: center; margin-top: 44px; flex-wrap: wrap; }
+  .btn.primary { padding: 16px 32px; font-size: 10.5px; }
+  .status { font-size: 11.5px; color: var(--glow); font-family: var(--display); font-style: italic; min-height: 16px; }
+
+  @media (max-width: 900px) {
+    .console.on { grid-template-columns: 1fr; }
+    .list { border-right: 0; border-bottom: 1px solid var(--hair); max-height: 40vh; }
+    .editor { padding: 32px 24px 64px; }
+    .two, .three { grid-template-columns: 1fr; gap: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="brand" href="homepage.html">BLUE PULSE <span>// NEWSWIRE CONSOLE</span></a>
+  <div class="actions" id="topActions" style="display:none">
+    <a href="journal.html" target="_blank" rel="noopener">View Newswire</a>
+    <button id="pageSeoBtn">Page SEO</button>
+    <button id="rssBtn" title="Download feed.xml built from current posts">Export RSS</button>
+    <button id="resetBtn" title="Restore the original demo posts">Reset Demo Data</button>
+    <button id="logoutBtn">Log Out</button>
+  </div>
+</div>
+<div class="demo-note">
+  Demonstration console &mdash; posts publish to this browser&rsquo;s local storage so you can preview the full editorial flow. Production version will use a real CMS with server-side authentication.
+</div>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="loginWrap">
+  <form class="login" id="loginForm">
+    <h1>Sign <em>in.</em></h1>
+    <p class="sub">Editorial access &middot; Blue Pulse Studios</p>
+    <label for="pw">Passphrase</label>
+    <input id="pw" type="password" autocomplete="current-password" required />
+    <button type="submit">Enter the console &rarr;</button>
+    <div class="err" id="loginErr"></div>
+    <p class="hint">Access is listed in the studio&rsquo;s ADMIN-ACCESS document.</p>
+  </form>
+</div>
+
+<!-- CONSOLE -->
+<div class="console" id="console">
+  <aside class="list">
+    <div class="settings">
+      <div class="s-head">Site Settings</div>
+      <label class="toggle">
+        <input type="checkbox" id="phToggle" />
+        <span class="track"><span class="knob"></span></span>
+        <span class="t-label">Placeholder Mode <span class="t-state" id="phState">— showing</span></span>
+      </label>
+      <div class="s-help">ON shows all demo/placeholder content. Hit HIDE to preview the site with every placeholder stripped out &mdash; posts, coming-soon products, press links, socials.</div>
+    </div>
+    <div class="head">
+      <span class="t">Posts</span>
+      <button class="btn" id="newBtn">+ New Post</button>
+    </div>
+    <div id="postList"></div>
+  </aside>
+
+  <main class="editor">
+    <div class="placeholder" id="edPlaceholder">Select a post to edit, or create a new one.</div>
+    <form id="edForm">
+      <div class="fld">
+        <label for="fTitle">Title</label>
+        <input id="fTitle" type="text" required />
+        <div class="help">Wrap words in *asterisks* for italics &mdash; e.g. Now we *cut.*</div>
+      </div>
+      <div class="three">
+        <div class="fld">
+          <label for="fDate">Date</label>
+          <input id="fDate" type="date" required />
+        </div>
+        <div class="fld">
+          <label for="fTag">Tag</label>
+          <input id="fTag" type="text" placeholder="Studio, Stay Home, Drop 01…" required />
+        </div>
+        <div class="fld">
+          <label for="fAuthor">Author</label>
+          <input id="fAuthor" type="text" placeholder="Founders" required />
+        </div>
+      </div>
+      <div class="fld">
+        <label for="fExcerpt">Excerpt (shown on the Newswire index)</label>
+        <textarea id="fExcerpt" style="min-height:110px" required></textarea>
+      </div>
+      <div class="fld">
+        <label for="fBody">Body</label>
+        <textarea id="fBody" required></textarea>
+        <div class="help">Plain text. Leave a blank line between paragraphs.</div>
+      </div>
+      <div class="fld">
+        <label>Header image</label>
+        <div class="img-well">
+          <div class="prev" id="imgPrev">No image</div>
+          <div class="ctrls">
+            <label class="btn ghost" for="fImage">Upload image</label>
+            <input id="fImage" type="file" accept="image/*" />
+            <button type="button" class="btn ghost" id="imgClear">Remove</button>
+          </div>
+        </div>
+        <div class="help">Uploads are resized to 1400px and stored with the post. Keep them under ~1&nbsp;MB for the demo.</div>
+      </div>
+      <div class="fld">
+        <label class="check"><input type="checkbox" id="fFeatured" /> Featured (pinned to the top of the Newswire)</label>
+      </div>
+      <div class="fld">
+        <label class="check"><input type="checkbox" id="fPlaceholder" /> Placeholder content (hidden sitewide when Placeholder Mode is off)</label>
+      </div>
+      <div class="fld">
+        <label class="check"><input type="checkbox" id="fDraft" /> Draft (never shown publicly until unticked)</label>
+        <div class="help" style="margin-top:10px;font-size:11px;color:var(--stone);font-family:var(--display);font-style:italic">Tip: setting the date in the future schedules the post &mdash; it publishes itself that day.</div>
+      </div>
+      <div class="bar">
+        <button type="submit" class="btn primary">Publish &rarr;</button>
+        <a class="btn ghost" id="previewLink" href="#" target="_blank" rel="noopener">Preview</a>
+        <button type="button" class="btn danger" id="deleteBtn">Delete</button>
+        <span class="status" id="status"></span>
+      </div>
+    </form>
+
+    <!-- PAGE SEO / METADATA EDITOR -->
+    <form id="metaForm" style="display:none;max-width:760px">
+      <h2 style="font-family:var(--display);font-weight:300;font-size:28px;margin-bottom:8px">Page metadata</h2>
+      <p style="font-family:var(--display);font-style:italic;font-size:13px;color:var(--stone);margin-bottom:36px">Sets the browser title, search description, and social-share image per page. Applied live in this browser; use &ldquo;Copy tags&rdquo; to bake them into the HTML at launch so search engines see them.</p>
+      <div class="fld">
+        <label for="mPage">Page</label>
+        <select id="mPage" style="width:100%;font:inherit;font-size:15px;color:var(--foam);background:var(--abyss);border:0;border-bottom:1px solid var(--hair);padding:12px 0;outline:none"></select>
+      </div>
+      <div class="fld">
+        <label for="mTitle">Title (browser tab + search result headline)</label>
+        <input id="mTitle" type="text" placeholder="e.g. Stay Home — A Film by Blue Pulse Studios" />
+      </div>
+      <div class="fld">
+        <label for="mDesc">Description (search result snippet, ~155 characters)</label>
+        <textarea id="mDesc" style="min-height:80px"></textarea>
+      </div>
+      <div class="fld">
+        <label for="mOg">Social share image URL (og:image)</label>
+        <input id="mOg" type="text" placeholder="og-image.jpg or a full URL" />
+      </div>
+      <div class="bar">
+        <button type="submit" class="btn primary">Save &rarr;</button>
+        <button type="button" class="btn ghost" id="mCopy">Copy tags for HTML</button>
+        <button type="button" class="btn danger" id="mClear">Clear overrides</button>
+        <span class="status" id="mStatus"></span>
+      </div>
+      <textarea id="mExport" readonly style="display:none;margin-top:24px;width:100%;min-height:130px;font-family:monospace;font-size:11.5px;color:var(--foam);background:var(--depth);border:1px solid var(--hair);padding:14px"></textarea>
+    </form>
+  </main>
+</div>
+
+<script src="newswire-data.js"></script>
+<script>
+  /* ============================================================
+     DEMO AUTHENTICATION — client-side only.
+     This gates the console UI for demonstration purposes; it is
+     NOT real security (nothing on a static site is). The real
+     build should put this behind server-side auth or a CMS.
+     ============================================================ */
+  const ADMIN_PASSPHRASE = 'bluepulse2026';
+  const SESSION_KEY = 'bpsAdminSession';
+
+  const $ = (id) => document.getElementById(id);
+  const F = window.bpsNews.fmt;
+  let currentId = null;
+  let currentImage = '';
+
+  /* ——— login ——— */
+  function showConsole(on) {
+    $('loginWrap').style.display = on ? 'none' : 'flex';
+    $('console').classList.toggle('on', on);
+    $('topActions').style.display = on ? 'flex' : 'none';
+    if (on) renderList();
+  }
+  $('loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    if ($('pw').value === ADMIN_PASSPHRASE) {
+      sessionStorage.setItem(SESSION_KEY, '1');
+      showConsole(true);
+    } else {
+      $('loginErr').textContent = 'Wrong passphrase.';
+    }
+  });
+  $('logoutBtn').addEventListener('click', () => {
+    sessionStorage.removeItem(SESSION_KEY);
+    location.reload();
+  });
+  $('resetBtn').addEventListener('click', () => {
+    if (confirm('Restore the original demo posts? All edits and new posts in this browser will be removed.')) {
+      window.bpsNews.reset();
+      currentId = null;
+      $('edForm').classList.remove('on');
+      $('edPlaceholder').style.display = 'block';
+      renderList();
+    }
+  });
+
+  /* ——— post list ——— */
+  function renderList() {
+    const posts = window.bpsNews.all();
+    const today = new Date().toISOString().slice(0, 10);
+    $('postList').innerHTML = posts.map(p => {
+      let badges = '';
+      if (p.featured) badges += ' <span class="star">★ featured</span>';
+      if (p.draft) badges += ' <span style="color:#C94F4F">● draft</span>';
+      else if (p.date && p.date > today) badges += ' <span style="color:#E8B46B">◔ scheduled</span>';
+      if (p.placeholder) badges += ' <span style="color:var(--stone)">▢ placeholder</span>';
+      return `
+      <button type="button" class="item ${p.id === currentId ? 'sel' : ''}" data-id="${F.esc(p.id)}">
+        <div class="d">${F.date(p.date)}${badges}</div>
+        <div class="ti">${F.title(p.title)}</div>
+        <div class="tg">${F.esc(p.tag)} &middot; ${F.esc(p.author)}</div>
+      </button>`;
+    }).join('');
+    $('postList').querySelectorAll('.item').forEach(el => {
+      el.addEventListener('click', () => openPost(el.dataset.id));
+    });
+  }
+
+  /* ——— editor ——— */
+  function slugify(s) {
+    return s.toLowerCase().replace(/\*/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || ('post-' + Date.now());
+  }
+  function setImage(src) {
+    currentImage = src || '';
+    const prev = $('imgPrev');
+    if (currentImage) { prev.style.backgroundImage = `url("${currentImage}")`; prev.textContent = ''; }
+    else { prev.style.backgroundImage = 'none'; prev.textContent = 'No image'; }
+  }
+  function openPost(id) {
+    const p = window.bpsNews.get(id);
+    if (!p) return;
+    currentId = p.id;
+    $('fTitle').value = p.title;
+    $('fDate').value = p.date;
+    $('fTag').value = p.tag;
+    $('fAuthor').value = p.author;
+    $('fExcerpt').value = p.excerpt;
+    $('fBody').value = p.body;
+    $('fFeatured').checked = !!p.featured;
+    $('fPlaceholder').checked = !!p.placeholder;
+    $('fDraft').checked = !!p.draft;
+    setImage(p.image);
+    $('previewLink').href = 'newswire-post.html?id=' + encodeURIComponent(p.id);
+    $('status').textContent = '';
+    $('edPlaceholder').style.display = 'none';
+    $('metaForm').style.display = 'none';
+    $('edForm').classList.add('on');
+    renderList();
+  }
+  $('newBtn').addEventListener('click', () => {
+    currentId = null;
+    $('edForm').reset();
+    $('fDate').value = new Date().toISOString().slice(0, 10);
+    setImage('');
+    $('previewLink').href = '#';
+    $('status').textContent = '';
+    $('edPlaceholder').style.display = 'none';
+    $('metaForm').style.display = 'none';
+    $('edForm').classList.add('on');
+    renderList();
+    $('fTitle').focus();
+  });
+
+  /* image upload → downscale to max 1400px, JPEG */
+  $('fImage').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const img = new Image();
+    img.onload = () => {
+      const MAX = 1400;
+      const scale = Math.min(1, MAX / Math.max(img.width, img.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.width * scale);
+      c.height = Math.round(img.height * scale);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      setImage(c.toDataURL('image/jpeg', 0.82));
+      URL.revokeObjectURL(img.src);
+    };
+    img.src = URL.createObjectURL(file);
+    e.target.value = '';
+  });
+  $('imgClear').addEventListener('click', () => setImage(''));
+
+  /* publish */
+  $('edForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const title = $('fTitle').value.trim();
+    if (!currentId) currentId = slugify(title);
+    const post = {
+      id: currentId,
+      title,
+      date: $('fDate').value,
+      tag: $('fTag').value.trim(),
+      author: $('fAuthor').value.trim(),
+      excerpt: $('fExcerpt').value.trim(),
+      body: $('fBody').value.trim(),
+      image: currentImage,
+      featured: $('fFeatured').checked,
+      placeholder: $('fPlaceholder').checked,
+      draft: $('fDraft').checked
+    };
+    /* only one featured post at a time */
+    if (post.featured) {
+      window.bpsNews.all().forEach(p => {
+        if (p.id !== post.id && p.featured) { p.featured = false; window.bpsNews.upsert(p); }
+      });
+    }
+    const ok = window.bpsNews.upsert(post);
+    $('status').textContent = ok
+      ? 'Published. Live on the Newswire in this browser.'
+      : 'Could not save — storage is full. Try a smaller image.';
+    $('previewLink').href = 'newswire-post.html?id=' + encodeURIComponent(post.id);
+    renderList();
+  });
+
+  /* delete */
+  $('deleteBtn').addEventListener('click', () => {
+    if (!currentId) return;
+    if (!confirm('Delete this post?')) return;
+    window.bpsNews.remove(currentId);
+    currentId = null;
+    $('edForm').classList.remove('on');
+    $('edPlaceholder').style.display = 'block';
+    renderList();
+  });
+
+  /* ——— Page SEO / metadata editor ——— */
+  const META_KEY = 'bpsPageMeta';
+  const SITE_PAGES = [
+    'homepage.html', 'shop.html', 'stay-home.html', 'the-painting.html',
+    'studio.html', 'journal.html', 'press.html', 'community.html',
+    'contact.html', 'cart.html', 'product.html', 'drops.html',
+    'careers.html', 'privacy.html', 'terms.html', 'shipping-returns.html'
+  ];
+  function metaAll() { try { return JSON.parse(localStorage.getItem(META_KEY) || '{}'); } catch (_) { return {}; } }
+  function metaSave(all) { localStorage.setItem(META_KEY, JSON.stringify(all)); }
+  function metaLoadPage() {
+    const m = metaAll()[$('mPage').value] || {};
+    $('mTitle').value = m.title || '';
+    $('mDesc').value = m.description || '';
+    $('mOg').value = m.ogImage || '';
+    $('mExport').style.display = 'none';
+    $('mStatus').textContent = '';
+  }
+  SITE_PAGES.forEach(p => {
+    const o = document.createElement('option');
+    o.value = p; o.textContent = p;
+    $('mPage').appendChild(o);
+  });
+  $('mPage').addEventListener('change', metaLoadPage);
+  $('pageSeoBtn').addEventListener('click', () => {
+    const showing = $('metaForm').style.display !== 'none';
+    $('metaForm').style.display = showing ? 'none' : 'block';
+    $('edForm').classList.remove('on');
+    $('edPlaceholder').style.display = showing ? 'block' : 'none';
+    if (!showing) metaLoadPage();
+  });
+  $('metaForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const all = metaAll();
+    all[$('mPage').value] = {
+      title: $('mTitle').value.trim(),
+      description: $('mDesc').value.trim(),
+      ogImage: $('mOg').value.trim()
+    };
+    metaSave(all);
+    $('mStatus').textContent = 'Saved — live on this browser. Use "Copy tags" to bake into HTML for search engines.';
+  });
+  $('mClear').addEventListener('click', () => {
+    const all = metaAll();
+    delete all[$('mPage').value];
+    metaSave(all);
+    metaLoadPage();
+    $('mStatus').textContent = 'Overrides cleared — page uses its built-in metadata.';
+  });
+  $('mCopy').addEventListener('click', () => {
+    const t = $('mTitle').value.trim(), d = $('mDesc').value.trim(), o = $('mOg').value.trim();
+    const esc = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    let out = '';
+    if (t) out += `<title>${esc(t)}</title>\n<meta property="og:title" content="${esc(t)}" />\n<meta name="twitter:title" content="${esc(t)}" />\n`;
+    if (d) out += `<meta name="description" content="${esc(d)}" />\n<meta property="og:description" content="${esc(d)}" />\n<meta name="twitter:description" content="${esc(d)}" />\n`;
+    if (o) out += `<meta property="og:image" content="${esc(o)}" />\n<meta name="twitter:image" content="${esc(o)}" />\n`;
+    $('mExport').value = out || 'Fill in fields above first.';
+    $('mExport').style.display = 'block';
+    $('mExport').select();
+    try { document.execCommand('copy'); $('mStatus').textContent = 'Tags copied — paste into the page\'s <head> before launch.'; } catch (_) {}
+  });
+
+  /* ——— RSS export — builds feed.xml from currently-visible posts ——— */
+  $('rssBtn').addEventListener('click', () => {
+    const posts = window.bpsNews.visible();
+    const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const base = 'https://bluepulsestudios.com/';
+    const items = posts.map(p => `  <item>
+    <title>${esc(p.title.replace(/\*/g, ''))}</title>
+    <link>${base}newswire-post.html?id=${encodeURIComponent(p.id)}</link>
+    <guid isPermaLink="true">${base}newswire-post.html?id=${encodeURIComponent(p.id)}</guid>
+    <pubDate>${new Date(p.date + 'T12:00:00Z').toUTCString()}</pubDate>
+    <description>${esc(p.excerpt)}</description>
+  </item>`).join('\n');
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+  <title>Blue Pulse Studios — Newswire</title>
+  <link>${base}journal.html</link>
+  <description>Dispatches from the rooms. Production updates and field notes from Blue Pulse Studios.</description>
+  <language>en-us</language>
+${items}
+</channel>
+</rss>`;
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([xml], { type: 'application/rss+xml' }));
+    a.download = 'feed.xml';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  /* ——— Placeholder Mode toggle ———
+     Checked = placeholder content VISIBLE (demo mode).
+     Unchecked = placeholder content HIDDEN sitewide. */
+  function syncToggle() {
+    const showing = !window.bpsNews.hidePH();
+    $('phToggle').checked = showing;
+    $('phState').textContent = showing ? '— showing' : '— hidden';
+  }
+  $('phToggle').addEventListener('change', () => {
+    window.bpsNews.setHidePH(!$('phToggle').checked);
+    syncToggle();
+  });
+  syncToggle();
+
+  /* session restore */
+  showConsole(sessionStorage.getItem(SESSION_KEY) === '1');
+</script>
+</body>
+</html>

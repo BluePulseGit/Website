@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Press kit, key art, factsheet, and contact for Blue Pulse Studios." />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="theme-color" content="#02040A" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Press Kit — Blue Pulse Studios" />
+<meta property="og:description" content="Logos, key art, factsheet, press contact." />
+<meta property="og:image" content="og-image.jpg" />
+<meta property="og:site_name" content="Blue Pulse Studios" />
+<title>Press Kit — Blue Pulse Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<style>
+  :root {
+    --abyss: #02040A; --ocean: #060F1F; --depth: #0A1A35; --tide: #0F2A52;
+    --pulse: #1D5FB8; --glow: #6BB4E8; --foam: #CFD9E4; --stone: #8B929C; --hair: #132341;
+    --display: 'Fraunces', serif; --ui: 'Inter', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; overflow-x: clip; }
+  body { background: var(--abyss); color: var(--foam); font-family: var(--ui); -webkit-font-smoothing: antialiased; }
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+    opacity: 0.04; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 28px 48px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, rgba(2,4,10,0.5), transparent); font-size: 10.5px; letter-spacing: .28em; text-transform: uppercase; transition: background .8s; }
+  .nav .brand { display: inline-flex; flex-direction: column; gap: 3px; line-height: 1; color: var(--foam); text-decoration: none; }
+  .nav .brand .line1 { font-weight: 600; letter-spacing: .32em; font-size: 11px; }
+  .nav .brand .line2 { font-weight: 500; letter-spacing: .42em; font-size: 9px; color: var(--stone); }
+  .nav .links a { color: var(--stone); text-decoration: none; margin-left: 28px; transition: color .5s; }
+  .nav .links a:hover { color: var(--foam); }
+
+  /* HERO */
+  .hero {
+    position: relative; overflow: hidden;
+    padding: 180px 72px 100px;
+    min-height: 65vh; display: flex; align-items: center;
+  }
+  .hero .bg {
+    position: absolute; inset: -4%;
+    background: url('assets/bubbles-v2.webp') center/cover no-repeat,
+                radial-gradient(ellipse at 70% 30%, #0A2448 0%, #020611 85%);
+    opacity: 0.7; filter: brightness(0.7); z-index: 0;
+  }
+  .hero .vig { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(to right, rgba(2,4,10,0.5) 0%, transparent 50%, rgba(2,4,10,0.5) 100%), linear-gradient(to bottom, rgba(2,4,10,0.5), transparent 30%, transparent 70%, var(--abyss)); }
+  .hero .content { position: relative; z-index: 2; max-width: 1100px; }
+  .hero .kicker { font-size: 10.5px; letter-spacing: .5em; text-transform: uppercase; color: var(--glow); font-weight: 500; }
+  .hero h1 { margin-top: 28px; font-family: var(--display); font-weight: 300; font-size: clamp(46px, 6vw, 96px); letter-spacing: -0.025em; line-height: 1.02; color: var(--foam); }
+  .hero h1 em { font-style: italic; color: var(--glow); }
+  .hero .sub { margin-top: 32px; max-width: 660px; font-family: var(--display); font-style: italic; font-weight: 300; font-size: clamp(17px, 1.6vw, 21px); line-height: 1.55; color: var(--stone); }
+
+  .rule { height: 1px; background: var(--hair); margin: 0 72px; }
+
+  section { padding: 110px 72px; position: relative; }
+  .head { display: flex; align-items: baseline; gap: 24px; margin-bottom: 24px; }
+  .head .num { font-size: 10px; letter-spacing: .32em; color: var(--glow); font-weight: 600; text-transform: uppercase; }
+  .head .label { font-size: 10px; letter-spacing: .32em; color: var(--foam); font-weight: 500; text-transform: uppercase; }
+  .lede { font-family: var(--display); font-weight: 400; font-size: clamp(17px, 1.5vw, 21px); line-height: 1.5; color: var(--foam); opacity: 0.88; max-width: 780px; margin-bottom: 64px; }
+
+  /* FACTSHEET */
+  .factsheet { background: linear-gradient(to bottom, var(--abyss), var(--ocean)); }
+  .facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--hair); border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
+  .fact { background: var(--ocean); padding: 32px 36px; }
+  .fact .k { font-size: 9px; letter-spacing: .45em; color: var(--glow); font-weight: 600; text-transform: uppercase; margin-bottom: 12px; }
+  .fact .v { font-family: var(--display); font-weight: 300; font-size: clamp(20px, 1.8vw, 26px); color: var(--foam); letter-spacing: -0.01em; line-height: 1.35; }
+  .fact .v em { font-style: italic; color: var(--glow); }
+
+  /* DOWNLOADS */
+  .downloads { background: var(--ocean); }
+  .dl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .dl-card { background: var(--depth); border: 1px solid var(--hair); padding: 36px 28px; display: flex; flex-direction: column; gap: 18px; transition: border-color .5s, background .5s; }
+  .dl-card:hover { border-color: var(--pulse); background: rgba(29,95,184,0.1); }
+  .dl-card .preview {
+    aspect-ratio: 4/3; background: var(--abyss); display: flex; align-items: center; justify-content: center;
+    border: 1px solid var(--hair); padding: 20px; overflow: hidden;
+  }
+  .dl-card.light .preview { background: var(--foam); }
+  .dl-card .preview img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .dl-card .meta .k { font-size: 9px; letter-spacing: .45em; color: var(--glow); font-weight: 500; text-transform: uppercase; margin-bottom: 8px; }
+  .dl-card .meta .n { font-family: var(--display); font-weight: 400; font-size: 20px; color: var(--foam); letter-spacing: -0.01em; }
+  .dl-card .meta .desc { margin-top: 8px; font-family: var(--display); font-style: italic; font-size: 13px; line-height: 1.5; color: var(--stone); }
+  .dl-card .actions { display: flex; gap: 16px; flex-wrap: wrap; margin-top: auto; }
+  .dl-card .actions a { font-size: 10px; letter-spacing: .4em; text-transform: uppercase; color: var(--foam); text-decoration: none; padding-bottom: 4px; border-bottom: 1px solid var(--foam); transition: color .4s, border-color .4s; font-weight: 500; }
+  .dl-card .actions a:hover { color: var(--glow); border-color: var(--glow); }
+
+  /* COVERAGE */
+  .coverage { background: linear-gradient(to bottom, var(--ocean), var(--abyss)); }
+  .cov-list { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--hair); }
+  .cov-item { padding: 28px 0; border-bottom: 1px solid var(--hair); display: grid; grid-template-columns: 140px 1fr auto; gap: 32px; align-items: center; }
+  .cov-item .date { font-size: 10px; letter-spacing: .3em; text-transform: uppercase; color: var(--stone); font-weight: 500; }
+  .cov-item .what { font-family: var(--display); font-weight: 400; font-size: 19px; color: var(--foam); letter-spacing: -0.01em; }
+  .cov-item .what .src { display: block; font-family: var(--ui); font-style: normal; font-size: 11px; color: var(--stone); letter-spacing: .25em; text-transform: uppercase; font-weight: 500; margin-top: 6px; }
+  .cov-item .read { font-size: 10px; letter-spacing: .4em; text-transform: uppercase; color: var(--glow); text-decoration: none; padding-bottom: 4px; border-bottom: 1px solid var(--glow); font-weight: 500; }
+
+  /* PRESS CONTACT */
+  .press-contact { background: var(--abyss); text-align: center; padding-bottom: 140px; }
+  .press-contact .inner { max-width: 720px; margin: 0 auto; }
+  .press-contact h2 { font-family: var(--display); font-weight: 300; font-size: clamp(36px, 4.5vw, 60px); letter-spacing: -0.02em; line-height: 1.1; color: var(--foam); margin-bottom: 28px; }
+  .press-contact h2 em { font-style: italic; color: var(--glow); }
+  .press-contact p { font-family: var(--display); font-style: italic; font-size: 17px; color: var(--stone); margin-bottom: 36px; line-height: 1.55; }
+  .press-contact a.email { display: inline-block; background: transparent; border: 1px solid var(--foam); color: var(--foam); padding: 20px 40px; font-size: 12px; letter-spacing: .35em; text-transform: uppercase; text-decoration: none; font-weight: 500; transition: background .4s, color .4s; }
+  .press-contact a.email:hover { background: var(--foam); color: var(--abyss); }
+
+  footer { padding: 96px 48px 56px; background: var(--abyss); color: var(--stone); border-top: 1px solid var(--hair); }
+  footer .top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 64px; margin-bottom: 72px; }
+  footer h4 { font-size: 10px; letter-spacing: .4em; text-transform: uppercase; color: var(--foam); font-weight: 500; margin-bottom: 20px; }
+  footer a { display: block; color: var(--stone); text-decoration: none; font-size: 13px; margin-bottom: 10px; transition: color .5s; }
+  footer a:hover { color: var(--foam); }
+  footer .brand-col .mark { color: var(--foam); font-size: 13px; letter-spacing: .3em; font-weight: 600; margin-bottom: 18px; }
+  footer .brand-col p { font-family: var(--display); font-style: italic; font-size: 14px; line-height: 1.55; max-width: 340px; }
+  footer .bottom { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .32em; text-transform: uppercase; padding-top: 28px; border-top: 1px solid var(--hair); }
+
+  @media (max-width: 900px) {
+    .nav { padding: 18px 24px; } .nav .links a { margin-left: 14px; font-size: 9px; }
+    .hero, section, .rule { padding-left: 24px; padding-right: 24px; }
+    .rule { margin: 0 24px; }
+    .facts { grid-template-columns: 1fr; }
+    .dl-grid { grid-template-columns: 1fr; }
+    .cov-item { grid-template-columns: 1fr; gap: 8px; padding: 24px 0; }
+    footer .top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="page-transition entering" id="pageTransition" aria-hidden="true"></div>
+
+<nav class="nav">
+  <a class="brand" href="homepage.html">
+    <span class="line1">BLUE PULSE</span>
+    <span class="line2">STUDIOS</span>
+  </a>
+  <div class="links">
+    <a href="homepage.html#slate">Films</a>
+    <a href="shop.html">Shop</a>
+    <span class="studio-menu">
+      <a class="studio-trigger" href="studio.html">Studio</a>
+      <div class="studio-panel" role="menu">
+        <a href="press.html" class="on" role="menuitem">Press</a>
+        <a href="journal.html" role="menuitem">Newswire</a>
+      </div>
+    </span>
+    <a href="community.html">Community</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<section class="hero" id="main">
+  <div class="bg"></div>
+  <div class="vig"></div>
+  <div class="content">
+    <div class="kicker">Press Kit</div>
+    <h1>For the people writing <em>about us.</em></h1>
+    <p class="sub">Logos, key art, headshots, factsheet, and a press contact who actually responds. Use it freely &mdash; just credit Blue Pulse Studios where appropriate.</p>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<section class="factsheet">
+  <div class="head"><span class="num">01</span><span class="label">Factsheet</span></div>
+  <p class="lede">The studio at a glance.</p>
+  <div class="facts">
+    <div class="fact"><div class="k">Founded</div><div class="v">2024</div></div>
+    <div class="fact"><div class="k">Headquarters</div><div class="v">Los Angeles, CA &amp; Pittsburgh, PA</div></div>
+    <div class="fact"><div class="k">Disciplines</div><div class="v">Film &middot; Television &middot; Video Games</div></div>
+    <div class="fact"><div class="k">Genres</div><div class="v">Horror, dark genre, slow-cinema</div></div>
+    <div class="fact"><div class="k">Status</div><div class="v"><em>Independent</em>, award-winning</div></div>
+    <div class="fact"><div class="k">In production</div><div class="v">Stay Home (Feature, 2027)</div></div>
+    <div class="fact"><div class="k">Released</div><div class="v">The Painting (Short, 2025)</div></div>
+    <div class="fact"><div class="k">Press contact</div><div class="v">press@bluepulsestudios.com</div></div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<section class="downloads">
+  <div class="head"><span class="num">02</span><span class="label">Downloads</span></div>
+  <p class="lede">Logos, key art, and headshots. Click to download.</p>
+  <div class="dl-grid">
+    <div class="dl-card">
+      <div class="preview"><img src="bps-logo-transparent.webp" alt="BPS logo on dark"></div>
+      <div class="meta">
+        <div class="k">Studio Mark</div>
+        <div class="n">BPS Logo &middot; White on Dark</div>
+        <div class="desc">Primary studio mark for use on dark backgrounds.</div>
+      </div>
+      <div class="actions">
+        <a href="bps-logo-transparent.webp" download>Download WebP</a>
+        <a href="bps-logo.webp" download>PNG · Black BG</a>
+      </div>
+    </div>
+    <div class="dl-card light">
+      <div class="preview"><img src="bps-logo.webp" alt="BPS logo on black"></div>
+      <div class="meta">
+        <div class="k">Studio Mark</div>
+        <div class="n">BPS Logo &middot; Hero Treatment</div>
+        <div class="desc">The light-smear hero treatment used on most studio marketing.</div>
+      </div>
+      <div class="actions">
+        <a href="bps-logo.webp" download>Download WebP</a>
+      </div>
+    </div>
+    <div class="dl-card">
+      <div class="preview"><img src="assets/the-painting-poster.webp" alt="The Painting poster"></div>
+      <div class="meta">
+        <div class="k">Key Art</div>
+        <div class="n">The Painting &middot; Poster</div>
+        <div class="desc">2025 short film. Print-ready.</div>
+      </div>
+      <div class="actions">
+        <a href="assets/the-painting-poster.webp" download>Download WebP</a>
+      </div>
+    </div>
+    <div class="dl-card">
+      <div class="preview"><img src="assets/dark-heart.webp" alt="Stay Home key still — heart"></div>
+      <div class="meta">
+        <div class="k">Key Still</div>
+        <div class="n">Stay Home &middot; The Heart</div>
+        <div class="desc">Production still from the opening sequence.</div>
+      </div>
+      <div class="actions">
+        <a href="assets/dark-heart.webp" download>Download WebP</a>
+      </div>
+    </div>
+    <div class="dl-card">
+      <div class="preview"><img src="assets/zera-figure.webp" alt="Stay Home key still — Zera"></div>
+      <div class="meta">
+        <div class="k">Character</div>
+        <div class="n">Stay Home &middot; Zera</div>
+        <div class="desc">Character render from Stay Home.</div>
+      </div>
+      <div class="actions">
+        <a href="assets/zera-figure.webp" download>Download WebP</a>
+      </div>
+    </div>
+    <div class="dl-card">
+      <div class="preview"><img src="assets/red-winter-rulebook.webp" alt="Red Winter Rulebook"></div>
+      <div class="meta">
+        <div class="k">Tabletop</div>
+        <div class="n">Red Winter &middot; Rulebook</div>
+        <div class="desc">Hardcover tabletop RPG, first edition.</div>
+      </div>
+      <div class="actions">
+        <a href="assets/red-winter-rulebook.webp" download>Download WebP</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<section class="downloads" style="background: var(--ocean);">
+  <div class="head"><span class="num">03</span><span class="label">Boilerplate</span></div>
+  <p class="lede">Approved short and long descriptions for use in press materials.</p>
+  <div style="background: var(--depth); border: 1px solid var(--hair); padding: 40px 48px; max-width: 920px;">
+    <div style="font-size: 10px; letter-spacing: .45em; color: var(--glow); font-weight: 600; text-transform: uppercase; margin-bottom: 18px;">Short (50 words)</div>
+    <p style="font-family: var(--display); font-size: 17px; line-height: 1.6; color: var(--foam); font-weight: 400;">Blue Pulse Studios is an independent, award-winning studio telling bold, unflinching stories in film, television, and video games. Headquartered in Los Angeles and Pittsburgh, the studio champions the fearless, the visionary, and the unhinged &mdash; crafting dark narratives that refuse to play it safe.</p>
+    <div style="font-size: 10px; letter-spacing: .45em; color: var(--glow); font-weight: 600; text-transform: uppercase; margin: 36px 0 18px;">Long (110 words)</div>
+    <p style="font-family: var(--display); font-size: 17px; line-height: 1.6; color: var(--foam); font-weight: 400;">Blue Pulse Studios is an independent production company working in horror and genre cinema, prestige television, and interactive video games. Founded in 2024 and headquartered in Los Angeles and Pittsburgh, the studio operates as a boutique &mdash; small rooms, patient timelines, in-camera craft &mdash; with a debut feature, <em>Stay Home</em>, in production for 2027 and a back catalog of award-winning short films including <em>The Painting</em> (2025). The studio also publishes the tabletop wargame system <em>Red Winter</em> through its imprint Kriegsspiel Press. Blue Pulse believes restraint is a feature, not a bug, and that the best horror leaves the room slowly.</p>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<section class="coverage">
+  <div class="head"><span class="num">04</span><span class="label">Coverage</span></div>
+  <p class="lede">Recent press, festival mentions, and interviews.</p>
+  <p class="ph-note" style="font-family:var(--display);font-style:italic;color:var(--stone);">Coverage links will be added as articles publish.</p>
+  <div class="cov-list" data-placeholder>
+    <div class="cov-item">
+      <div class="date">Q1 &middot; 2026</div>
+      <div class="what">Stay Home Wraps Principal Photography<span class="src">Variety &middot; Industry News</span></div>
+      <a href="#" class="read">Read &rarr;</a>
+    </div>
+    <div class="cov-item">
+      <div class="date">Nov &middot; 2025</div>
+      <div class="what">The Painting Wins Best Short at Sitges<span class="src">Indiewire &middot; Festival Coverage</span></div>
+      <a href="#" class="read">Read &rarr;</a>
+    </div>
+    <div class="cov-item">
+      <div class="date">Sep &middot; 2025</div>
+      <div class="what">Independent Studios Pushing Back Against the Algorithm<span class="src">The Hollywood Reporter &middot; Feature</span></div>
+      <a href="#" class="read">Read &rarr;</a>
+    </div>
+    <div class="cov-item">
+      <div class="date">Aug &middot; 2025</div>
+      <div class="what">Red Winter: A WWII RPG From the People Behind Stay Home<span class="src">Polygon &middot; Tabletop</span></div>
+      <a href="#" class="read">Read &rarr;</a>
+    </div>
+    <div class="cov-item">
+      <div class="date">Jul &middot; 2024</div>
+      <div class="what">Inside Blue Pulse Studios &middot; The Founders Interview<span class="src">Filmmaker Magazine &middot; Profile</span></div>
+      <a href="#" class="read">Read &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- EPK DOWNLOADS -->
+<section class="coverage">
+  <div class="head"><span class="num">04b</span><span class="label">Press Kits</span></div>
+  <p class="lede">Everything in one download &mdash; stills, key art, loglines, credits, and contact sheets.</p>
+  <div data-placeholder style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;max-width:900px">
+    <a href="#" onclick="event.preventDefault();alert('EPK PDF uploads with the final press materials.');" style="display:block;padding:32px;border:1px solid var(--hair);text-decoration:none;color:inherit">
+      <div style="font-size:10px;letter-spacing:.5em;color:var(--glow);text-transform:uppercase;font-weight:500">Feature &middot; 2027</div>
+      <div style="font-family:var(--display);font-size:24px;color:var(--foam);margin-top:12px">Stay Home EPK</div>
+      <div style="font-size:12px;color:var(--stone);margin-top:8px;font-style:italic;font-family:var(--display)">PDF &middot; stills, key art, production notes</div>
+      <div style="margin-top:20px;font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:var(--foam);font-weight:500">Download &darr;</div>
+    </a>
+    <a href="#" onclick="event.preventDefault();alert('EPK PDF uploads with the final press materials.');" style="display:block;padding:32px;border:1px solid var(--hair);text-decoration:none;color:inherit">
+      <div style="font-size:10px;letter-spacing:.5em;color:var(--glow);text-transform:uppercase;font-weight:500">Short &middot; 2025</div>
+      <div style="font-family:var(--display);font-size:24px;color:var(--foam);margin-top:12px">The Painting EPK</div>
+      <div style="font-size:12px;color:var(--stone);margin-top:8px;font-style:italic;font-family:var(--display)">PDF &middot; stills, laurels, director&rsquo;s statement</div>
+      <div style="margin-top:20px;font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:var(--foam);font-weight:500">Download &darr;</div>
+    </a>
+  </div>
+  <p class="ph-note" style="font-family:var(--display);font-style:italic;color:var(--stone)">Press kits are being assembled &mdash; email us and we&rsquo;ll send materials directly.</p>
+</section>
+
+<div class="rule"></div>
+
+<section class="press-contact">
+  <div class="inner">
+    <div class="head" style="justify-content: center;"><span class="num">05</span><span class="label">Press contact</span></div>
+    <h2>Need something else? <em>Just ask.</em></h2>
+    <p>Embargoed previews, festival access, junket scheduling, ISDN-quality stills &mdash; if it's not here, we'll send it.</p>
+    <a class="email" href="mailto:press@bluepulsestudios.com">press@bluepulsestudios.com</a>
+  </div>
+</section>
+
+<footer>
+  <div class="top">
+    <div class="brand-col">
+      <div class="mark">BLUE PULSE STUDIOS</div>
+      <p>A boutique production house for horror and genre film, television, and video games.</p>
+    </div>
+    <div><h4>Films</h4><a href="homepage.html#slate">Stay Home</a><a href="homepage.html#slate">The Painting</a></div>
+    <div><h4>Shop</h4><a href="shop.html">All</a><a href="cart.html">Cart</a></div>
+    <div><h4>Studio</h4><a href="studio.html">About</a><a href="press.html">Press</a><a href="journal.html">Newswire</a><a href="contact.html">Contact</a></div>
+  </div>
+  <div class="bottom"><div>&copy; 2026 Blue Pulse Studios</div><div class="legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="shipping-returns.html">Shipping &amp; Returns</a></div><div>Made patiently</div></div>
+</footer>
+
+<script src="site.js"></script>
+</body>
+</html>

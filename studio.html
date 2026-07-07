@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Independent. Unflinching. Dark stories from Los Angeles and Pittsburgh — film, television, and video games from the boutique studio that refuses to play it safe." />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="theme-color" content="#02040A" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="The Studio — Blue Pulse Studios" />
+<meta property="og:description" content="Independent. Unflinching. Dark stories from Los Angeles and Pittsburgh — film, television, and video games from the boutique studio that refuses to play it safe." />
+<meta property="og:image" content="og-image.jpg" />
+<meta property="og:site_name" content="Blue Pulse Studios" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="The Studio — Blue Pulse Studios" />
+<meta name="twitter:description" content="Independent. Unflinching. Dark stories from Los Angeles and Pittsburgh — film, television, and video games from the boutique studio that refuses to play it safe." />
+<meta name="twitter:image" content="og-image.jpg" />
+<title>Studio — Blue Pulse Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --abyss:  #02040A;
+    --ocean:  #060F1F;
+    --depth:  #0A1A35;
+    --tide:   #0F2A52;
+    --pulse:  #1D5FB8;
+    --glow:   #6BB4E8;
+    --foam:   #CFD9E4;
+    --stone:  #8B929C;
+    --hair:   #132341;
+    --display:'Fraunces', 'Times New Roman', serif;
+    --ui:     'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--abyss); color: var(--foam);
+    font-family: var(--ui); font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+    opacity: 0.04; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 48px;
+    background: linear-gradient(to bottom, rgba(2,4,10,0.5), transparent);
+    font-size: 10.5px; letter-spacing: 0.28em; text-transform: uppercase;
+    transition: background .8s ease;
+  }
+  .nav .brand {
+    display: inline-flex; flex-direction: column; gap: 3px; line-height: 1;
+    color: var(--foam); text-decoration: none;
+  }
+  .nav .brand .line1 { font-weight: 600; letter-spacing: 0.32em; font-size: 11px; }
+  .nav .brand .line2 { font-weight: 500; letter-spacing: 0.42em; font-size: 9px; color: var(--stone); transition: color .6s; }
+  .nav .brand:hover .line2 { color: var(--foam); }
+  .nav .links a { color: var(--stone); text-decoration: none; margin-left: 34px; transition: color .6s; }
+  .nav .links a:hover, .nav .links a.on { color: var(--foam); }
+
+  section { position: relative; overflow: hidden; }
+
+  /* ——— HERO ——— */
+  .hero {
+    min-height: 92vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 160px 72px 120px;
+  }
+  .hero .bg {
+    position: absolute; inset: -4%;
+    background:
+      url('assets/bubbles-v3.webp') center/cover no-repeat,
+      radial-gradient(ellipse at 30% 30%, #0A2448 0%, #020611 85%);
+    opacity: 0.7;
+    filter: brightness(0.7);
+    z-index: 0;
+  }
+  .hero .vig {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background:
+      linear-gradient(to right, rgba(2,4,10,0.85) 0%, transparent 60%, var(--abyss) 100%),
+      linear-gradient(to bottom, rgba(2,4,10,0.5), transparent 30%, transparent 70%, var(--abyss));
+  }
+  .hero .content { position: relative; z-index: 2; max-width: 1100px; }
+  .hero .kicker {
+    font-size: 10.5px; letter-spacing: .5em; text-transform: uppercase;
+    color: var(--glow); font-weight: 500;
+    animation: fadeUp 1.6s ease .3s both;
+  }
+  .hero h1 {
+    margin-top: 32px;
+    font-family: var(--display); font-weight: 300;
+    font-size: clamp(52px, 7.5vw, 112px);
+    letter-spacing: -0.025em; line-height: 1.02;
+    color: var(--foam);
+    animation: fadeUp 2s ease .5s both;
+  }
+  .hero h1 em { font-style: italic; color: var(--glow); }
+  .hero .sub {
+    margin-top: 44px;
+    font-family: var(--display); font-style: italic; font-weight: 300;
+    font-size: clamp(19px, 1.7vw, 24px); line-height: 1.55;
+    max-width: 680px; color: var(--stone);
+    animation: fadeUp 2s ease 1s both;
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+  .rule { height: 1px; background: var(--hair); margin: 0 72px; }
+
+  /* ——— MANIFESTO ——— */
+  .manifesto {
+    padding: 180px 72px;
+    background: linear-gradient(to bottom, var(--abyss), var(--ocean));
+  }
+  .manifesto .inner {
+    max-width: 1000px; margin: 0 auto;
+  }
+  .manifesto .label {
+    font-size: 10px; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--glow); font-weight: 500;
+    display: flex; align-items: center; gap: 20px;
+    margin-bottom: 56px;
+  }
+  .manifesto .label::before {
+    content: ''; width: 40px; height: 1px; background: var(--glow);
+  }
+  .manifesto p {
+    font-family: var(--display); font-weight: 300;
+    font-size: clamp(22px, 2.4vw, 32px); line-height: 1.5;
+    color: var(--foam); margin-bottom: 36px;
+    letter-spacing: -0.01em;
+  }
+  .manifesto p em { font-style: italic; color: var(--glow); }
+  .manifesto .drop::first-letter {
+    font-size: 1.35em; line-height: 1; font-style: italic; color: var(--glow);
+  }
+
+  /* ——— DISCIPLINES ——— */
+  .disciplines {
+    padding: 150px 72px;
+    background: var(--ocean);
+    position: relative;
+  }
+  .disciplines::before {
+    content: ''; position: absolute; inset: 0;
+    background: url('assets/bubbles-v1.webp') center/cover no-repeat;
+    opacity: 0.12; mix-blend-mode: screen; pointer-events: none;
+  }
+  .head {
+    display: flex; align-items: baseline; gap: 24px; margin-bottom: 24px;
+    position: relative; z-index: 2;
+  }
+  .head .num { font-size: 10px; letter-spacing: .32em; color: var(--glow); font-weight: 600; text-transform: uppercase; }
+  .head .label { font-size: 10px; letter-spacing: .32em; color: var(--foam); font-weight: 500; text-transform: uppercase; }
+  .lede {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(19px, 1.7vw, 24px); line-height: 1.5;
+    color: var(--foam); opacity: .9;
+    max-width: 820px; margin-bottom: 80px;
+    position: relative; z-index: 2;
+  }
+  .disc-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+    background: var(--hair);
+    border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair);
+    position: relative; z-index: 2;
+  }
+  .disc {
+    background: var(--ocean);
+    padding: 56px 40px;
+    display: flex; flex-direction: column; gap: 20px;
+    min-height: 320px;
+  }
+  .disc .n {
+    font-size: 10px; letter-spacing: .5em; color: var(--glow); font-weight: 600; text-transform: uppercase;
+  }
+  .disc h3 {
+    font-family: var(--display); font-weight: 300; font-size: 44px;
+    letter-spacing: -0.02em; color: var(--foam); line-height: 1;
+  }
+  .disc h3 em { font-style: italic; color: var(--glow); }
+  .disc p {
+    font-family: var(--display); font-style: italic; font-weight: 300;
+    font-size: 15px; line-height: 1.6; color: var(--stone);
+    margin-top: auto;
+  }
+
+  /* ——— PILLARS ——— */
+  .pillars {
+    padding: 180px 72px;
+    background: linear-gradient(to bottom, var(--ocean), var(--abyss));
+    text-align: center;
+  }
+  .pillars .inner { max-width: 1100px; margin: 0 auto; }
+  .pillars .kicker {
+    font-size: 10.5px; letter-spacing: .5em; text-transform: uppercase;
+    color: var(--glow); font-weight: 500; margin-bottom: 32px;
+  }
+  .pillars h2 {
+    font-family: var(--display); font-weight: 300;
+    font-size: clamp(40px, 5.5vw, 72px); letter-spacing: -0.02em;
+    line-height: 1.1; color: var(--foam); margin-bottom: 80px;
+  }
+  .pillars h2 em { font-style: italic; color: var(--glow); }
+  .pillars-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px;
+    text-align: left;
+  }
+  .pillar { padding: 48px 36px; border: 1px solid var(--hair); background: rgba(10,26,53,0.25); transition: border-color .6s, background .6s; }
+  .pillar:hover { border-color: var(--pulse); background: rgba(29,95,184,0.08); }
+  .pillar .n {
+    font-family: var(--display); font-style: italic; font-weight: 300;
+    font-size: 48px; color: var(--glow); line-height: 1;
+    margin-bottom: 28px;
+  }
+  .pillar h4 {
+    font-family: var(--display); font-weight: 400;
+    font-size: 30px; letter-spacing: -0.015em;
+    color: var(--foam); margin-bottom: 16px;
+  }
+  .pillar p {
+    font-family: var(--display); font-style: italic; font-weight: 300;
+    font-size: 15px; line-height: 1.6; color: var(--stone);
+  }
+
+  /* ——— LOCATIONS ——— */
+  .locations {
+    padding: 150px 72px;
+    background: var(--abyss);
+  }
+  .loc-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+    position: relative; z-index: 2;
+  }
+  .loc {
+    border: 1px solid var(--hair);
+    padding: 56px;
+    background: linear-gradient(140deg, var(--depth), var(--abyss));
+    position: relative; overflow: hidden;
+    min-height: 360px;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .loc::after {
+    content: ''; position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    opacity: 0.15; mix-blend-mode: screen;
+  }
+  .loc.la::after    { background-image: url('assets/bubbles-v2.webp'); }
+  .loc.alt::after   { background-image: url('assets/bubbles-v3.webp'); }
+  .loc > * { position: relative; z-index: 2; }
+  .loc .k {
+    font-size: 10px; letter-spacing: .5em; color: var(--glow); font-weight: 600; text-transform: uppercase;
+  }
+  .loc h3 {
+    font-family: var(--display); font-weight: 300;
+    font-size: clamp(40px, 4.5vw, 60px); letter-spacing: -0.02em;
+    color: var(--foam); margin-top: 18px; line-height: 1;
+  }
+  .loc .addr {
+    margin-top: 36px;
+    font-family: var(--display); font-style: italic; font-weight: 300;
+    font-size: 16px; line-height: 1.6; color: var(--stone);
+  }
+  .loc .meta {
+    margin-top: 24px; font-size: 10px; letter-spacing: .4em; color: var(--glow); font-weight: 500; text-transform: uppercase;
+  }
+
+  /* ——— CTA ——— */
+  .cta-section {
+    padding: 180px 72px;
+    text-align: center;
+    background: radial-gradient(ellipse at center, var(--tide) 0%, var(--abyss) 80%);
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: ''; position: absolute; inset: 0;
+    background: url('assets/bubbles-v2.webp') center/cover no-repeat;
+    opacity: 0.18; mix-blend-mode: screen;
+  }
+  .cta-section .inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 2; }
+  .cta-section .kicker {
+    font-size: 10.5px; letter-spacing: .5em; color: var(--glow); font-weight: 500;
+    text-transform: uppercase; margin-bottom: 28px;
+  }
+  .cta-section h2 {
+    font-family: var(--display); font-weight: 300;
+    font-size: clamp(44px, 6.5vw, 92px); letter-spacing: -0.025em;
+    line-height: 1.05; color: var(--foam); margin-bottom: 56px;
+  }
+  .cta-section h2 em { font-style: italic; color: var(--glow); }
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 18px;
+    padding: 20px 40px;
+    border: 1px solid var(--foam);
+    color: var(--foam); text-decoration: none;
+    font-size: 11px; letter-spacing: .45em; text-transform: uppercase; font-weight: 500;
+    transition: background .5s, color .5s, border-color .5s;
+  }
+  .cta-btn:hover { background: var(--foam); color: var(--abyss); border-color: var(--foam); }
+
+  /* ——— FOOTER ——— */
+  footer {
+    padding: 96px 48px 56px;
+    background: var(--abyss);
+    color: var(--stone);
+    border-top: 1px solid var(--hair);
+  }
+  footer .top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 64px;
+    margin-bottom: 72px;
+  }
+  footer h4 {
+    font-size: 10px; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--foam); font-weight: 500; margin-bottom: 20px;
+  }
+  footer a { display: block; color: var(--stone); text-decoration: none; font-size: 13px; margin-bottom: 10px; transition: color .5s; }
+  footer a:hover { color: var(--foam); }
+  footer .brand-col .mark { color: var(--foam); font-size: 13px; letter-spacing: .3em; font-weight: 600; margin-bottom: 18px; }
+  footer .brand-col p { font-family: var(--display); font-style: italic; font-size: 14px; line-height: 1.55; max-width: 340px; }
+  footer .bottom {
+    display: flex; justify-content: space-between;
+    font-size: 10px; letter-spacing: .32em; text-transform: uppercase;
+    padding-top: 28px; border-top: 1px solid var(--hair);
+  }
+
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 1.4s cubic-bezier(.2,.7,.2,1), transform 1.4s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    .nav { padding: 18px 24px; }
+    .nav .links a { margin-left: 16px; }
+    .hero, .manifesto, .disciplines, .pillars, .locations, .cta-section, .rule { padding-left: 24px; padding-right: 24px; }
+    .rule { margin: 0 24px; }
+    .disc-grid, .pillars-grid, .loc-grid { grid-template-columns: 1fr; }
+    footer .top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  }
+</style>
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="page-transition entering" id="pageTransition" aria-hidden="true"></div>
+<nav class="nav">
+  <a class="brand" href="homepage.html">
+    <span class="line1">BLUE PULSE</span>
+    <span class="line2">STUDIOS</span>
+  </a>
+  <div class="links">
+    <a href="homepage.html#slate">Films</a>
+    <a href="shop.html">Shop</a>
+    <span class="studio-menu">
+      <a class="studio-trigger on" href="studio.html">Studio</a>
+      <div class="studio-panel" role="menu">
+        <a href="press.html" role="menuitem">Press</a>
+        <a href="journal.html" role="menuitem">Newswire</a>
+      </div>
+    </span>
+    <a href="community.html">Community</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="main" class="hero">
+  <div class="bg"></div>
+  <div class="vig"></div>
+  <div class="content">
+    <div class="kicker">The Studio</div>
+    <h1>Independent.<br/><em>Unflinching.</em></h1>
+    <p class="sub">Dark stories, made by hand. Film, television, and video games, out of Los Angeles and Pittsburgh.</p>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- MANIFESTO -->
+<section class="manifesto">
+  <div class="inner">
+    <div class="label reveal">Manifesto &middot; 2026</div>
+    <p class="reveal drop">Blue Pulse Studios is an independent, award-winning studio <em>hell-bent on telling bold, unflinching stories</em> in film, television, and video games. We champion the fearless, the visionary, and the unhinged &mdash; crafting dark narratives that refuse to play it safe.</p>
+    <p class="reveal">With headquarters in Los Angeles and Pittsburgh, we&rsquo;re here to shake things up, make people feel something, and <em>craft stories that stay with audiences</em> well after the credits roll.</p>
+  </div>
+</section>
+
+<!-- DISCIPLINES -->
+<section class="disciplines">
+  <div class="head reveal"><span class="num">01</span><span class="label">What we make</span></div>
+  <p class="lede reveal">Three mediums, one temperament. The story decides the form.</p>
+  <div class="disc-grid reveal">
+    <div class="disc">
+      <div class="n">I &middot; Film</div>
+      <h3>Feature <em>cinema</em></h3>
+      <p>Boutique-scale, auteur-driven horror and genre features. Shot in-camera when we can. Released to be seen in a dark room with other people.</p>
+    </div>
+    <div class="disc">
+      <div class="n">II &middot; Television</div>
+      <h3>Long-form <em>dread</em></h3>
+      <p>Limited series and anthologies for the nights that need a slow unravelling. Built for streaming, written for patience.</p>
+    </div>
+    <div class="disc">
+      <div class="n">III &middot; Video Games</div>
+      <h3>Interactive <em>horror</em></h3>
+      <p>Playable stories where the camera is the player. First-person atmosphere, branching narrative, sound design that breathes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PILLARS -->
+<section class="pillars">
+  <div class="inner">
+    <div class="kicker reveal">What we champion</div>
+    <h2 class="reveal">Three things keep us <em>awake at night.</em></h2>
+    <div class="pillars-grid">
+      <div class="pillar reveal">
+        <div class="n">i.</div>
+        <h4>The fearless</h4>
+        <p>Stories that refuse to soften their edges. Writers and directors willing to sit in discomfort long enough to find something true inside it.</p>
+      </div>
+      <div class="pillar reveal">
+        <div class="n">ii.</div>
+        <h4>The visionary</h4>
+        <p>A singular voice, handled with care. We back the weird idea, the unproven hand, the film that shouldn&rsquo;t work &mdash; and then does.</p>
+      </div>
+      <div class="pillar reveal">
+        <div class="n">iii.</div>
+        <h4>The unhinged</h4>
+        <p>The stuff that keeps you up. Dark narratives that play for keeps. If it makes the room uncomfortable, we&rsquo;re probably interested.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATIONS -->
+<section class="locations">
+  <div class="head reveal"><span class="num">02</span><span class="label">Where we work</span></div>
+  <p class="lede reveal">Two rooms on two coasts. One temperament.</p>
+  <div class="loc-grid reveal">
+    <div class="loc la">
+      <div>
+        <div class="k">Headquarters</div>
+        <h3>Los Angeles</h3>
+      </div>
+      <div>
+        <div class="addr">Production, post, and development. The West Coast room. Where the films get made, and where most of the noise happens.</div>
+        <div class="meta">LA &middot; CA</div>
+      </div>
+    </div>
+    <div class="loc alt">
+      <div>
+        <div class="k">Headquarters</div>
+        <h3>Pittsburgh</h3>
+      </div>
+      <div>
+        <div class="addr">Writing, editing, and the occasional quiet week. The East Coast room. Where the stories get loud and then get cut back down.</div>
+        <div class="meta">Pittsburgh &middot; PA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="inner">
+    <div class="kicker">Work with us</div>
+    <h2>Bring us your <em>story.</em></h2>
+    <a href="contact.html" class="cta-btn">Open contact &rarr;</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="top">
+    <div class="brand-col">
+      <div class="mark">BLUE PULSE STUDIOS</div>
+      <p>A boutique production house for horror and genre film, television, and video games. Small rooms, patient work, handmade stories.</p>
+    </div>
+    <div>
+      <h4>Films</h4>
+      <a href="homepage.html#slate">Stay Home</a>
+      <a href="homepage.html#slate">The Painting</a>
+      <a href="journal.html">Archive</a>
+    </div>
+    <div>
+      <h4>Shop</h4>
+      <a href="shop.html">All</a>
+      <a href="shop.html">Apparel</a>
+      <a href="shop.html">Figures</a>
+      <a href="shop.html">Prints</a>
+    </div>
+    <div>
+      <h4>Studio</h4>
+      <a href="studio.html">About</a>
+      <a href="journal.html">Newswire</a>
+      <a href="contact.html">Contact</a>
+      <a href="press.html">Press</a>
+    </div>
+  </div>
+  <div class="bottom">
+    <div>&copy; 2026 Blue Pulse Studios</div>
+    <div class="legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="shipping-returns.html">Shipping &amp; Returns</a></div>
+    <div>Made patiently</div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.14 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  const nav = document.querySelector('.nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) nav.style.background = 'rgba(2,4,10,0.82)';
+    else nav.style.background = 'linear-gradient(to bottom, rgba(2,4,10,0.5), transparent)';
+  }, { passive: true });
+</script>
+<script src="site.js"></script>
+</body>
+</html>

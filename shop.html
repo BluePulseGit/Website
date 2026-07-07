@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Artifacts from the films. Limited drops, numbered editions, exclusive collectables from Blue Pulse Studios." />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="theme-color" content="#02040A" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Blue Pulse Studios · Shop" />
+<meta property="og:description" content="Artifacts from the films. Limited drops, numbered editions, exclusive collectables from Blue Pulse Studios." />
+<meta property="og:image" content="og-image.jpg" />
+<meta property="og:site_name" content="Blue Pulse Studios" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Blue Pulse Studios · Shop" />
+<meta name="twitter:description" content="Artifacts from the films. Limited drops, numbered editions, exclusive collectables from Blue Pulse Studios." />
+<meta name="twitter:image" content="og-image.jpg" />
+<title>shop.bluepulsestudios.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="products.js"></script>
+<style>
+  :root {
+    --paper:    #FAFAFA;
+    --paper-2:  #F2F2F2;
+    --ink:      #0F0F0F;
+    --stone:    #6B6B6B;
+    --ash:      #B0B0B0;
+    --hair:     #E5E5E5;
+    --hair-2:   #D8D8D8;
+    --accent:   #1D3A6B;
+    --accent-glow: #2F6DB8;
+    --display:  'Fraunces', 'Times New Roman', serif;
+    --ui:       'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--ui);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ——— NAV ——— */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--paper);
+    border-bottom: 1px solid var(--hair);
+  }
+  .nav .inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 48px;
+    padding: 22px 40px;
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+  }
+  .nav .brand {
+    display: inline-flex; flex-direction: column; gap: 3px; line-height: 1;
+    text-decoration: none; color: var(--ink);
+  }
+  .nav .brand .line1 { font-weight: 600; letter-spacing: 0.32em; font-size: 11px; }
+  .nav .brand .line2 { font-weight: 500; letter-spacing: 0.42em; font-size: 9px; color: var(--stone); transition: color .6s; }
+  .nav .brand:hover .line2 { color: var(--ink); }
+  .nav .links { justify-self: center; display: flex; gap: 36px; }
+  .nav .links a { color: var(--stone); text-decoration: none; transition: color .5s; font-weight: 500; }
+  .nav .links a:hover, .nav .links a.on { color: var(--ink); }
+  .nav .right { display: flex; align-items: center; gap: 22px; justify-self: end; }
+  .nav .right a, .nav .right button {
+    color: var(--ink); text-decoration: none; background: none; border: 0;
+    font: inherit; letter-spacing: inherit; text-transform: inherit;
+    cursor: pointer; transition: color .5s; font-weight: 500;
+  }
+  .nav .right a:hover, .nav .right button:hover { color: var(--stone); }
+  .nav .right .auth .sep { color: var(--ash); margin: 0 4px; }
+  .nav .right .cart-btn sup {
+    font-size: 10px; letter-spacing: 0.1em; color: var(--stone); font-weight: 500;
+    margin-left: 4px; transition: color .4s;
+  }
+  .nav .right .cart-btn.active sup { color: var(--ink); }
+  .nav .right .cart-btn.pop {
+    animation: cartPop .55s cubic-bezier(.2,.7,.2,1);
+  }
+  @keyframes cartPop {
+    0%   { transform: translateY(0); }
+    35%  { transform: translateY(-4px); }
+    100% { transform: translateY(0); }
+  }
+
+  /* ——— FILTERS BAR ——— */
+  .filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 40px 36px;
+    border-bottom: 1px solid var(--hair);
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .filters .cats { display: flex; gap: 18px; align-items: center; }
+  /* All dropdown mini-menu */
+  .all-menu { position: relative; }
+  .all-menu .all-trigger {
+    display: inline-flex; align-items: baseline; gap: 6px;
+    color: var(--ink); font-weight: 500; cursor: pointer;
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  }
+  .all-menu .caret { font-size: 9px; color: var(--stone); transition: transform .35s, color .35s; }
+  .all-menu.open .caret { transform: rotate(180deg); color: var(--ink); }
+  .all-menu .dropdown {
+    position: absolute; top: 100%; left: -14px;
+    min-width: 260px;
+    padding-top: 16px;                          /* invisible hover bridge — no cursor gap */
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transform: translateY(-6px);
+    transition: opacity .3s, transform .3s, visibility .3s;
+    z-index: 50;
+  }
+  .all-menu .dropdown-panel {
+    background: var(--paper);
+    border: 1px solid var(--hair);
+    padding: 10px 0;
+    box-shadow: 0 24px 48px -20px rgba(15,15,15,0.22);
+  }
+  /* Nested submenu (Board Gaming → Red Winter) */
+  .dropdown-panel .submenu { position: relative; }
+  .dropdown-panel .submenu > a .arrow {
+    float: right; color: var(--ash); margin-left: 12px;
+    font-size: 10px; transition: transform .3s, color .3s;
+  }
+  .dropdown-panel .submenu:hover > a .arrow { color: var(--ink); transform: translateX(3px); }
+  .dropdown-panel .submenu .sub-panel {
+    position: absolute; top: -11px; left: 100%;
+    margin-left: 12px;                    /* small visible gap, but bridged below */
+    min-width: 220px;
+    background: var(--paper);
+    border: 1px solid var(--hair);
+    padding: 10px 0;
+    box-shadow: 0 24px 48px -20px rgba(15,15,15,0.22);
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity .25s, visibility .25s;
+    z-index: 2;
+  }
+  /* Transparent bridge between parent item and sub-panel so cursor can cross safely */
+  .dropdown-panel .submenu::after {
+    content: '';
+    position: absolute; top: 0; left: 100%;
+    width: 14px; height: 100%;
+    pointer-events: none;
+  }
+  .dropdown-panel .submenu:hover::after { pointer-events: auto; }
+  .dropdown-panel .submenu:hover .sub-panel,
+  .dropdown-panel .submenu .sub-panel:hover {
+    opacity: 1; visibility: visible; pointer-events: auto;
+  }
+  .dropdown-panel .submenu .sub-panel .sub-head {
+    display: block;
+    padding: 10px 22px 8px;
+    font-size: 9px; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--stone); font-weight: 600;
+    border-bottom: 1px solid var(--hair);
+    margin-bottom: 4px;
+  }
+  .all-menu.open .dropdown {
+    opacity: 1; visibility: visible; pointer-events: auto;
+    transform: translateY(0);
+  }
+  .all-menu .dropdown a {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 12px 22px;
+    font-size: 12.5px; letter-spacing: 0.06em; text-transform: none;
+    text-decoration: none; color: var(--ink); font-weight: 500;
+    transition: color .3s, background .3s;
+  }
+  .all-menu .dropdown a sup {
+    font-size: 10px; color: var(--ash); font-weight: 400; margin-left: 14px;
+    letter-spacing: 0;
+  }
+  .all-menu .dropdown a:hover { background: var(--paper-2); }
+  .all-menu .dropdown a.on { color: var(--stone); pointer-events: none; }
+  /* Current filter crumb beside the All trigger */
+  .filter-crumb {
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--stone); font-weight: 500;
+    padding-left: 18px; border-left: 1px solid var(--hair);
+    display: none;
+  }
+  body.filtered .filter-crumb { display: inline-block; }
+  .filters .tools { display: flex; gap: 24px; align-items: center; color: var(--ink); font-weight: 500; }
+  .filters .tools .sep { color: var(--ash); }
+  .filters .sort { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; }
+
+  /* ——— FEATURED BANNER ——— */
+  /* ——— EXCLUSIVE CAROUSEL — only on shop home, hidden when filter is active ——— */
+  .exclusive {
+    background: #0F0F0F;
+    color: #FAFAFA;
+    padding: 60px 40px 80px;
+    border-bottom: 1px solid var(--hair);
+  }
+  body.filtered .exclusive { display: none; }
+  .excl-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 60px; padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+  }
+  .excl-label { display: flex; align-items: center; gap: 16px; }
+  .excl-label .mark {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px;
+    border: 1px solid rgba(255,255,255,0.55);
+    font-size: 9px; letter-spacing: 0.08em; font-weight: 600;
+    color: #FAFAFA;
+  }
+  .excl-label .title {
+    font-size: 10.5px; letter-spacing: 0.5em; text-transform: uppercase;
+    color: #FAFAFA; font-weight: 500;
+  }
+  .excl-count {
+    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: rgba(255,255,255,0.45); font-weight: 500;
+  }
+  .carousel { position: relative; }
+  .slide {
+    display: grid; grid-template-columns: 1fr 1.1fr;
+    gap: 80px; align-items: center;
+    min-height: 480px;
+  }
+  .slide-copy .kicker {
+    font-size: 10.5px; letter-spacing: .5em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55); font-weight: 500; margin-bottom: 22px;
+  }
+  .slide-copy h1 {
+    font-family: var(--display); font-weight: 300;
+    font-size: clamp(44px, 5.2vw, 74px);
+    letter-spacing: -0.022em; line-height: 1.02;
+    color: #FAFAFA;
+  }
+  .slide-copy h1 em { font-style: italic; color: rgba(255,255,255,0.8); }
+  .slide-copy p {
+    margin-top: 28px;
+    font-family: var(--display); font-style: italic; font-weight: 300;
+    font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.62);
+    max-width: 500px;
+  }
+  .slide-cta {
+    display: inline-flex; align-items: center; gap: 14px;
+    margin-top: 40px;
+    font-size: 11px; letter-spacing: .45em; text-transform: uppercase;
+    color: #FAFAFA; text-decoration: none; font-weight: 500;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #FAFAFA;
+    transition: padding-bottom .4s, letter-spacing .4s;
+  }
+  .slide-cta:hover { padding-bottom: 14px; letter-spacing: .52em; }
+  .slide-visual {
+    aspect-ratio: 4 / 5;
+    background: rgba(250,250,250,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    overflow: visible;
+    text-decoration: none;
+    transition: transform .8s cubic-bezier(.2,.7,.2,1), border-color .4s;
+  }
+  .slide-visual:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.18); }
+  .slide-visual img {
+    max-width: 85%; max-height: 85%;
+    object-fit: contain;
+    filter: drop-shadow(0 32px 50px rgba(0,0,0,0.6));
+  }
+  .excl-nav {
+    display: flex; justify-content: center; align-items: center; gap: 32px;
+    margin-top: 60px;
+  }
+  .excl-nav button {
+    background: transparent; border: 0; cursor: pointer;
+    color: rgba(255,255,255,0.55); font-size: 20px;
+    padding: 8px 16px;
+    transition: color .4s;
+  }
+  .excl-nav button:hover:not(:disabled) { color: #FAFAFA; }
+  .excl-nav button:disabled { opacity: 0.25; cursor: default; }
+  .excl-nav .dots { display: flex; gap: 10px; }
+  .excl-nav .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.25); transition: background .4s; }
+  .excl-nav .dot.on { background: #FAFAFA; }
+
+  /* ——— PRODUCT GRID ——— */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 56px 40px;
+    padding: 80px 40px 120px;
+  }
+  .card { text-decoration: none; color: inherit; display: flex; flex-direction: column; cursor: pointer; }
+  .card .img {
+    aspect-ratio: 4 / 5;
+    background: #FAFAFA;
+    position: relative;
+    border: 1px solid var(--hair);
+    display: flex; align-items: center; justify-content: center;
+    overflow: visible;
+  }
+  .card .img img {
+    max-width: 88%; max-height: 88%;
+    object-fit: contain;
+    filter: drop-shadow(0 16px 22px rgba(15,15,15,0.22));
+    transition: transform 1s cubic-bezier(.2,.7,.2,1);
+  }
+  .card:hover .img img { transform: translateY(-6px); }
+  .card.painting .img { overflow: hidden; padding: 0; }
+  .card.painting .img img {
+    max-width: 100%; max-height: 100%; width: 100%; height: 100%;
+    filter: none;
+  }
+  /* Figurine V2 files have baked-in Photoshop drop shadows — don't double them */
+  .card[data-product="shelby-figure"] .img img,
+  .card[data-product="ashen-figure"] .img img { filter: none; }
+  .pd-media.contain.baked img { filter: none; }
+  /* Board game image already sits on white — use light tile to match rest of grid */
+  .card[data-product="board-game"] .img {
+    background: #FAFAFA;
+    overflow: hidden;
+    padding: 20px;
+  }
+  .card[data-product="board-game"] .img img {
+    max-width: 100%; max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 14px 22px rgba(15,15,15,0.14));
+  }
+  /* Filter: hide non-matching cards */
+  .card.hidden { display: none; }
+  .card .img .pill {
+    position: absolute;
+    top: 14px; left: 14px; z-index: 2;
+    font-size: 8.5px; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--paper);
+    background: rgba(15,15,16,0.72);
+    backdrop-filter: blur(6px);
+    padding: 6px 10px;
+    font-weight: 500;
+  }
+  .card .info {
+    margin-top: 20px;
+  }
+  .card .kicker {
+    font-size: 9.5px; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--stone); font-weight: 500; margin-bottom: 6px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card .kicker .logo-chip {
+    display: inline-block; width: 14px; height: 14px; vertical-align: middle;
+    background: var(--ink); color: var(--paper);
+    font-size: 8px; line-height: 14px; text-align: center; letter-spacing: 0;
+    font-weight: 600;
+  }
+  .card .name {
+    font-family: var(--display); font-weight: 400;
+    font-size: 18px; letter-spacing: -0.01em;
+    color: var(--ink); line-height: 1.25;
+  }
+  .card .price {
+    margin-top: 8px; font-size: 13px; color: var(--ink); font-weight: 500;
+  }
+
+  /* Light paper tiles for print/placeholder items */
+  .card.paper .img {
+    background-color: var(--paper-2);
+    border: 1px solid var(--hair);
+  }
+  .card.painting .img {
+    background-color: #A9B3B8;
+    background-image: url('assets/the-painting-poster.webp');
+    background-size: cover;
+  }
+  .card.placeholder .img {
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--display); font-style: italic;
+    color: var(--stone);
+  }
+  .card.placeholder .img::before {
+    content: '+';
+    position: absolute;
+    font-size: 22px;
+    color: var(--ash);
+    font-style: normal;
+    font-weight: 300;
+  }
+  .card.placeholder .img::after {
+    content: 'coming soon';
+    position: absolute; bottom: 22px; left: 0; right: 0; text-align: center;
+    font-size: 10px; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--stone); font-family: var(--ui); font-style: normal;
+    font-weight: 500;
+  }
+
+  /* ——— FOOTER BAND ——— */
+  .band {
+    padding: 80px 40px 120px;
+    border-top: 1px solid var(--hair);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: start;
+    background: var(--paper-2);
+  }
+  .band h3 {
+    font-family: var(--display); font-weight: 300;
+    font-size: clamp(30px, 3vw, 42px); letter-spacing: -0.018em;
+    line-height: 1.1; color: var(--ink); max-width: 460px;
+  }
+  .band form {
+    display: flex; gap: 0; border-bottom: 1px solid var(--ink);
+    max-width: 520px;
+  }
+  .band input {
+    flex: 1; border: 0; background: transparent; font: inherit;
+    color: var(--ink); font-size: 14px; padding: 14px 0; outline: none;
+  }
+  .band input::placeholder { color: var(--ash); }
+  .band button {
+    border: 0; background: transparent; font: inherit; cursor: pointer;
+    font-size: 10.5px; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--ink); font-weight: 500; padding: 14px 4px;
+  }
+
+  /* ——— SITE FOOTER ——— */
+  footer.site {
+    padding: 72px 40px 48px;
+    background: var(--ink);
+    color: var(--ash);
+  }
+  footer.site .top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 56px;
+    margin-bottom: 56px;
+  }
+  footer.site h4 {
+    font-size: 10px; letter-spacing: .42em; text-transform: uppercase;
+    color: var(--paper); font-weight: 500; margin-bottom: 18px;
+  }
+  footer.site a {
+    display: block; color: var(--ash); text-decoration: none;
+    font-size: 13px; margin-bottom: 8px; transition: color .5s;
+  }
+  footer.site a:hover { color: var(--paper); }
+  footer.site .brand-col .mark { color: var(--paper); font-size: 13px; letter-spacing: .3em; font-weight: 600; margin-bottom: 16px; }
+  footer.site .brand-col p { font-family: var(--display); font-style: italic; font-size: 14px; line-height: 1.55; max-width: 340px; }
+  footer.site .bottom {
+    display: flex; justify-content: space-between;
+    font-size: 10px; letter-spacing: .32em; text-transform: uppercase;
+    padding-top: 28px; border-top: 1px solid #222226;
+  }
+
+  /* reveal */
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 1.2s cubic-bezier(.2,.7,.2,1), transform 1.2s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* hide non-matching cards when filter is active */
+  .card.hidden { display: none; }
+
+  @media (max-width: 1100px) {
+    .grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 900px) {
+    .slide { grid-template-columns: 1fr; gap: 40px; }
+  }
+  @media (max-width: 800px) {
+    .nav .inner { grid-template-columns: auto 1fr; gap: 16px; padding: 16px 24px; }
+    .nav .links { display: none; }
+    .nav .right { justify-self: end; }
+    .filters { flex-wrap: wrap; gap: 14px 28px; padding: 20px 24px; }
+    .feature { grid-template-columns: 1fr; gap: 40px; padding: 40px 24px 56px; }
+    .grid { grid-template-columns: repeat(2, 1fr); padding: 48px 24px 80px; gap: 36px 20px; }
+    .band { grid-template-columns: 1fr; padding: 48px 24px; }
+    footer.site .top { grid-template-columns: 1fr 1fr; gap: 36px; padding: 0; }
+    .exclusive { padding: 40px 24px 56px; }
+    .excl-header { flex-direction: column; align-items: flex-start; gap: 14px; }
+  }
+</style>
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="page-transition entering" id="pageTransition" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="inner">
+    <a class="brand" href="shop.html">
+      <span class="line1">BLUE PULSE</span>
+      <span class="line2">SHOP</span>
+    </a>
+    <div class="links">
+      <a href="homepage.html">Home</a>
+      <a href="shop.html" class="on">Shop</a>
+      <span class="studio-menu">
+        <a class="studio-trigger" href="studio.html">Studio</a>
+        <div class="studio-panel" role="menu">
+          <a href="press.html" role="menuitem">Press</a>
+          <a href="journal.html" role="menuitem">Newswire</a>
+        </div>
+      </span>
+      <a href="community.html">Community</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="right">
+      <a href="#" class="icon-link" aria-label="Search">Search</a>
+      <a href="#" class="auth">Log In <span class="sep">/</span> Join</a>
+      <button class="cart-btn" id="navCartBtn">Cart <sup id="navCartCount">(0)</sup></button>
+    </div>
+  </div>
+</nav>
+
+<div class="filters" id="main">
+  <div class="cats">
+    <div class="all-menu" id="allMenu">
+      <span class="all-trigger">All <span class="caret">&darr;</span></span>
+      <div class="dropdown">
+        <div class="dropdown-panel">
+          <a href="shop.html" data-filter="all">All <sup>16</sup></a>
+          <a href="shop.html?filter=apparel" data-filter="apparel">Apparel <sup>2</sup></a>
+          <a href="shop.html?filter=accessories" data-filter="accessories">Accessories <sup>1</sup></a>
+          <a href="shop.html?filter=figurines" data-filter="figurines">Figurines <sup>2</sup></a>
+          <div class="submenu">
+            <a href="shop.html?filter=board-gaming" data-filter="board-gaming">Board Gaming <sup>3</sup><span class="arrow">&rsaquo;</span></a>
+            <div class="sub-panel">
+              <span class="sub-head">Series</span>
+              <a href="shop.html?filter=red-winter" data-filter="red-winter">Red Winter <sup>2</sup></a>
+              <a href="shop.html?filter=board-gaming" data-filter="board-gaming">All Board Gaming <sup>3</sup></a>
+            </div>
+          </div>
+          <a href="shop.html?filter=video-games" data-filter="video-games">Video Games <sup>1</sup></a>
+          <a href="shop.html?filter=posters" data-filter="posters">Posters <sup>1</sup></a>
+          <a href="shop.html?filter=blu-rays" data-filter="blu-rays">Blu-Rays <sup>1</sup></a>
+          <a href="shop.html?filter=vinyl" data-filter="vinyl">Vinyl <sup>1</sup></a>
+          <a href="shop.html?filter=books" data-filter="books">Books <sup>3</sup></a>
+          <a href="shop.html?filter=limited" data-filter="limited">Limited Collectables <sup>2</sup></a>
+        </div>
+      </div>
+    </div>
+    <span class="filter-crumb" id="filterCrumb"></span>
+  </div>
+  <div class="tools">
+    <div class="sort">Featured <span>&darr;</span></div>
+  </div>
+</div>
+
+<!-- EXCLUSIVE CAROUSEL — only on shop home, hidden when filter is active -->
+<section class="exclusive" id="exclusive">
+  <div class="excl-header">
+    <div class="excl-label">
+      <span class="mark">BPS</span>
+      <span class="title">Blue Pulse Studios &middot; Exclusive</span>
+    </div>
+    <div class="excl-count">01 / 01</div>
+  </div>
+  <div class="carousel" id="carousel">
+    <div class="slide">
+      <div class="slide-copy">
+        <div class="kicker">Stay Home &middot; Drop 01</div>
+        <h1>The Ashen Man <em>Hoodie.</em></h1>
+        <p>A heavyweight, washed-black pullover pulled from the world of Stay Home. Screen-printed front and back, numbered run of 500. Once the numbers hit zero, we&rsquo;re not reprinting.</p>
+        <a class="slide-cta" href="product.html?id=ashen-hoodie">Shop this piece &rarr;</a>
+      </div>
+      <a class="slide-visual" href="product.html?id=ashen-hoodie">
+        <img src="assets/ashen-man-hoodie-clean-V2.webp" alt="The Ashen Man Hoodie" />
+      </a>
+    </div>
+  </div>
+  <div class="excl-nav">
+    <button class="prev" aria-label="Previous" disabled>&larr;</button>
+    <div class="dots"><span class="dot on"></span></div>
+    <button class="next" aria-label="Next" disabled>&rarr;</button>
+  </div>
+</section>
+
+<section class="grid" id="grid">
+
+  <a class="card reveal" data-product="ashen-hoodie" data-category="apparel" href="product.html?id=ashen-hoodie">
+    <div class="img"><img src="assets/ashen-man-hoodie-clean-V2.webp" alt="The Ashen Man Hoodie" /><span class="pill">Limited &middot; Drop 01</span></div>
+    <div class="info"><div class="kicker">Stay Home</div><div class="name">The Ashen Man Hoodie</div><div class="price">$95</div></div>
+  </a>
+
+  <a class="card reveal" data-product="shelby-figure" data-category="figurines" href="product.html?id=shelby-figure">
+    <div class="img"><img src="assets/shelby-figure-clean-dropshadow-v2.webp" alt="Shelby Collectible Figure" /><span class="pill">1/6 Scale &middot; Preorder</span></div>
+    <div class="info"><div class="kicker">Stay Home</div><div class="name">Shelby Collectible Figure</div><div class="price">$220</div></div>
+  </a>
+
+  <a class="card reveal" data-product="ashen-figure" data-category="figurines" href="product.html?id=ashen-figure">
+    <div class="img"><img src="assets/ashen-man-figure-clean-dropshadow-v2.webp" alt="The Ashen Man Figure" /><span class="pill">1/6 Scale &middot; Preorder</span></div>
+    <div class="info"><div class="kicker">Stay Home</div><div class="name">The Ashen Man Figure</div><div class="price">$240</div></div>
+  </a>
+
+  <a class="card reveal" data-product="board-game" data-category="board-gaming" href="product.html?id=board-game">
+    <div class="img"><img src="assets/stay-home-board-game.webp" alt="Stay Home Board Game" /><span class="pill">Preorder &middot; Change History</span></div>
+    <div class="info"><div class="kicker">Stay Home &middot; Cooperative Board Game</div><div class="name">Change History. Survive the Night.</div><div class="price">$75</div></div>
+  </a>
+
+  <a class="card reveal" data-product="red-winter-rulebook" data-category="books board-gaming red-winter" href="product.html?id=red-winter-rulebook">
+    <div class="img"><img src="assets/red-winter-rulebook.webp" alt="Red Winter Core Rulebook" /><span class="pill">First Edition &middot; Hardcover</span></div>
+    <div class="info"><div class="kicker">Red Winter &middot; WWII RPG</div><div class="name">Red Winter &mdash; Core Rulebook</div><div class="price">$65</div></div>
+  </a>
+
+  <a class="card reveal" data-product="red-winter-ivan" data-category="board-gaming red-winter" href="product.html?id=red-winter-ivan">
+    <div class="img"><img src="assets/red-winter-ivan.webp" alt="Ivan — Russian Super Soldier" /><span class="pill">Hero Expansion</span></div>
+    <div class="info"><div class="kicker">Red Winter &middot; Hero Expansion</div><div class="name">Ivan &mdash; Russian Super Soldier</div><div class="price">$45</div></div>
+  </a>
+
+  <a class="card reveal" data-product="bps-hat" data-category="accessories" href="product.html?id=bps-hat">
+    <div class="img"><img src="assets/bps-hat.webp" alt="Blue Pulse Cap" /><span class="pill">Studio &middot; Staple</span></div>
+    <div class="info"><div class="kicker">Studio</div><div class="name">Blue Pulse Cap</div><div class="price">$38</div></div>
+  </a>
+
+  <a class="card painting reveal" data-product="painting-poster" data-category="posters" href="product.html?id=painting-poster">
+    <div class="img"><img src="assets/the-painting-poster.webp" alt="The Painting Poster Print" /></div>
+    <div class="info"><div class="kicker">The Painting (2025)</div><div class="name">Original Poster Print</div><div class="price">$35</div></div>
+  </a>
+
+  <a class="card placeholder reveal" data-product="stay-home-tee" data-category="apparel" href="product.html?id=stay-home-tee">
+    <div class="img"></div>
+    <div class="info"><div class="kicker">Stay Home</div><div class="name">Stay Home Tee</div><div class="price">$42</div></div>
+  </a>
+
+  <a class="card placeholder reveal" data-product="ring-silver" data-category="limited" href="product.html?id=ring-silver">
+    <div class="img"></div>
+    <div class="info"><div class="kicker">Stay Home &middot; Prop Replica</div><div class="name">The Ring (Silver)</div><div class="price">$180</div></div>
+  </a>
+
+  <a class="card placeholder reveal" data-product="stay-home-vinyl" data-category="vinyl" href="product.html?id=stay-home-vinyl">
+    <div class="img"></div>
+    <div class="info"><div class="kicker">Stay Home &middot; OST</div><div class="name">Original Score (2xLP)</div><div class="price">$48</div></div>
+  </a>
+
+  <a class="card placeholder reveal" data-product="painting-bluray" data-category="blu-rays" href="product.html?id=painting-bluray">
+    <div class="img"></div>
+    <div class="info"><div class="kicker">The Painting &middot; 2025</div><div class="name">Blu-Ray &middot; Director&rsquo;s Cut</div><div class="price">$32</div></div>
+  </a>
+
+  <a class="card placeholder reveal" data-product="stay-home-game" data-category="video-games" href="product.html?id=stay-home-game">
+    <div class="img"></div>
+    <div class="info"><div class="kicker">Stay Home &middot; Companion Game</div><div class="name">The Cabin &middot; Dev Edition</div><div class="price">$45</div></div>
+  </a>
+
+  <a class="card placeholder reveal" data-product="stay-home-screenplay" data-category="books" href="product.html?id=stay-home-screenplay">
+    <div class="img"></div>
+    <div class="info"><div class="kicker">Stay Home &middot; Bound Screenplay</div><div class="name">Shooting Draft</div><div class="price">$28</div></div>
+  </a>
+
+  <a class="card placeholder reveal" data-product="art-book" data-category="books" href="product.html?id=art-book">
+    <div class="img"></div>
+    <div class="info"><div class="kicker">Studio</div><div class="name">Art Book Vol. 01</div><div class="price">$65</div></div>
+  </a>
+
+  <a class="card placeholder reveal" data-product="signed-poster" data-category="limited" href="product.html?id=signed-poster">
+    <div class="img"></div>
+    <div class="info"><div class="kicker">Stay Home &middot; Signed &middot; Numbered</div><div class="name">Cast &amp; Crew Edition</div><div class="price">$240</div></div>
+  </a>
+
+  <a class="card placeholder reveal" data-product="stay-home-bundle" data-category="limited" href="product.html?id=stay-home-bundle">
+    <div class="img"></div>
+    <div class="info"><div class="kicker">Bundle &middot; Stay Home</div><div class="name">Stay Home Survival Kit</div><div class="price">$185</div></div>
+  </a>
+
+  <a class="card placeholder reveal" data-product="painting-set" data-category="limited posters blu-rays" href="product.html?id=painting-set">
+    <div class="img"></div>
+    <div class="info"><div class="kicker">Bundle &middot; The Painting</div><div class="name">The Painting Collector Set</div><div class="price">$95</div></div>
+  </a>
+
+  <a class="card placeholder reveal" data-product="gift-card" data-category="accessories" href="product.html?id=gift-card">
+    <div class="img"></div>
+    <div class="info"><div class="kicker">Blue Pulse Studios</div><div class="name">Studio Gift Card</div><div class="price">$25&ndash;$250</div></div>
+  </a>
+
+</section>
+
+<section class="band">
+  <h3 class="reveal">Be first when the next drop goes live.</h3>
+  <p class="reveal" style="margin:-8px 0 24px"><a href="drops.html" style="font-size:10.5px;letter-spacing:.4em;text-transform:uppercase;color:inherit;text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:4px;font-weight:500">Drop 02 &mdash; watch the countdown &rarr;</a></p>
+  <form class="reveal" onsubmit="return window.bpsSubscribe(this, event);">
+    <input type="email" placeholder="your email" required />
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
+
+<footer class="site">
+  <div class="top">
+    <div class="brand-col">
+      <div class="mark">BLUE PULSE STUDIOS</div>
+      <p>A boutique production house for horror and genre film, television, and video games.</p>
+    </div>
+    <div><h4>Films</h4><a href="stay-home.html">Stay Home</a><a href="the-painting.html">The Painting</a></div>
+    <div><h4>Shop</h4><a href="shop.html">All</a><a href="cart.html">Cart</a></div>
+    <div><h4>Studio</h4><a href="studio.html">About</a><a href="press.html">Press</a><a href="journal.html">Newswire</a><a href="community.html">Community</a><a href="contact.html">Contact</a></div>
+  </div>
+  <div class="bottom"><div>&copy; 2026 Blue Pulse Studios</div><div class="legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="shipping-returns.html">Shipping &amp; Returns</a></div><div>Made patiently</div></div>
+</footer>
+
+<script>
+  /* reveal */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* cart count from localStorage */
+  if (window.renderNavCartCount) window.renderNavCartCount();
+
+  /* URL-driven category filter */
+  const urlParams = new URLSearchParams(location.search);
+  const gridCards = document.querySelectorAll('.card[data-category]');
+  const dropdownLinks = document.querySelectorAll('.all-menu .dropdown a[data-filter]');
+  const filterCrumb = document.getElementById('filterCrumb');
+  function applyFilter(f) {
+    const isAll = (f === 'all' || !f);
+    document.body.classList.toggle('filtered', !isAll);
+    gridCards.forEach(c => {
+      const cats = (c.dataset.category || '').split(/\s+/);
+      const match = isAll || cats.includes(f);
+      c.classList.toggle('hidden', !match);
+    });
+    dropdownLinks.forEach(a => a.classList.toggle('on', a.dataset.filter === (isAll ? 'all' : f)));
+    if (filterCrumb) {
+      const cat = (window.CATEGORIES || []).find(c => c.id === f);
+      filterCrumb.textContent = cat ? cat.label : '';
+    }
+  }
+  applyFilter(urlParams.get('filter') || 'all');
+
+  dropdownLinks.forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const f = a.dataset.filter;
+      const url = new URL(location);
+      if (f === 'all') url.searchParams.delete('filter');
+      else url.searchParams.set('filter', f);
+      history.pushState({}, '', url);
+      applyFilter(f);
+      closeAllMenu();
+    });
+  });
+  window.addEventListener('popstate', () => {
+    const u = new URLSearchParams(location.search);
+    applyFilter(u.get('filter') || 'all');
+  });
+
+  /* Dropdown control with forgiving close delay */
+  const allMenu = document.getElementById('allMenu');
+  let menuTimer = null;
+  function openAllMenu()  { clearTimeout(menuTimer); allMenu.classList.add('open'); }
+  function closeAllMenu() { clearTimeout(menuTimer); allMenu.classList.remove('open'); }
+  function scheduleClose(){ clearTimeout(menuTimer); menuTimer = setTimeout(() => allMenu.classList.remove('open'), 450); }
+  allMenu.addEventListener('mouseenter', openAllMenu);
+  allMenu.addEventListener('mouseleave', scheduleClose);
+  allMenu.querySelector('.all-trigger').addEventListener('click', (e) => {
+    e.stopPropagation();
+    allMenu.classList.toggle('open');
+  });
+  document.addEventListener('click', (e) => {
+    if (!allMenu.contains(e.target)) closeAllMenu();
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeAllMenu(); });
+
+  /* cart button → navigate to cart page */
+  document.getElementById('navCartBtn').addEventListener('click', () => {
+    location.href = 'cart.html';
+  });
+</script>
+<script src="site.js"></script>
+</body>
+</html>

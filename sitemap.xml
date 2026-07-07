@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Update the domain if it differs from bluepulsestudios.com.
+     Hidden pages (client portal, admin console) are intentionally excluded. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://bluepulsestudios.com/</loc><priority>1.0</priority></url>
+  <url><loc>https://bluepulsestudios.com/homepage.html</loc><priority>1.0</priority></url>
+  <url><loc>https://bluepulsestudios.com/shop.html</loc><priority>0.9</priority></url>
+  <url><loc>https://bluepulsestudios.com/stay-home.html</loc><priority>0.8</priority></url>
+  <url><loc>https://bluepulsestudios.com/the-painting.html</loc><priority>0.8</priority></url>
+  <url><loc>https://bluepulsestudios.com/studio.html</loc><priority>0.7</priority></url>
+  <url><loc>https://bluepulsestudios.com/journal.html</loc><priority>0.7</priority></url>
+  <url><loc>https://bluepulsestudios.com/press.html</loc><priority>0.6</priority></url>
+  <url><loc>https://bluepulsestudios.com/community.html</loc><priority>0.6</priority></url>
+  <url><loc>https://bluepulsestudios.com/contact.html</loc><priority>0.6</priority></url>
+  <url><loc>https://bluepulsestudios.com/product.html</loc><priority>0.5</priority></url>
+  <url><loc>https://bluepulsestudios.com/drops.html</loc><priority>0.7</priority></url>
+  <url><loc>https://bluepulsestudios.com/careers.html</loc><priority>0.4</priority></url>
+  <url><loc>https://bluepulsestudios.com/cart.html</loc><priority>0.3</priority></url>
+  <url><loc>https://bluepulsestudios.com/privacy.html</loc><priority>0.2</priority></url>
+  <url><loc>https://bluepulsestudios.com/terms.html</loc><priority>0.2</priority></url>
+  <url><loc>https://bluepulsestudios.com/shipping-returns.html</loc><priority>0.2</priority></url>
+</urlset>

@@ -1,0 +1,9 @@
+# Private studio docs — never deploy these (readable by anyone at yourdomain.com/FILE if uploaded)
+ADMIN-ACCESS.md
+TODO.md
+ROADMAP.md
+
+# OS noise
+Thumbs.db
+.DS_Store
+desktop.ini

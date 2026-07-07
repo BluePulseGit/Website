@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="The next Blue Pulse Studios merch drop. Numbered pieces, small batches, gone when they're gone." />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<meta name="theme-color" content="#02040A" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="The Next Drop — Blue Pulse Studios" />
+<meta property="og:description" content="Numbered pieces, small batches, gone when they're gone." />
+<meta property="og:image" content="og-image.jpg" />
+<title>The Next Drop — Blue Pulse Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<style>
+  :root { --abyss:#02040A; --ocean:#060F1F; --depth:#0A1A35; --pulse:#1D5FB8; --glow:#6BB4E8; --foam:#CFD9E4; --stone:#8B929C; --hair:#132341; --display:'Fraunces',serif; --ui:'Inter',sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--abyss); color: var(--foam); font-family: var(--ui); -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
+  .nav { position: fixed; top:0; left:0; right:0; z-index:100; padding: 28px 48px; display:flex; justify-content:space-between; align-items:center; font-size:10.5px; letter-spacing:.28em; text-transform:uppercase; background: linear-gradient(to bottom, rgba(2,4,10,0.5), transparent); }
+  .nav .brand { display:inline-flex; flex-direction:column; gap:3px; line-height:1; color:var(--foam); text-decoration:none; }
+  .nav .brand .line1 { font-weight:600; letter-spacing:.32em; font-size:11px; }
+  .nav .brand .line2 { font-weight:500; letter-spacing:.42em; font-size:9px; color:var(--stone); }
+  .nav a.back { color: var(--stone); text-decoration: none; }
+  .nav a.back:hover { color: var(--foam); }
+  main { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding: 160px 24px 100px; position:relative; overflow:hidden; }
+  main::before { content:''; position:absolute; inset:-5%; background: url('assets/bubbles-v3.webp') center/cover no-repeat; opacity:.25; mix-blend-mode:screen; pointer-events:none; }
+  .kicker { font-size:10.5px; letter-spacing:.55em; text-transform:uppercase; color:var(--glow); font-weight:500; }
+  h1 { font-family:var(--display); font-weight:300; font-size:clamp(48px,8vw,110px); letter-spacing:-0.025em; line-height:1; margin-top:24px; }
+  h1 em { font-style:italic; color:var(--glow); }
+  .sub { margin-top:28px; max-width:560px; font-family:var(--display); font-style:italic; font-weight:300; font-size:18px; line-height:1.55; color:var(--stone); }
+  .count { display:flex; gap:32px; margin-top:56px; }
+  .count .cell { min-width:86px; }
+  .count .n { font-family:var(--display); font-weight:300; font-size:clamp(40px,6vw,72px); color:var(--foam); }
+  .count .l { margin-top:8px; font-size:9px; letter-spacing:.4em; text-transform:uppercase; color:var(--stone); }
+  .tba { font-family:var(--display); font-weight:300; font-size:clamp(36px,5vw,60px); color:var(--foam); margin-top:56px; }
+  form.wait { margin-top:56px; display:flex; border:1px solid var(--foam); max-width:420px; width:100%; }
+  form.wait input { flex:1; font:inherit; font-size:14px; padding:16px 18px; background:transparent; border:0; outline:none; color:var(--foam); }
+  form.wait input::placeholder { color:var(--stone); }
+  form.wait button { font-family:var(--ui); font-size:10px; letter-spacing:.3em; text-transform:uppercase; font-weight:600; padding:0 24px; border:0; background:var(--foam); color:var(--abyss); cursor:pointer; }
+  .code-row { margin-top:28px; font-size:11px; color:var(--stone); }
+  .code-row input { font:inherit; background:transparent; border:0; border-bottom:1px solid var(--hair); color:var(--foam); padding:6px 4px; width:130px; outline:none; text-transform:uppercase; letter-spacing:.2em; text-align:center; }
+  .code-row input:focus { border-color:var(--glow); }
+  .unlocked { display:none; margin-top:20px; color:var(--glow); font-family:var(--display); font-style:italic; font-size:15px; }
+  footer { padding: 40px 48px; display:flex; justify-content:space-between; font-size:10px; letter-spacing:.32em; text-transform:uppercase; color:var(--stone); border-top:1px solid var(--hair); }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="page-transition entering" id="pageTransition" aria-hidden="true"></div>
+<nav class="nav">
+  <a class="brand" href="homepage.html"><span class="line1">BLUE PULSE</span><span class="line2">STUDIOS</span></a>
+  <a class="back" href="shop.html">&larr; Back to the shop</a>
+</nav>
+
+<main id="main">
+  <div class="kicker">Drop 02</div>
+  <h1>Something is <em>surfacing.</em></h1>
+  <p class="sub">Numbered pieces from the world of Stay Home. Small batch. No reprints. Newsletter and Discord get the door held open first.</p>
+
+  <div class="count" id="count" style="display:none">
+    <div class="cell"><div class="n" id="cd">00</div><div class="l">Days</div></div>
+    <div class="cell"><div class="n" id="ch">00</div><div class="l">Hours</div></div>
+    <div class="cell"><div class="n" id="cm">00</div><div class="l">Minutes</div></div>
+    <div class="cell"><div class="n" id="cs">00</div><div class="l">Seconds</div></div>
+  </div>
+  <div class="tba" id="tba">Date under wraps.</div>
+
+  <form class="wait" onsubmit="return window.bpsSubscribe(this, event);">
+    <input type="email" required placeholder="your email — first through the door" aria-label="Email for drop notification" />
+    <button type="submit">Wait here</button>
+  </form>
+
+  <div class="code-row">
+    Have an early-access code? <input id="codeInput" maxlength="12" aria-label="Early access code" />
+  </div>
+  <div class="unlocked" id="unlocked">Code accepted. You&rsquo;re on the early list &mdash; the drop opens for you 24 hours before everyone else.</div>
+</main>
+
+<footer>
+  <div>&copy; 2026 Blue Pulse Studios</div>
+  <div>Made patiently</div>
+</footer>
+
+<script src="site.js"></script>
+<script>
+  // Countdown — set BPS_CONFIG.nextDropAt in site.js (e.g. '2026-10-31T00:00:00')
+  (function () {
+    const at = (window.BPS_CONFIG || {}).nextDropAt;
+    if (!at) return;
+    const target = new Date(at).getTime();
+    if (isNaN(target)) return;
+    document.getElementById('tba').style.display = 'none';
+    document.getElementById('count').style.display = 'flex';
+    const pad = (n) => String(n).padStart(2, '0');
+    function tick() {
+      let d = Math.max(0, target - Date.now());
+      document.getElementById('cd').textContent = pad(Math.floor(d / 864e5));
+      document.getElementById('ch').textContent = pad(Math.floor(d / 36e5) % 24);
+      document.getElementById('cm').textContent = pad(Math.floor(d / 6e4) % 60);
+      document.getElementById('cs').textContent = pad(Math.floor(d / 1e3) % 60);
+    }
+    tick(); setInterval(tick, 1000);
+  })();
+
+  // Early-access code (demo code: ASHEN — change before a real drop)
+  document.getElementById('codeInput').addEventListener('input', function () {
+    if (this.value.trim().toUpperCase() === 'ASHEN') {
+      document.getElementById('unlocked').style.display = 'block';
+      try { localStorage.setItem('bpsEarlyAccess', '1'); } catch (_) {}
+    }
+  });
+</script>
+</body>
+</html>

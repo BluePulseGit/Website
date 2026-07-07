@@ -1,0 +1,979 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="A boutique studio for horror and genre film, television, and video games. Patient dread, handcrafted." />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="theme-color" content="#02040A" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Blue Pulse Studios — Patient Dread, Handcrafted" />
+<meta property="og:description" content="A boutique studio for horror and genre film, television, and video games. Patient dread, handcrafted." />
+<meta property="og:image" content="og-image.jpg" />
+<meta property="og:site_name" content="Blue Pulse Studios" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Blue Pulse Studios — Patient Dread, Handcrafted" />
+<meta name="twitter:description" content="A boutique studio for horror and genre film, television, and video games. Patient dread, handcrafted." />
+<meta name="twitter:image" content="og-image.jpg" />
+<title>Blue Pulse Studios</title>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Blue Pulse Studios",
+  "description": "A boutique production house for horror and genre film, television, and video games.",
+  "url": "https://bluepulsestudios.com/",
+  "logo": "https://bluepulsestudios.com/bps-logo.png",
+  "email": "production@bluepulsestudios.com",
+  "foundingDate": "2024",
+  "location": [
+    { "@type": "Place", "address": { "@type": "PostalAddress", "addressLocality": "Los Angeles", "addressRegion": "CA", "addressCountry": "US" } },
+    { "@type": "Place", "address": { "@type": "PostalAddress", "addressLocality": "Pittsburgh", "addressRegion": "PA", "addressCountry": "US" } }
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --abyss:  #02040A;
+    --ocean:  #060F1F;
+    --depth:  #0A1A35;
+    --tide:   #0F2A52;
+    --pulse:  #1D5FB8;
+    --glow:   #6BB4E8;
+    --foam:   #CFD9E4;
+    --paper:  #F4F1EA;
+    --ink:    #0F0F10;
+    --stone:  #8B929C;
+    --hair-dark: #132341;
+    --hair-light: #E3DFD6;
+    --display: 'Fraunces', 'Times New Roman', serif;
+    --ui: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--abyss);
+    color: var(--foam);
+    font-family: var(--ui);
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;           /* clip — does NOT create a scroll container, so sticky still works */
+  }
+  html { overflow-x: clip; }
+
+  /* film-grain overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+    opacity: 0.04; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ——— nav ——— */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 48px;
+    background: linear-gradient(to bottom, rgba(2,4,10,0.5), transparent);
+    font-size: 10.5px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    transition: background .8s ease;
+  }
+  .nav .brand {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 3px;
+    color: var(--foam);
+    text-decoration: none;
+    line-height: 1;
+  }
+  .nav .brand .line1 {
+    font-weight: 600;
+    letter-spacing: 0.32em;
+    font-size: 11px;
+  }
+  .nav .brand .line2 {
+    font-weight: 500;
+    letter-spacing: 0.42em;
+    font-size: 9px;
+    color: var(--stone);
+    transition: color .6s ease;
+  }
+  .nav .brand:hover .line2 { color: var(--foam); }
+  .nav .links a {
+    color: var(--stone);
+    text-decoration: none;
+    margin-left: 34px;
+    transition: color .6s ease;
+  }
+  .nav .links a:hover { color: var(--foam); }
+
+  section {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ——— HERO — logo over underwater with parallax ——— */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 120px 48px 80px;
+    position: relative;    /* contain the absolutely-positioned bubble/drift layers */
+    overflow: hidden;      /* keep inset:-12% drift from spilling horizontally */
+  }
+  .hero .bg-layers {
+    position: absolute; inset: -6%;
+    z-index: 0;
+    will-change: transform;
+  }
+  .hero .bg-layers::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      url('assets/hero-underwater-bg.webp') center center / cover no-repeat,
+      radial-gradient(ellipse at 50% 30%, #0A2448 0%, #020611 80%);
+    filter: brightness(0.7) contrast(1.1);
+  }
+  /* layered bubbles drifting — two planes moving against each other for depth */
+  .hero .drift {
+    position: absolute; inset: -12%;
+    z-index: 1;
+    background: url('assets/bubbles-v2.webp') center center / cover no-repeat;
+    opacity: 0.38;
+    mix-blend-mode: screen;
+    animation: heroDriftA 22s ease-in-out infinite alternate;
+    filter: blur(1px);
+  }
+  .hero .drift-2 {
+    position: absolute; inset: -16%;
+    z-index: 1;
+    background: url('assets/bubbles-v3.webp') center center / cover no-repeat;
+    opacity: 0.26;
+    mix-blend-mode: screen;
+    animation: heroDriftB 34s ease-in-out infinite alternate;
+    filter: blur(0.5px);
+    pointer-events: none;
+  }
+  @keyframes heroDriftA {
+    0%   { transform: translate3d(-3%, 4%, 0) scale(1.06); }
+    50%  { transform: translate3d(1%, -1%, 0) scale(1.10); }
+    100% { transform: translate3d(3%, -5%, 0) scale(1.14); }
+  }
+  @keyframes heroDriftB {
+    0%   { transform: translate3d(4%, -3%, 0) scale(1.10); }
+    50%  { transform: translate3d(-1%, 1%, 0) scale(1.14); }
+    100% { transform: translate3d(-4%, 4%, 0) scale(1.18); }
+  }
+  /* vignette */
+  .hero .vignette {
+    position: absolute; inset: 0;
+    z-index: 2;
+    background:
+      radial-gradient(ellipse at center, transparent 40%, rgba(2,4,10,0.6) 85%, #02040A 100%),
+      linear-gradient(to bottom, transparent 60%, var(--abyss));
+    pointer-events: none;
+  }
+
+  .hero .content {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .hero .logo {
+    width: 560px; max-width: 78vw;
+    will-change: transform;
+  }
+  .hero .logo-track {
+    animation: logoIn 3s cubic-bezier(.2,.7,.2,1) .3s both;
+  }
+  .hero .logo img {
+    width: 100%; height: auto; display: block;
+    filter: drop-shadow(0 0 42px rgba(107,180,232,0.28));
+  }
+  @keyframes logoIn {
+    0%   { opacity: 0; transform: translateY(14px) scale(.98); filter: blur(10px); }
+    60%  { opacity: 1; filter: blur(0); }
+    100% { opacity: 1; transform: none; filter: blur(0); }
+  }
+  .hero .tag {
+    margin-top: 56px;
+    max-width: 820px;
+    text-align: center;
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(22px, 2.2vw, 30px);
+    line-height: 1.35;
+    color: var(--foam);
+    opacity: 0;
+    animation: fadeUp 2s ease 1.8s forwards;
+  }
+  .hero .eyebrow {
+    margin-top: 28px;
+    font-size: 10.5px;
+    letter-spacing: 0.55em;
+    color: var(--glow);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 2s ease 2.5s forwards;
+  }
+  .hero .scroll-cue {
+    position: absolute;
+    bottom: 48px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    font-size: 9px;
+    letter-spacing: 0.5em;
+    color: var(--stone);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeIn 2s ease 3s forwards, breathe 3.2s ease-in-out 5s infinite;
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
+  .hero .scroll-cue::before {
+    content: ''; width: 3px; height: 3px; border-radius: 50%; background: var(--glow); opacity: .9;
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: .95; transform: none; } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: .85; } }
+  @keyframes breathe { 0%, 100% { opacity: .5; } 50% { opacity: .9; } }
+
+  /* ——— SCENE: heart pulse → Zera. Autoplays when scrolled into view. ——— */
+  .scene {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    background: radial-gradient(ellipse at center, #081528 0%, #020611 65%, #000 100%);
+    isolation: isolate;
+  }
+  .scene .bg-depth {
+    position: absolute; inset: -6%;
+    background: url('assets/hero-underwater-bg.webp') center/cover no-repeat;
+    opacity: 0.55;
+    mix-blend-mode: lighten;
+    will-change: transform;
+  }
+  .scene .bg-bubbles {
+    position: absolute; inset: -10%;
+    background-size: cover; background-position: center;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    will-change: transform;
+  }
+  .scene .bubbles-a {
+    background-image: url('assets/bubbles-v2.webp');
+    opacity: 0.36;
+    animation: sceneDriftA 24s ease-in-out infinite alternate;
+    filter: blur(1px);
+  }
+  .scene .bubbles-b {
+    background-image: url('assets/bubbles-v3.webp');
+    opacity: 0.28;
+    animation: sceneDriftB 38s ease-in-out infinite alternate;
+    filter: blur(0.5px);
+  }
+  @keyframes sceneDriftA {
+    0%   { transform: translate3d(-3%, 4%, 0) scale(1.06); }
+    50%  { transform: translate3d(1%, -1%, 0) scale(1.12); }
+    100% { transform: translate3d(3%, -5%, 0) scale(1.18); }
+  }
+  @keyframes sceneDriftB {
+    0%   { transform: translate3d(4%, -3%, 0) scale(1.10); }
+    50%  { transform: translate3d(-1%, 1%, 0) scale(1.14); }
+    100% { transform: translate3d(-4%, 4%, 0) scale(1.20); }
+  }
+
+  .scene .stage {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ZERA — TOP visual layer, ALWAYS visible. Now a real <img> so the browser
+     can't hide her behind a stacking-context bug. Her silhouette has a
+     transparent background; heart/pulses/flash glow behind/around her. */
+  .scene .zera-wrap {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 100 !important;
+    display: flex; align-items: center; justify-content: center;
+    will-change: transform;
+    pointer-events: none;
+  }
+  .scene .zera-wrap img.zera {
+    display: block;
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: scale(1.03);
+    filter: drop-shadow(0 0 60px rgba(29,95,184,0.6));
+    will-change: transform, filter;
+    transform-origin: center center;
+    animation: zeraSettle 4s cubic-bezier(.3,0,.2,1) 5s forwards;
+  }
+  @keyframes zeraSettle {
+    0%   { transform: scale(1.06); filter: drop-shadow(0 0 70px rgba(29,95,184,0.5)) blur(2px); }
+    100% { transform: scale(1.03); filter: drop-shadow(0 0 55px rgba(29,95,184,0.75)) blur(0); }
+  }
+
+  /* HEART — sits BEHIND Zera. Fades in, holds, dissolves outward. Auto-plays. */
+  .scene .heart {
+    position: absolute; inset: 0; z-index: 2;
+    background: url('assets/dark-heart.webp') center/cover no-repeat;
+    opacity: 0;
+    transform: scale(0.96);
+    filter: drop-shadow(0 0 40px rgba(29,95,184,0.35));
+    will-change: transform, opacity, filter;
+    transform-origin: center center;
+    animation: sceneHeart 7s cubic-bezier(.4,0,.2,1) .3s forwards;
+  }
+  @keyframes sceneHeart {
+    0%   { opacity: 0;    transform: scale(0.94); filter: blur(8px) drop-shadow(0 0 25px rgba(29,95,184,0.25)); }
+    10%  { opacity: 1;    transform: scale(1.00); filter: blur(0)   drop-shadow(0 0 45px rgba(29,95,184,0.4)); }
+    55%  { opacity: 1;    transform: scale(1.03); filter: drop-shadow(0 0 60px rgba(107,180,232,0.6)); }
+    68%  { opacity: 0.95; transform: scale(1.10); filter: drop-shadow(0 0 80px rgba(107,180,232,0.85)); }
+    82%  { opacity: 0.4;  transform: scale(1.25); filter: blur(6px) drop-shadow(0 0 100px rgba(107,180,232,1)); }
+    95%  { opacity: 0;    transform: scale(1.45); filter: blur(22px); }
+    100% { opacity: 0;    transform: scale(1.55); }
+  }
+
+  /* PULSE RINGS — auto-play on page load. Behind Zera. */
+  .scene .pulse {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.3);
+    width: 28vmin; height: 28vmin;
+    border: 2px solid rgba(107,180,232,0.85);
+    border-radius: 50%;
+    opacity: 0;
+    z-index: 3;
+    box-shadow: 0 0 50px rgba(29,95,184,0.55), inset 0 0 25px rgba(107,180,232,0.3);
+    will-change: transform, opacity;
+  }
+  .scene .pulse.p1 { animation: sceneRing 2.8s ease-out 2.8s forwards; }
+  .scene .pulse.p2 { animation: sceneRing 2.8s ease-out 3.8s forwards; }
+  .scene .pulse.p3 {
+    width: 46vmin; height: 46vmin; border-width: 3px;
+    animation: sceneRing 3.6s cubic-bezier(.25,0,.2,1) 4.5s forwards;
+  }
+  @keyframes sceneRing {
+    0%   { opacity: 0;    transform: translate(-50%,-50%) scale(0.3); }
+    15%  { opacity: 0.95; }
+    100% { opacity: 0;    transform: translate(-50%,-50%) scale(3.8); }
+  }
+
+  /* FLASH — the pulse peak that carries the cut. Behind Zera. */
+  .scene .flash {
+    position: absolute; inset: 0; z-index: 4;
+    background: radial-gradient(ellipse at center,
+      rgba(160,220,255,0.75) 0%,
+      rgba(107,180,232,0.55) 18%,
+      rgba(29,95,184,0.25) 42%,
+      transparent 68%);
+    mix-blend-mode: screen;
+    opacity: 0;
+    pointer-events: none;
+    animation: sceneFlash 1.4s cubic-bezier(.3,0,.2,1) 5.0s forwards;
+  }
+  @keyframes sceneFlash {
+    0%   { opacity: 0; }
+    35%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* VIGNETTE — sits BELOW Zera so it doesn't darken her. */
+  .scene .vig {
+    position: absolute; inset: 0; pointer-events: none;
+    z-index: 5;
+    background:
+      radial-gradient(ellipse at center, transparent 42%, rgba(0,0,0,0.6) 95%),
+      linear-gradient(to bottom, rgba(0,0,0,0.3), transparent 15%, transparent 85%, rgba(0,0,0,0.5));
+  }
+  .scene .caption {
+    position: absolute; bottom: 56px; left: 0; right: 0;
+    text-align: center;
+    font-size: 10.5px; letter-spacing: 0.5em;
+    color: var(--glow);
+    text-transform: uppercase;
+    opacity: 0;
+    font-weight: 500;
+    transition: opacity 1s ease;
+    z-index: 9;
+  }
+  .scene .caption.on { opacity: 0.85; }
+
+  /* FINAL CAPTION — sits ABOVE Zera (the only thing that reads over her). */
+  .scene .caption-final-wrap {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+    will-change: transform;
+    z-index: 10;
+  }
+  .scene .caption-final {
+    font-family: var(--ui);
+    font-size: clamp(13px, 1.25vw, 18px);
+    font-weight: 500;
+    letter-spacing: 0.55em;
+    color: var(--foam);
+    text-transform: uppercase;
+    max-width: 640px;
+    text-align: center;
+    padding: 0 32px;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 2s ease, transform 2s ease;
+    text-shadow: 0 0 28px rgba(107,180,232,0.45), 0 0 70px rgba(0,0,0,0.75);
+  }
+  .scene .caption-final.on {
+    opacity: 0.95;
+    transform: translateY(0);
+  }
+
+  /* ——— STATEMENT ——— */
+  .statement {
+    padding: 48px 48px 120px;
+    background: linear-gradient(to bottom, var(--abyss), var(--ocean));
+    display: flex; justify-content: center;
+  }
+  .statement .inner {
+    max-width: 880px;
+    text-align: center;
+  }
+  .statement .kicker {
+    font-size: 10.5px;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--glow);
+    margin-bottom: 28px;
+  }
+  .statement h2 {
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: clamp(36px, 5vw, 62px);
+    line-height: 1.15;
+    letter-spacing: -0.018em;
+    color: var(--foam);
+  }
+  .statement .em {
+    font-style: italic;
+    color: var(--glow);
+  }
+  .statement p {
+    margin-top: 36px;
+    font-family: var(--display);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 19px;
+    line-height: 1.65;
+    color: var(--stone);
+    max-width: 680px;
+    margin-left: auto; margin-right: auto;
+  }
+
+  /* ——— FILM SLATE ——— */
+  .slate {
+    padding: 160px 48px 140px;
+    background: var(--ocean);
+    position: relative;
+  }
+  .slate::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url('assets/bubbles-v3.webp') center top / cover no-repeat;
+    opacity: 0.15;
+    mix-blend-mode: screen;
+    pointer-events: none;
+  }
+  .slate .head {
+    display: flex; align-items: baseline; gap: 24px;
+    margin-bottom: 64px;
+    position: relative; z-index: 2;
+  }
+  .slate .head .num { font-size: 10px; letter-spacing: .35em; color: var(--glow); font-weight: 600; text-transform: uppercase; }
+  .slate .head .label { font-size: 10px; letter-spacing: .35em; color: var(--foam); font-weight: 500; text-transform: uppercase; }
+  .slate .lede {
+    font-family: var(--display);
+    font-weight: 400; font-size: clamp(20px, 1.8vw, 26px); line-height: 1.5;
+    color: var(--foam); opacity: 0.9;
+    max-width: 780px;
+    margin-bottom: 80px;
+    position: relative; z-index: 2;
+  }
+  .slate .films {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 48px;
+    position: relative; z-index: 2;
+  }
+  .film-primary {
+    background: linear-gradient(140deg, var(--depth) 0%, var(--abyss) 100%);
+    border: 1px solid var(--hair-dark);
+    padding: 56px;
+    aspect-ratio: 16 / 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+  .film-primary::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: url('assets/bubbles-v1.webp') center center / cover no-repeat;
+    opacity: 0.3;
+    mix-blend-mode: screen;
+  }
+  .film-primary > * { position: relative; z-index: 2; }
+  .film-primary .tag {
+    font-size: 10px; letter-spacing: .5em; text-transform: uppercase;
+    color: var(--glow); font-weight: 500;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .film-primary .tag::before { content: ''; width: 6px; height: 6px; background: var(--glow); border-radius: 50%; box-shadow: 0 0 10px var(--glow); }
+  .film-primary .wordmark {
+    display: flex; align-items: flex-end; flex: 1; padding: 48px 0;
+  }
+  .film-primary .wordmark img { max-width: 70%; height: auto; filter: drop-shadow(0 0 20px rgba(107,180,232,0.3)); }
+  .film-primary .logline {
+    font-family: var(--display); font-style: italic; font-weight: 300;
+    font-size: 17px; line-height: 1.55; color: var(--foam); max-width: 440px;
+  }
+  .film-primary .meta {
+    margin-top: 24px;
+    font-size: 10px; letter-spacing: .35em; text-transform: uppercase; color: var(--stone);
+    display: flex; gap: 28px;
+  }
+
+  .film-secondary {
+    display: flex; flex-direction: column;
+    gap: 24px;
+  }
+  .film-short {
+    background: var(--abyss);
+    border: 1px solid var(--hair-dark);
+    padding: 32px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 28px;
+    align-items: center;
+    flex: 1;
+  }
+  .film-short .poster {
+    aspect-ratio: 2/3;
+    background: url('assets/the-painting-poster.webp') center / cover no-repeat, var(--depth);
+    border: 1px solid var(--hair-dark);
+  }
+  .film-short .meta-col .kicker { font-size: 9px; letter-spacing: .4em; color: var(--glow); font-weight: 500; text-transform: uppercase; margin-bottom: 12px; }
+  .film-short .meta-col .title { font-family: var(--display); font-weight: 400; font-size: 22px; color: var(--foam); letter-spacing: -0.01em; }
+  .film-short .meta-col .desc { margin-top: 10px; font-family: var(--display); font-style: italic; font-size: 13px; color: var(--stone); line-height: 1.5; }
+  .film-short .meta-col .link {
+    margin-top: 18px;
+    display: inline-flex; align-items: center; gap: 12px;
+    font-size: 9.5px; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--foam); text-decoration: none;
+    font-weight: 500;
+  }
+  .film-short .meta-col .link::before {
+    content: ''; width: 22px; height: 1px; background: var(--foam);
+  }
+  .film-placeholder {
+    flex: 0.6;
+    border: 1px dashed var(--hair-dark);
+    padding: 32px;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    min-height: 140px;
+    color: var(--stone);
+    font-size: 10px; letter-spacing: .4em; text-transform: uppercase;
+  }
+  .film-placeholder .plus { font-family: var(--display); font-style: italic; font-size: 22px; color: var(--glow); margin-bottom: 8px; letter-spacing: 0; text-transform: none; font-weight: 300; }
+
+  /* ——— SHOP TEASER ——— */
+  .shop-teaser {
+    padding: 160px 48px 120px;
+    background: #FAFAFA;
+    color: #0F0F0F;
+  }
+  .shop-teaser .head {
+    display: flex; align-items: baseline; gap: 24px;
+    margin-bottom: 28px;
+  }
+  .shop-teaser .head .num, .shop-teaser .head .label {
+    font-size: 10px; letter-spacing: .35em; text-transform: uppercase; font-weight: 500;
+  }
+  .shop-teaser .head .num { color: #6B6B6B; }
+  .shop-teaser .head .label { color: var(--ink); }
+  .shop-teaser .title-row {
+    display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 56px;
+  }
+  .shop-teaser h2 {
+    font-family: var(--display); font-weight: 300; font-size: clamp(42px, 5.5vw, 72px);
+    letter-spacing: -0.022em; color: var(--ink); max-width: 700px; line-height: 1.05;
+  }
+  .shop-teaser .view-all {
+    font-size: 10.5px; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--ink); text-decoration: none; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 14px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--ink);
+  }
+  .shop-teaser .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+  .shop-teaser .product .img {
+    aspect-ratio: 4 / 5;
+    background: #FAFAFA;
+    border: 1px solid #E5E5E5;
+    display: flex; align-items: center; justify-content: center;
+    overflow: visible;
+  }
+  .shop-teaser .product .img img {
+    max-width: 86%; max-height: 86%;
+    object-fit: contain;
+    filter: drop-shadow(0 16px 24px rgba(15,15,15,0.22));
+    transition: transform .9s cubic-bezier(.2,.7,.2,1);
+  }
+  /* Figurine V2 files have Photoshop shadows baked in — don't double */
+  .shop-teaser .product.shelby .img img,
+  .shop-teaser .product.ashen  .img img { filter: none; }
+  .shop-teaser .product:hover .img img { transform: translateY(-6px); }
+  .shop-teaser .product .meta {
+    margin-top: 18px;
+    display: flex; justify-content: space-between; align-items: flex-start;
+  }
+  .shop-teaser .product .name { font-family: var(--display); font-weight: 400; font-size: 18px; color: var(--ink); }
+  .shop-teaser .product .kicker { font-size: 9px; letter-spacing: .4em; color: #6B6B6B; text-transform: uppercase; margin-bottom: 4px; font-weight: 500; }
+  .shop-teaser .product .price { font-size: 13px; color: var(--ink); font-weight: 500; }
+
+  /* ——— FOOTER ——— */
+  footer {
+    padding: 96px 48px 56px;
+    background: var(--abyss);
+    color: var(--stone);
+    border-top: 1px solid var(--hair-dark);
+  }
+  footer .top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 64px;
+    margin-bottom: 72px;
+  }
+  footer h4 {
+    font-size: 10px; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--foam); font-weight: 500; margin-bottom: 20px;
+  }
+  footer a { display: block; color: var(--stone); text-decoration: none; font-size: 13px; margin-bottom: 10px; transition: color .5s; }
+  footer a:hover { color: var(--foam); }
+  footer .brand-col .mark { color: var(--foam); font-size: 13px; letter-spacing: .3em; font-weight: 600; margin-bottom: 18px; }
+  footer .brand-col p { font-family: var(--display); font-style: italic; font-size: 14px; line-height: 1.55; max-width: 340px; color: var(--stone); }
+  footer .bottom {
+    display: flex; justify-content: space-between;
+    font-size: 10px; letter-spacing: .32em; text-transform: uppercase;
+    padding-top: 28px; border-top: 1px solid var(--hair-dark);
+  }
+
+  /* ——— reveal ——— */
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 1.4s cubic-bezier(.2,.7,.2,1), transform 1.4s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* mobile */
+  @media (max-width: 900px) {
+    .nav { padding: 18px 24px; font-size: 9px; }
+    .nav a { margin-left: 18px; }
+    .hero { padding: 100px 24px 64px; }
+    section, .statement, .slate, .shop-teaser { padding-left: 24px; padding-right: 24px; }
+    .slate .films { grid-template-columns: 1fr; }
+    .film-primary { padding: 32px; aspect-ratio: 4/5; }
+    .shop-teaser .grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+    .shop-teaser .title-row { flex-direction: column; align-items: flex-start; gap: 20px; }
+    footer .top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  }
+</style>
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="page-transition entering" id="pageTransition" aria-hidden="true"></div>
+<nav class="nav">
+  <a class="brand" href="homepage.html">
+    <span class="line1">BLUE PULSE</span>
+    <span class="line2">STUDIOS</span>
+  </a>
+  <div class="links">
+    <a href="#slate">Films</a>
+    <a href="shop.html">Shop</a>
+    <span class="studio-menu">
+      <a class="studio-trigger" href="studio.html">Studio</a>
+      <div class="studio-panel" role="menu">
+        <a href="press.html" role="menuitem">Press</a>
+        <a href="journal.html" role="menuitem">Newswire</a>
+      </div>
+    </span>
+    <a href="community.html">Community</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="main" class="hero">
+  <div class="bg-layers" id="heroBg"></div>
+  <div class="drift"></div>
+  <div class="drift-2"></div>
+  <div class="vignette"></div>
+  <div class="content">
+    <div class="logo" id="heroLogo">
+      <div class="logo-track">
+        <img src="bps-logo-transparent.webp" alt="Blue Pulse Studios" />
+      </div>
+    </div>
+    <p class="tag">A boutique studio for horror<br/>and genre film.</p>
+    <div class="eyebrow">Patient dread &middot; Handcrafted</div>
+  </div>
+  <div class="scroll-cue">Scroll</div>
+</section>
+
+<!-- SCENE: heart pulse → Zera (autoplays on scroll into view) -->
+<section class="scene" id="scene">
+  <div class="bg-depth" id="sceneBg"></div>
+  <div class="bg-bubbles bubbles-a"></div>
+  <div class="bg-bubbles bubbles-b"></div>
+  <div class="stage">
+    <div class="heart"></div>
+    <div class="pulse p1"></div>
+    <div class="pulse p2"></div>
+    <div class="pulse p3"></div>
+    <div class="flash"></div>
+  </div>
+  <div class="vig"></div>
+  <!-- ZERA — pulled out of .stage and placed near the top of the z-stack so
+       nothing in the heart/pulse/flash chain can stack-context her away. -->
+  <div class="zera-wrap" id="zeraWrap">
+    <img class="zera" src="assets/zera-figure.webp" alt="Zera, the figure at the heart of Blue Pulse" />
+  </div>
+  <!-- Bottom caption (cycles through the opening beats) -->
+  <div class="caption" id="sceneCap">A DARK HEART &middot; STILL</div>
+  <!-- Final caption: centered on Zera, its own parallax layer -->
+  <div class="caption-final-wrap" id="capFinalWrap">
+    <div class="caption-final" id="capFinal">STORIES COME TO LIFE WITH A SINGLE PULSE</div>
+  </div>
+</section>
+
+<!-- STATEMENT -->
+<section class="statement">
+  <div class="inner reveal">
+    <div class="kicker">The Studio</div>
+    <h2>We make small, <span class="em">patient</span><br/>horror films.</h2>
+    <p>Blue Pulse Studios is a boutique production company for horror and genre cinema. We work slowly, intentionally, and in-camera when we can. Our stories are small, our patience is long, and our restraint is the point.</p>
+  </div>
+</section>
+
+<!-- FILM SLATE -->
+<section class="slate" id="slate">
+  <div class="head reveal">
+    <span class="num">01</span>
+    <span class="label">The Slate</span>
+  </div>
+  <p class="lede reveal">What we&rsquo;re making now. What we&rsquo;ve made. Each film arrives when it&rsquo;s ready.</p>
+
+  <div class="films reveal">
+    <a class="film-primary" href="stay-home.html">
+      <div class="tag">Now in production</div>
+      <div class="wordmark">
+        <img src="assets/stay-home-logo.webp" alt="Stay Home" />
+      </div>
+      <div>
+        <p class="logline">Debut feature. A young woman, a ring, and an empty house at the end of the road. Some doors are better left locked.</p>
+        <div class="meta">
+          <span>2027</span>
+          <span>Feature</span>
+          <span>Horror</span>
+        </div>
+      </div>
+    </a>
+
+    <div class="film-secondary">
+      <a class="film-short" href="the-painting.html">
+        <div class="poster"></div>
+        <div class="meta-col">
+          <div class="kicker">Short Film &middot; 2025</div>
+          <div class="title">The Painting</div>
+          <div class="desc">A painter finds her subject beginning to look back.</div>
+          <span class="link">Watch</span>
+        </div>
+      </a>
+      <div class="film-placeholder" data-placeholder>
+        <span class="plus">+</span>
+        <span>Next project &middot; TBA</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SHOP TEASER -->
+<section class="shop-teaser">
+  <div class="head reveal">
+    <span class="num">02</span>
+    <span class="label">Shop</span>
+  </div>
+  <div class="title-row reveal">
+    <h2>Artifacts from the films.</h2>
+    <a href="shop.html" class="view-all">Visit the shop &rarr;</a>
+  </div>
+  <div class="grid reveal">
+    <a class="product hoodie" href="product.html?id=ashen-hoodie">
+      <div class="img"><img src="assets/ashen-man-hoodie-clean-V2.webp" alt="The Ashen Man Hoodie" /></div>
+      <div class="meta">
+        <div>
+          <div class="kicker">Stay Home</div>
+          <div class="name">The Ashen Man Hoodie</div>
+        </div>
+        <div class="price">$95</div>
+      </div>
+    </a>
+    <a class="product shelby" href="product.html?id=shelby-figure">
+      <div class="img"><img src="assets/shelby-figure-clean-dropshadow-v2.webp" alt="Shelby Figure" /></div>
+      <div class="meta">
+        <div>
+          <div class="kicker">Stay Home &middot; 1/6 scale</div>
+          <div class="name">Shelby Figure</div>
+        </div>
+        <div class="price">$220</div>
+      </div>
+    </a>
+    <a class="product ashen" href="product.html?id=ashen-figure">
+      <div class="img"><img src="assets/ashen-man-figure-clean-dropshadow-v2.webp" alt="The Ashen Man Figure" /></div>
+      <div class="meta">
+        <div>
+          <div class="kicker">Stay Home &middot; 1/6 scale</div>
+          <div class="name">The Ashen Man Figure</div>
+        </div>
+        <div class="price">$240</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="top">
+    <div class="brand-col">
+      <div class="mark">BLUE PULSE STUDIOS</div>
+      <p>A boutique production house for horror and genre film, television, and video games. Small rooms, patient work, handmade stories.</p>
+    </div>
+    <div>
+      <h4>Films</h4>
+      <a href="stay-home.html">Stay Home</a>
+      <a href="the-painting.html">The Painting</a>
+    </div>
+    <div>
+      <h4>Shop</h4>
+      <a href="shop.html">All</a>
+      <a href="cart.html">Cart</a>
+    </div>
+    <div>
+      <h4>Studio</h4>
+      <a href="studio.html">About</a>
+      <a href="press.html">Press</a>
+      <a href="journal.html">Newswire</a>
+      <a href="community.html">Community</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+  <div class="bottom">
+    <div>&copy; 2026 Blue Pulse Studios</div>
+    <div class="legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="shipping-returns.html">Shipping &amp; Returns</a></div>
+    <div>Made patiently</div>
+  </div>
+</footer>
+
+<script>
+  /* ——— hero parallax + cursor-anchored logo ——— */
+  const bg = document.getElementById('heroBg');
+  const heroLogo = document.getElementById('heroLogo');
+  let mx = 0, my = 0, sy = 0, tmx = 0, tmy = 0;
+  window.addEventListener('mousemove', (e) => {
+    tmx = (e.clientX / window.innerWidth - 0.5) * 2;
+    tmy = (e.clientY / window.innerHeight - 0.5) * 2;
+  }, { passive: true });
+  window.addEventListener('scroll', () => { sy = window.scrollY; }, { passive: true });
+  function raf() {
+    mx += (tmx - mx) * 0.07;
+    my += (tmy - my) * 0.07;
+    if (bg) bg.style.transform = `translate3d(${(-mx*22).toFixed(2)}px, ${(-my*16 + sy*0.18).toFixed(2)}px, 0) scale(1.05)`;
+    if (heroLogo) heroLogo.style.transform = `translate3d(${(mx*8).toFixed(2)}px, ${(my*5).toFixed(2)}px, 0)`;
+    requestAnimationFrame(raf);
+  }
+  raf();
+
+  /* ——— Scene: CSS auto-plays the heart → Zera transition on page load.
+     JS only handles the synchronized caption text cycling and Zera is the
+     ALWAYS-VISIBLE base layer (z-index:1, opacity:1) so even if anything else
+     fails she stays put. ——— */
+  const scene = document.getElementById('scene');
+  const sceneCap = document.getElementById('sceneCap');
+  const capFinal = document.getElementById('capFinal');
+  const capFinalWrap = document.getElementById('capFinalWrap');
+  const zeraWrap = document.getElementById('zeraWrap');
+  const sceneBg = document.getElementById('sceneBg');
+
+  if (scene && sceneCap) {
+    // Fire caption beats in sync with the CSS-driven heart→pulse→flash timeline.
+    setTimeout(() => sceneCap.classList.add('on'), 500);
+    setTimeout(() => sceneCap.classList.remove('on'), 2700);
+    setTimeout(() => { sceneCap.textContent = 'THE PULSE \u00B7 AWAKE'; sceneCap.classList.add('on'); }, 3200);
+    setTimeout(() => sceneCap.classList.remove('on'), 5200);
+    setTimeout(() => { if (capFinal) capFinal.classList.add('on'); }, 7800);
+  }
+
+  /* Three independent cursor-parallax layers in the scene */
+  let zmx = 0, zmy = 0, ztmx = 0, ztmy = 0;
+  window.addEventListener('mousemove', (e) => {
+    ztmx = (e.clientX / window.innerWidth - 0.5) * 2;
+    ztmy = (e.clientY / window.innerHeight - 0.5) * 2;
+  }, { passive: true });
+  function scenePara() {
+    zmx += (ztmx - zmx) * 0.06;
+    zmy += (ztmy - zmy) * 0.06;
+    if (zeraWrap)     zeraWrap.style.transform     = `translate3d(${(zmx*14).toFixed(2)}px, ${(zmy*9).toFixed(2)}px, 0)`;
+    if (capFinalWrap) capFinalWrap.style.transform = `translate3d(${(zmx*7).toFixed(2)}px, ${(zmy*5).toFixed(2)}px, 0)`;
+    if (sceneBg)      sceneBg.style.transform      = `translate3d(${(-zmx*22).toFixed(2)}px, ${(-zmy*14).toFixed(2)}px, 0) scale(1.06)`;
+    requestAnimationFrame(scenePara);
+  }
+  scenePara();
+
+  /* scroll reveal */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.14 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  /* nav fills on scroll */
+  const nav = document.querySelector('.nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) nav.style.background = 'rgba(2,4,10,0.82)';
+    else nav.style.background = 'linear-gradient(to bottom, rgba(2,4,10,0.5), transparent)';
+  }, { passive: true });
+</script>
+<script src="site.js"></script>
+</body>
+</html>

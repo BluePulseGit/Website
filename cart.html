@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Your cart. Review your pieces and head to checkout." />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="theme-color" content="#FAFAFA" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Cart · Blue Pulse Studios Shop" />
+<meta property="og:description" content="Review and check out." />
+<meta property="og:image" content="og-image.jpg" />
+<meta property="og:site_name" content="Blue Pulse Studios" />
+<title>Cart · shop.bluepulsestudios.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<script src="products.js"></script>
+<style>
+  :root {
+    --paper: #FAFAFA; --paper-2: #F2F2F2; --ink: #0F0F0F; --stone: #6B6B6B;
+    --ash: #B0B0B0; --hair: #E5E5E5; --display: 'Fraunces', serif; --ui: 'Inter', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--paper); color: var(--ink); font-family: var(--ui); -webkit-font-smoothing: antialiased; }
+
+  .nav { position: sticky; top: 0; z-index: 100; background: var(--paper); border-bottom: 1px solid var(--hair); }
+  .nav .inner {
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 48px;
+    padding: 22px 40px; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+  }
+  .nav .brand { display: inline-flex; flex-direction: column; gap: 3px; line-height: 1; text-decoration: none; color: var(--ink); }
+  .nav .brand .line1 { font-weight: 600; letter-spacing: 0.32em; font-size: 11px; }
+  .nav .brand .line2 { font-weight: 500; letter-spacing: 0.42em; font-size: 9px; color: var(--stone); transition: color .6s; }
+  .nav .brand:hover .line2 { color: var(--ink); }
+  .nav .links { justify-self: center; display: flex; gap: 36px; }
+  .nav .links a { color: var(--stone); text-decoration: none; transition: color .5s; font-weight: 500; }
+  .nav .links a:hover, .nav .links a.on { color: var(--ink); }
+  .nav .right { display: flex; align-items: center; gap: 22px; justify-self: end; }
+  .nav .right a, .nav .right button {
+    color: var(--ink); text-decoration: none; background: none; border: 0;
+    font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; font-weight: 500;
+  }
+  .nav .right .auth .sep { color: var(--ash); margin: 0 4px; }
+  .nav .right .cart-btn sup { font-size: 10px; color: var(--ink); font-weight: 500; margin-left: 4px; }
+
+  /* HEAD */
+  .cart-head {
+    padding: 80px 40px 40px;
+    border-bottom: 1px solid var(--hair);
+    display: flex; justify-content: space-between; align-items: baseline;
+    flex-wrap: wrap; gap: 20px;
+  }
+  .cart-head h1 {
+    font-family: var(--display); font-weight: 300;
+    font-size: clamp(38px, 5vw, 60px); letter-spacing: -0.02em; color: var(--ink);
+  }
+  .cart-head .count { font-size: 11px; letter-spacing: .35em; text-transform: uppercase; color: var(--stone); font-weight: 500; }
+
+  /* MAIN GRID */
+  .cart-main {
+    display: grid; grid-template-columns: 1.7fr 1fr; gap: 80px;
+    padding: 56px 40px 100px;
+    align-items: start;
+  }
+
+  /* LINE ITEMS */
+  .lines { display: flex; flex-direction: column; gap: 0; }
+  .line {
+    display: grid; grid-template-columns: 120px 1fr auto;
+    gap: 32px; align-items: center;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--hair);
+  }
+  .line:first-child { border-top: 1px solid var(--hair); }
+  .line .img {
+    aspect-ratio: 4/5; background: var(--paper-2);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; padding: 12px;
+  }
+  .line .img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .line .img.boardgame { padding: 6px; }
+  .line .info .kicker { font-size: 9px; letter-spacing: .35em; text-transform: uppercase; color: var(--stone); font-weight: 500; margin-bottom: 6px; }
+  .line .info .name { font-family: var(--display); font-weight: 400; font-size: 19px; color: var(--ink); letter-spacing: -0.01em; }
+  .line .info .name a { color: inherit; text-decoration: none; transition: color .4s; }
+  .line .info .name a:hover { color: var(--stone); }
+  .line .info .meta { font-size: 11px; color: var(--stone); margin-top: 6px; letter-spacing: .15em; text-transform: uppercase; font-weight: 500; }
+  .line .info .controls { margin-top: 16px; display: flex; gap: 24px; align-items: center; }
+  .line .info .qty {
+    display: inline-flex; align-items: center; border: 1px solid var(--hair);
+  }
+  .line .info .qty button {
+    background: none; border: 0; padding: 8px 12px; cursor: pointer; color: var(--ink); font-size: 14px;
+  }
+  .line .info .qty button:hover { background: var(--paper-2); }
+  .line .info .qty .v { padding: 8px 14px; min-width: 28px; text-align: center; font-size: 14px; font-weight: 500; }
+  .line .info .remove {
+    background: none; border: 0; padding: 0;
+    font-size: 10.5px; letter-spacing: .35em; text-transform: uppercase; color: var(--stone);
+    text-decoration: underline; text-underline-offset: 4px;
+    cursor: pointer; transition: color .4s;
+    font-family: var(--ui); font-weight: 500;
+  }
+  .line .info .remove:hover { color: var(--ink); }
+  .line .price { text-align: right; font-size: 16px; font-weight: 500; }
+  .line .price .each { display: block; font-size: 11px; color: var(--stone); font-weight: 400; margin-top: 4px; letter-spacing: .12em; }
+
+  /* SUMMARY */
+  .summary {
+    background: var(--paper-2); padding: 36px;
+    position: sticky; top: 90px;
+  }
+  .summary h2 {
+    font-size: 11px; letter-spacing: .35em; text-transform: uppercase; color: var(--stone); font-weight: 500;
+    padding-bottom: 18px; border-bottom: 1px solid var(--hair); margin-bottom: 24px;
+  }
+  .summary .row { display: flex; justify-content: space-between; padding: 12px 0; font-size: 14px; }
+  .summary .row .lbl { color: var(--stone); }
+  .summary .row .val { color: var(--ink); font-weight: 500; }
+  .summary .row.total {
+    margin-top: 14px; padding-top: 18px; border-top: 1px solid var(--hair);
+    font-size: 18px;
+  }
+  .summary .row.total .val { font-family: var(--display); font-weight: 400; font-size: 28px; }
+  .summary .checkout {
+    display: block; width: 100%; margin-top: 28px;
+    background: var(--ink); color: var(--paper);
+    border: 0; padding: 22px 28px;
+    font: 500 12px/1 var(--ui); letter-spacing: .5em; text-transform: uppercase; cursor: pointer;
+    transition: background .4s, transform .4s;
+  }
+  .summary .checkout:hover { background: #000; transform: translateY(-2px); }
+  .summary .checkout:disabled { background: var(--ash); cursor: not-allowed; transform: none; }
+  .summary .fine { margin-top: 18px; font-family: var(--display); font-style: italic; font-size: 12px; color: var(--stone); text-align: center; line-height: 1.5; }
+
+  /* EMPTY STATE */
+  .empty { padding: 120px 40px 80px; text-align: center; max-width: 600px; margin: 0 auto; }
+  .empty .symbol { font-size: 48px; color: var(--ash); margin-bottom: 24px; }
+  .empty h2 { font-family: var(--display); font-weight: 300; font-size: 42px; letter-spacing: -0.02em; color: var(--ink); }
+  .empty p { font-family: var(--display); font-style: italic; font-size: 17px; color: var(--stone); margin-top: 16px; }
+  .empty a {
+    display: inline-block; margin-top: 36px;
+    background: var(--ink); color: var(--paper);
+    padding: 18px 40px;
+    font-size: 11px; letter-spacing: .45em; text-transform: uppercase; text-decoration: none; font-weight: 500;
+    transition: background .4s, transform .4s;
+  }
+  .empty a:hover { background: #000; transform: translateY(-2px); }
+
+  /* CHECKOUT MODAL */
+  .checkout-modal { position: fixed; inset: 0; z-index: 1000; display: none; }
+  .checkout-modal.open { display: block; }
+  .checkout-modal .scrim { position: absolute; inset: 0; background: rgba(15,15,15,0.6); backdrop-filter: blur(6px); animation: fadeIn .35s ease; }
+  .checkout-modal .panel {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: min(720px, 100%); max-height: calc(100vh - 56px);
+    background: var(--paper);
+    box-shadow: 0 40px 90px -30px rgba(15,15,15,0.4);
+    overflow: auto;
+    animation: rise .5s cubic-bezier(.2,.7,.2,1);
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes rise { from { opacity: 0; transform: translate(-50%, calc(-50% + 14px)); } to { opacity: 1; transform: translate(-50%, -50%); } }
+  .checkout-modal .panel-inner { padding: 56px; }
+  .checkout-modal .close {
+    position: absolute; top: 18px; right: 20px; width: 36px; height: 36px;
+    background: transparent; border: 0; color: var(--ink); font: 300 26px/1 var(--ui); cursor: pointer; z-index: 10;
+  }
+  .checkout-modal h2 {
+    font-family: var(--display); font-weight: 300; font-size: 36px; letter-spacing: -0.02em; color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .checkout-modal .lede {
+    font-family: var(--display); font-style: italic; font-size: 15px; color: var(--stone); margin-bottom: 36px;
+  }
+  .co-section { margin-bottom: 32px; }
+  .co-section .head {
+    font-size: 10px; letter-spacing: .4em; text-transform: uppercase; color: var(--stone); font-weight: 500;
+    border-bottom: 1px solid var(--hair); padding-bottom: 10px; margin-bottom: 18px;
+  }
+  .co-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 14px; }
+  .co-row.full { grid-template-columns: 1fr; }
+  .co-row.three { grid-template-columns: 2fr 1fr 1fr; }
+  .co-field input {
+    width: 100%; font: inherit; color: var(--ink);
+    background: transparent; border: 0; border-bottom: 1px solid var(--hair);
+    padding: 12px 0; outline: none; font-size: 15px; transition: border-color .4s;
+  }
+  .co-field input:focus { border-color: var(--ink); }
+  .co-field label { display: block; font-size: 9.5px; letter-spacing: .35em; text-transform: uppercase; color: var(--stone); margin-bottom: 6px; font-weight: 500; }
+
+  .co-submit {
+    display: block; width: 100%; margin-top: 12px;
+    background: var(--ink); color: var(--paper); border: 0; padding: 22px;
+    font: 500 12px/1 var(--ui); letter-spacing: .5em; text-transform: uppercase; cursor: pointer;
+    transition: background .4s;
+  }
+  .co-submit:hover { background: #000; }
+  .co-success {
+    text-align: center; padding: 40px 0;
+  }
+  .co-success .check { width: 60px; height: 60px; margin: 0 auto 24px; border: 1px solid var(--ink); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+  .co-success h3 { font-family: var(--display); font-weight: 300; font-size: 30px; letter-spacing: -0.02em; }
+  .co-success p { font-family: var(--display); font-style: italic; color: var(--stone); margin-top: 12px; font-size: 16px; }
+
+  /* RELATED */
+  .related-band {
+    background: var(--paper-2); padding: 80px 40px;
+    border-top: 1px solid var(--hair);
+  }
+  .related-band .head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-bottom: 1px solid var(--hair); padding-bottom: 18px; margin-bottom: 40px;
+  }
+  .related-band .head h3 { font-family: var(--display); font-weight: 300; font-size: 28px; letter-spacing: -0.015em; }
+  .related-band .head a { font-size: 10.5px; letter-spacing: .4em; text-transform: uppercase; color: var(--ink); text-decoration: none; font-weight: 500; padding-bottom: 6px; border-bottom: 1px solid var(--ink); }
+  .rel-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+  .rel-card { text-decoration: none; color: inherit; display: flex; flex-direction: column; cursor: pointer; }
+  .rel-card .img {
+    aspect-ratio: 4/5; background: var(--paper); border: 1px solid var(--hair);
+    display: flex; align-items: center; justify-content: center; padding: 16px;
+    overflow: hidden; transition: transform .8s cubic-bezier(.2,.7,.2,1);
+  }
+  .rel-card:hover .img { transform: translateY(-4px); }
+  .rel-card .img img { max-width: 86%; max-height: 86%; object-fit: contain; filter: drop-shadow(0 12px 18px rgba(15,15,15,0.18)); }
+  .rel-card.baked .img img { filter: none; }
+  .rel-card.boardgame .img { padding: 6px; }
+  .rel-card.empty .img { position: relative; }
+  .rel-card.empty .img::before { content: '+'; font-size: 26px; color: var(--ash); }
+  .rel-card .info { margin-top: 14px; }
+  .rel-card .k { font-size: 9px; letter-spacing: .4em; text-transform: uppercase; color: var(--stone); margin-bottom: 4px; font-weight: 500; }
+  .rel-card .n { font-family: var(--display); font-size: 15px; color: var(--ink); }
+  .rel-card .p { font-size: 12px; margin-top: 4px; font-weight: 500; }
+
+  /* FOOTER */
+  footer.site { padding: 64px 40px 40px; background: var(--ink); color: var(--ash); }
+  footer.site .top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 40px; }
+  footer.site h4 { font-size: 10px; letter-spacing: .42em; text-transform: uppercase; color: var(--paper); font-weight: 500; margin-bottom: 16px; }
+  footer.site a { display: block; color: var(--ash); text-decoration: none; font-size: 13px; margin-bottom: 8px; transition: color .5s; }
+  footer.site a:hover { color: var(--paper); }
+  footer.site .brand-col .mark { color: var(--paper); font-size: 13px; letter-spacing: .3em; font-weight: 600; margin-bottom: 14px; }
+  footer.site .brand-col p { font-family: var(--display); font-style: italic; font-size: 14px; line-height: 1.55; max-width: 340px; }
+  footer.site .bottom { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .32em; text-transform: uppercase; padding-top: 24px; border-top: 1px solid #222226; }
+
+  @media (max-width: 1000px) {
+    .cart-main { grid-template-columns: 1fr; gap: 32px; padding: 32px 24px 80px; }
+    .summary { position: static; }
+    .rel-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 700px) {
+    .nav .inner { grid-template-columns: auto 1fr; gap: 16px; padding: 16px 24px; }
+    .nav .links { display: none; }
+    .nav .right { justify-self: end; }
+    .cart-head { padding: 48px 24px 24px; }
+    .line { grid-template-columns: 90px 1fr; gap: 16px; padding: 24px 0; }
+    .line .price { grid-column: span 2; text-align: left; }
+    .checkout-modal .panel-inner { padding: 40px 24px; }
+    .co-row { grid-template-columns: 1fr; gap: 14px; }
+    .co-row.three { grid-template-columns: 1fr; }
+    footer.site .top { grid-template-columns: 1fr 1fr; gap: 36px; }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="page-transition entering" id="pageTransition" aria-hidden="true"></div>
+
+<nav class="nav">
+  <div class="inner">
+    <a class="brand" href="shop.html">
+      <span class="line1">BLUE PULSE</span>
+      <span class="line2">SHOP</span>
+    </a>
+    <div class="links">
+      <a href="homepage.html">Home</a>
+      <a href="shop.html" class="on">Shop</a>
+      <span class="studio-menu">
+        <a class="studio-trigger" href="studio.html">Studio</a>
+        <div class="studio-panel" role="menu">
+          <a href="press.html" role="menuitem">Press</a>
+          <a href="journal.html" role="menuitem">Newswire</a>
+        </div>
+      </span>
+      <a href="community.html">Community</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="right">
+      <a href="#">Search</a>
+      <a href="#" class="auth">Log In <span class="sep">/</span> Join</a>
+      <button class="cart-btn" id="navCartBtn">Cart <sup id="navCartCount">(0)</sup></button>
+    </div>
+  </div>
+</nav>
+
+<main id="main">
+  <div class="cart-head">
+    <h1>Your cart.</h1>
+    <div class="count" id="cartCount">0 items</div>
+  </div>
+
+  <div id="cartArea"></div>
+</main>
+
+<!-- Checkout modal -->
+<div class="checkout-modal" id="coModal" aria-hidden="true">
+  <div class="scrim" data-close></div>
+  <div class="panel" role="dialog" aria-modal="true">
+    <button class="close" aria-label="Close" data-close>&times;</button>
+    <div class="panel-inner" id="coPanel">
+      <h2>Checkout</h2>
+      <p class="lede">This is a prototype. No charge will be made.</p>
+      <form id="coForm">
+        <div class="co-section">
+          <div class="head">Contact</div>
+          <div class="co-row full"><div class="co-field"><label>Email</label><input type="email" required placeholder="you@example.com" /></div></div>
+        </div>
+        <div class="co-section">
+          <div class="head">Ship to</div>
+          <div class="co-row"><div class="co-field"><label>First name</label><input required /></div><div class="co-field"><label>Last name</label><input required /></div></div>
+          <div class="co-row full"><div class="co-field"><label>Address</label><input required /></div></div>
+          <div class="co-row three"><div class="co-field"><label>City</label><input required /></div><div class="co-field"><label>State</label><input required /></div><div class="co-field"><label>ZIP</label><input required /></div></div>
+        </div>
+        <div class="co-section">
+          <div class="head">Payment</div>
+          <div class="co-row full"><div class="co-field"><label>Card number</label><input placeholder="•••• •••• •••• ••••" required /></div></div>
+          <div class="co-row three"><div class="co-field"><label>Expires</label><input placeholder="MM/YY" required /></div><div class="co-field"><label>CVC</label><input placeholder="•••" required /></div><div class="co-field"><label>ZIP</label><input required /></div></div>
+        </div>
+        <button type="submit" class="co-submit">Place order &rarr;</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Related -->
+<section class="related-band" id="relatedBand" hidden>
+  <div class="head">
+    <h3>You might also like</h3>
+    <a href="shop.html">See everything &rarr;</a>
+  </div>
+  <div class="rel-grid" id="relGrid"></div>
+</section>
+
+<footer class="site">
+  <div class="top">
+    <div class="brand-col">
+      <div class="mark">BLUE PULSE STUDIOS</div>
+      <p>A boutique production house for horror and genre film, television, and video games.</p>
+    </div>
+    <div><h4>Films</h4><a href="homepage.html#slate">Stay Home</a><a href="homepage.html#slate">The Painting</a></div>
+    <div><h4>Shop</h4><a href="shop.html">All</a><a href="cart.html">Cart</a></div>
+    <div><h4>Studio</h4><a href="studio.html">About</a><a href="community.html">Community</a><a href="contact.html">Contact</a></div>
+  </div>
+  <div class="bottom"><div>&copy; 2026 Blue Pulse Studios</div><div class="legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="shipping-returns.html">Shipping &amp; Returns</a></div><div>Made patiently</div></div>
+</footer>
+
+<script>
+  // Render cart
+  function fmt(n) { return '$' + n.toFixed(2); }
+  function render() {
+    const cart = window.bpsCart.get();
+    window.renderNavCartCount();
+    const cartArea = document.getElementById('cartArea');
+    document.getElementById('cartCount').textContent = cart.length === 0
+      ? '0 items'
+      : cart.reduce((s, it) => s + it.qty, 0) + ' item' + (cart.reduce((s,it)=>s+it.qty,0) > 1 ? 's' : '');
+
+    if (cart.length === 0) {
+      cartArea.innerHTML = `
+        <div class="empty">
+          <div class="symbol">+</div>
+          <h2>Your cart is empty.</h2>
+          <p>Nothing yet. The shop is full of pieces from the films.</p>
+          <a href="shop.html">Shop the drop &rarr;</a>
+        </div>`;
+      // Show related (top 4 real products)
+      renderRelated(['ashen-hoodie','shelby-figure','ashen-figure','board-game']);
+      return;
+    }
+
+    let html = '<div class="cart-main"><div class="lines">';
+    cart.forEach((item, i) => {
+      const p = window.PRODUCTS[item.id] || {};
+      const lineTotal = item.price * item.qty;
+      const isBoard = item.id === 'board-game';
+      html += `<div class="line">
+        <a class="img${isBoard ? ' boardgame' : ''}" href="product.html?id=${item.id}">
+          ${p.image ? `<img src="${p.image}" alt="${p.name || item.name}" />` : ''}
+        </a>
+        <div class="info">
+          <div class="kicker">${(p.kicker || '').split('·').slice(0,2).join('·').trim()}</div>
+          <div class="name"><a href="product.html?id=${item.id}">${item.name}</a></div>
+          ${item.size ? `<div class="meta">Size · ${item.size}</div>` : ''}
+          <div class="controls">
+            <div class="qty">
+              <button data-i="${i}" data-act="dec" aria-label="Decrease">&minus;</button>
+              <span class="v">${item.qty}</span>
+              <button data-i="${i}" data-act="inc" aria-label="Increase">&plus;</button>
+            </div>
+            <button class="remove" data-i="${i}" data-act="rm">Remove</button>
+          </div>
+        </div>
+        <div class="price">${fmt(lineTotal)}<span class="each">${fmt(item.price)} each</span></div>
+      </div>`;
+    });
+    html += '</div>';
+
+    // Summary
+    const subtotal = cart.reduce((s, it) => s + it.price * it.qty, 0);
+    const shipping = subtotal > 0 ? 9.95 : 0;
+    const tax = subtotal * 0.0875;
+    const total = subtotal + shipping + tax;
+    html += `<aside class="summary">
+      <h2>Order summary</h2>
+      <div class="row"><span class="lbl">Subtotal</span><span class="val">${fmt(subtotal)}</span></div>
+      <div class="row"><span class="lbl">Shipping (US ground)</span><span class="val">${fmt(shipping)}</span></div>
+      <div class="row"><span class="lbl">Tax (est.)</span><span class="val">${fmt(tax)}</span></div>
+      <div class="row total"><span class="lbl">Total</span><span class="val">${fmt(total)}</span></div>
+      <button class="checkout" id="checkoutBtn">Checkout &rarr;</button>
+      <p class="fine">Shipping calculated at checkout. Limited items ship when production runs are complete.</p>
+    </aside></div>`;
+
+    cartArea.innerHTML = html;
+    // Wire buttons
+    cartArea.querySelectorAll('.qty button, .remove').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const i = parseInt(btn.dataset.i, 10);
+        const act = btn.dataset.act;
+        const c = window.bpsCart.get();
+        if (act === 'inc') c[i].qty = Math.min(99, c[i].qty + 1);
+        else if (act === 'dec') c[i].qty = Math.max(1, c[i].qty - 1);
+        else if (act === 'rm') c.splice(i, 1);
+        window.bpsCart.set(c);
+        render();
+      });
+    });
+    document.getElementById('checkoutBtn').addEventListener('click', openCheckout);
+    // Related: based on cart contents
+    const cartIds = cart.map(c => c.id);
+    let related = [];
+    cartIds.forEach(id => {
+      window.getRelatedProducts(id, 6).forEach(rid => {
+        if (!cartIds.includes(rid) && !related.includes(rid)) related.push(rid);
+      });
+    });
+    renderRelated(related.slice(0, 4));
+  }
+
+  function renderRelated(ids) {
+    const band = document.getElementById('relatedBand');
+    const grid = document.getElementById('relGrid');
+    if (!ids || ids.length === 0) { band.hidden = true; return; }
+    band.hidden = false;
+    grid.innerHTML = '';
+    ids.forEach(rid => {
+      const r = window.PRODUCTS[rid];
+      if (!r) return;
+      const a = document.createElement('a');
+      a.className = 'rel-card';
+      if (r.bakedShadow) a.classList.add('baked');
+      if (rid === 'board-game') a.classList.add('boardgame');
+      if (!r.image) a.classList.add('empty');
+      a.href = 'product.html?id=' + rid;
+      a.innerHTML = `<div class="img">${r.image ? `<img src="${r.image}" alt="${r.name}" />` : ''}</div>
+        <div class="info"><div class="k">${(r.kicker || '').split(' · ')[0]}</div><div class="n">${r.name}</div><div class="p">$${r.price}</div></div>`;
+      grid.appendChild(a);
+    });
+  }
+
+  // Checkout modal
+  const co = document.getElementById('coModal');
+  function openCheckout() {
+    co.classList.add('open');
+    co.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeCheckout() {
+    co.classList.remove('open');
+    co.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    document.getElementById('coPanel').innerHTML = document.getElementById('coPanel').dataset.original || document.getElementById('coPanel').innerHTML;
+  }
+  // Save original panel HTML so we can re-render after success
+  document.getElementById('coPanel').dataset.original = document.getElementById('coPanel').innerHTML;
+  co.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', (e) => {
+    if (e.target === el) closeCheckout();
+  }));
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && co.classList.contains('open')) closeCheckout(); });
+
+  // Bind form submit
+  function bindForm() {
+    const f = document.getElementById('coForm');
+    if (!f) return;
+    f.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const orderId = 'BPS-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+      document.getElementById('coPanel').innerHTML = `
+        <div class="co-success">
+          <div class="check">&#10003;</div>
+          <h3>Order placed.</h3>
+          <p>Confirmation #${orderId}<br/>You'll get an email shortly.</p>
+          <p style="margin-top:32px"><a href="shop.html" style="color:var(--ink);text-decoration:underline;text-underline-offset:6px;font-family:var(--ui);font-size:11px;letter-spacing:.4em;text-transform:uppercase;font-weight:500;">Keep shopping</a></p>
+        </div>`;
+      // Clear cart
+      window.bpsCart.set([]);
+      // Re-render after a beat in case they close the modal
+      setTimeout(render, 100);
+    });
+  }
+  // Re-bind on open
+  const origOpen = openCheckout;
+  openCheckout = function() {
+    document.getElementById('coPanel').innerHTML = document.getElementById('coPanel').dataset.original;
+    origOpen();
+    bindForm();
+  };
+
+  // Cart button = scroll to cart top
+  document.getElementById('navCartBtn').addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  render();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

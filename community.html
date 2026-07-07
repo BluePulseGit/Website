@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Cross over to the other side. A community of people who have seen what we make. Discord, social, and the conversation that doesn't end when the credits roll." />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="theme-color" content="#02040A" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Community — Cross Over to the Other Side" />
+<meta property="og:description" content="Cross over to the other side. A community of people who have seen what we make. Discord, social, and the conversation that doesn't end when the credits roll." />
+<meta property="og:image" content="og-image.jpg" />
+<meta property="og:site_name" content="Blue Pulse Studios" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Community — Cross Over to the Other Side" />
+<meta name="twitter:description" content="Cross over to the other side. A community of people who have seen what we make. Discord, social, and the conversation that doesn't end when the credits roll." />
+<meta name="twitter:image" content="og-image.jpg" />
+<title>Community — Blue Pulse Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --abyss:  #02040A;
+    --ocean:  #060F1F;
+    --depth:  #0A1A35;
+    --tide:   #0F2A52;
+    --pulse:  #1D5FB8;
+    --glow:   #6BB4E8;
+    --foam:   #CFD9E4;
+    --stone:  #8B929C;
+    --hair:   #132341;
+    --discord:#5865F2;
+    --display:'Fraunces', 'Times New Roman', serif;
+    --ui:     'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; overflow-x: clip; }
+  body {
+    background: var(--abyss); color: var(--foam);
+    font-family: var(--ui);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999;
+    opacity: 0.04; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ——— NAV ——— */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 48px;
+    background: linear-gradient(to bottom, rgba(2,4,10,0.5), transparent);
+    font-size: 10.5px; letter-spacing: 0.28em; text-transform: uppercase;
+    transition: background .8s ease;
+  }
+  .nav .brand {
+    display: inline-flex; flex-direction: column; gap: 3px; line-height: 1;
+    color: var(--foam); text-decoration: none;
+  }
+  .nav .brand .line1 { font-weight: 600; letter-spacing: 0.32em; font-size: 11px; }
+  .nav .brand .line2 { font-weight: 500; letter-spacing: 0.42em; font-size: 9px; color: var(--stone); transition: color .6s; }
+  .nav .brand:hover .line2 { color: var(--foam); }
+  .nav .links a { color: var(--stone); text-decoration: none; margin-left: 28px; transition: color .6s; }
+  .nav .links a:hover, .nav .links a.on { color: var(--foam); }
+
+  /* ——— HERO PORTAL ——— */
+  .portal {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 140px 40px 120px;
+    background: radial-gradient(ellipse at 50% 40%, #082048 0%, #061328 40%, #020611 75%, #000 100%);
+    isolation: isolate;
+  }
+  .portal .bubbles {
+    position: absolute; inset: -10%;
+    background: url('assets/bubbles-v2.webp') center/cover no-repeat;
+    opacity: 0.32; mix-blend-mode: screen; filter: blur(1px);
+    animation: portalDriftA 28s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+  .portal .bubbles2 {
+    position: absolute; inset: -14%;
+    background: url('assets/bubbles-v3.webp') center/cover no-repeat;
+    opacity: 0.22; mix-blend-mode: screen; filter: blur(0.5px);
+    animation: portalDriftB 40s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+  @keyframes portalDriftA {
+    0% { transform: translate3d(-3%, 4%, 0) scale(1.06); }
+    100% { transform: translate3d(3%, -5%, 0) scale(1.14); }
+  }
+  @keyframes portalDriftB {
+    0% { transform: translate3d(4%, -3%, 0) scale(1.10); }
+    100% { transform: translate3d(-4%, 4%, 0) scale(1.18); }
+  }
+
+  /* Pulse rings that loop — the portal itself */
+  .portal .rings {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    width: min(80vh, 90vw); height: min(80vh, 90vw);
+    z-index: 1;
+  }
+  .portal .ring {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.2);
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    border: 1px solid rgba(107,180,232,0.6);
+    box-shadow:
+      0 0 50px rgba(29,95,184,0.4),
+      inset 0 0 30px rgba(107,180,232,0.2);
+    opacity: 0;
+    animation: portalRing 5.2s ease-out infinite;
+  }
+  .portal .ring:nth-child(2) { animation-delay: 1.3s; }
+  .portal .ring:nth-child(3) { animation-delay: 2.6s; }
+  .portal .ring:nth-child(4) { animation-delay: 3.9s; }
+  @keyframes portalRing {
+    0%   { opacity: 0;   transform: translate(-50%,-50%) scale(0.15); }
+    15%  { opacity: 0.9; }
+    100% { opacity: 0;   transform: translate(-50%,-50%) scale(1.8); }
+  }
+  .portal .core {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center,
+      rgba(160,220,255,0.45) 0%,
+      rgba(107,180,232,0.28) 25%,
+      rgba(29,95,184,0.15) 50%,
+      transparent 75%);
+    filter: blur(8px);
+    animation: coreBreath 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes coreBreath {
+    0%, 100% { opacity: 0.85; transform: translate(-50%,-50%) scale(1.0); }
+    50%      { opacity: 1;    transform: translate(-50%,-50%) scale(1.1); }
+  }
+
+  .portal .content {
+    position: relative; z-index: 3;
+    text-align: center;
+    max-width: 780px;
+  }
+  .portal .eyebrow {
+    font-size: 10.5px; letter-spacing: 0.55em; text-transform: uppercase;
+    color: var(--glow); font-weight: 500; margin-bottom: 36px;
+    animation: fadeUp 1.6s ease .3s both;
+  }
+  .portal h1 {
+    font-family: var(--display); font-weight: 300;
+    font-size: clamp(46px, 7.5vw, 108px); letter-spacing: -0.025em;
+    line-height: 1.02; color: var(--foam);
+    margin-bottom: 28px;
+    animation: fadeUp 2s ease .5s both;
+  }
+  .portal h1 em { font-style: italic; color: var(--glow); }
+  .portal .sub {
+    font-family: var(--display); font-style: italic; font-weight: 300;
+    font-size: clamp(18px, 1.8vw, 24px); line-height: 1.55;
+    max-width: 620px; margin: 0 auto 56px; color: var(--stone);
+    animation: fadeUp 2s ease 1s both;
+  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  .portal .enter {
+    display: inline-flex; align-items: center; gap: 16px;
+    padding: 22px 48px;
+    background: var(--discord);
+    color: #fff; text-decoration: none;
+    font-size: 11.5px; font-weight: 600;
+    letter-spacing: 0.45em; text-transform: uppercase;
+    border: 0; cursor: pointer;
+    box-shadow: 0 0 80px rgba(88,101,242,0.4), 0 20px 60px rgba(29,95,184,0.3);
+    transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s, filter .5s;
+    animation: fadeUp 2s ease 1.5s both;
+  }
+  .portal .enter:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 120px rgba(88,101,242,0.6), 0 30px 80px rgba(29,95,184,0.4);
+    filter: brightness(1.08);
+  }
+  .portal .enter svg { width: 22px; height: 22px; fill: currentColor; }
+
+  .portal .cue {
+    position: absolute; bottom: 48px; left: 50%; transform: translateX(-50%);
+    z-index: 3;
+    font-size: 9px; letter-spacing: 0.5em; text-transform: uppercase;
+    color: var(--stone);
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+    animation: fadeUp 2s ease 2.2s both, breathe 3.2s ease-in-out 4s infinite;
+  }
+  .portal .cue::before {
+    content: ''; width: 3px; height: 3px; border-radius: 50%; background: var(--glow);
+  }
+  @keyframes breathe { 0%, 100% { opacity: .5; } 50% { opacity: .9; } }
+
+  /* ——— OTHER PORTALS (social grid) ——— */
+  .portals-section { padding: 160px 48px; background: var(--ocean); position: relative; overflow: hidden; }
+  .portals-section::before {
+    content: ''; position: absolute; inset: 0;
+    background: url('assets/bubbles-v1.webp') center/cover no-repeat;
+    opacity: 0.12; mix-blend-mode: screen; pointer-events: none;
+  }
+  .head { display: flex; align-items: baseline; gap: 24px; margin-bottom: 24px; position: relative; z-index: 2; }
+  .head .num { font-size: 10px; letter-spacing: .32em; color: var(--glow); font-weight: 600; text-transform: uppercase; }
+  .head .label { font-size: 10px; letter-spacing: .32em; color: var(--foam); font-weight: 500; text-transform: uppercase; }
+  .lede {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(19px, 1.8vw, 26px); line-height: 1.45;
+    color: var(--foam); opacity: .9; max-width: 820px; margin-bottom: 80px;
+    position: relative; z-index: 2;
+  }
+  .social-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--hair);
+    border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair);
+    position: relative; z-index: 2;
+  }
+  .soc {
+    background: var(--ocean);
+    padding: 40px 32px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    min-height: 220px;
+    text-decoration: none;
+    color: var(--foam);
+    transition: background .6s;
+  }
+  .soc:hover { background: rgba(29,95,184,0.08); }
+  .soc .icon {
+    width: 32px; height: 32px; fill: var(--foam);
+    opacity: 0.75;
+    transition: opacity .5s, transform .5s;
+  }
+  .soc:hover .icon { opacity: 1; transform: translateY(-2px); }
+  .soc .meta { margin-top: auto; }
+  .soc .name {
+    font-family: var(--display); font-weight: 400;
+    font-size: 22px; letter-spacing: -0.01em;
+    color: var(--foam); margin-top: 24px;
+  }
+  .soc .handle {
+    font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--stone); margin-top: 8px; font-weight: 500;
+  }
+  .soc .arrow {
+    font-size: 10px; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--glow); margin-top: 18px; font-weight: 500;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .soc .arrow::after { content: '→'; transition: transform .4s; }
+  .soc:hover .arrow::after { transform: translateX(4px); }
+
+  /* ——— ON THE OTHER SIDE ——— */
+  .other-side {
+    padding: 160px 48px;
+    background: linear-gradient(to bottom, var(--ocean), var(--abyss));
+    text-align: center;
+  }
+  .other-side .inner { max-width: 1100px; margin: 0 auto; }
+  .other-side .kicker {
+    font-size: 10.5px; letter-spacing: .55em; text-transform: uppercase;
+    color: var(--glow); font-weight: 500; margin-bottom: 32px;
+  }
+  .other-side h2 {
+    font-family: var(--display); font-weight: 300;
+    font-size: clamp(38px, 5vw, 66px); letter-spacing: -0.02em;
+    line-height: 1.1; color: var(--foam); margin-bottom: 72px;
+  }
+  .other-side h2 em { font-style: italic; color: var(--glow); }
+  .perks {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;
+    text-align: left;
+  }
+  .perk {
+    padding: 40px 32px;
+    border: 1px solid var(--hair);
+    background: rgba(10,26,53,0.25);
+    transition: border-color .6s, background .6s;
+  }
+  .perk:hover { border-color: var(--pulse); background: rgba(29,95,184,0.08); }
+  .perk .n {
+    font-family: var(--display); font-style: italic; font-weight: 300;
+    font-size: 44px; color: var(--glow); line-height: 1; margin-bottom: 24px;
+  }
+  .perk h4 {
+    font-family: var(--display); font-weight: 400;
+    font-size: 24px; letter-spacing: -0.01em; color: var(--foam); margin-bottom: 14px;
+  }
+  .perk p {
+    font-family: var(--display); font-style: italic; font-weight: 300;
+    font-size: 15px; line-height: 1.6; color: var(--stone);
+  }
+
+  /* ——— CLOSING CTA ——— */
+  .closer {
+    padding: 180px 48px;
+    background: radial-gradient(ellipse at 50% 50%, var(--tide) 0%, var(--abyss) 75%);
+    position: relative; overflow: hidden;
+    text-align: center;
+  }
+  .closer::before {
+    content: ''; position: absolute; inset: 0;
+    background: url('assets/bubbles-v2.webp') center/cover no-repeat;
+    opacity: 0.18; mix-blend-mode: screen;
+  }
+  .closer .inner { max-width: 720px; margin: 0 auto; position: relative; z-index: 2; }
+  .closer h2 {
+    font-family: var(--display); font-weight: 300;
+    font-size: clamp(42px, 6vw, 84px); letter-spacing: -0.025em;
+    line-height: 1.05; color: var(--foam); margin-bottom: 48px;
+  }
+  .closer h2 em { font-style: italic; color: var(--glow); }
+  .closer .enter {
+    display: inline-flex; align-items: center; gap: 16px;
+    padding: 22px 48px;
+    background: var(--discord);
+    color: #fff; text-decoration: none;
+    font-size: 11.5px; font-weight: 600;
+    letter-spacing: 0.45em; text-transform: uppercase;
+    box-shadow: 0 0 80px rgba(88,101,242,0.4);
+    transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .5s, filter .5s;
+  }
+  .closer .enter:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 120px rgba(88,101,242,0.6);
+    filter: brightness(1.08);
+  }
+  .closer .enter svg { width: 22px; height: 22px; fill: currentColor; }
+
+  /* ——— FOOTER ——— */
+  footer {
+    padding: 96px 48px 56px;
+    background: var(--abyss);
+    color: var(--stone);
+    border-top: 1px solid var(--hair);
+  }
+  footer .top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 64px; margin-bottom: 72px; }
+  footer h4 { font-size: 10px; letter-spacing: .4em; text-transform: uppercase; color: var(--foam); font-weight: 500; margin-bottom: 20px; }
+  footer a { display: block; color: var(--stone); text-decoration: none; font-size: 13px; margin-bottom: 10px; transition: color .5s; }
+  footer a:hover { color: var(--foam); }
+  footer .brand-col .mark { color: var(--foam); font-size: 13px; letter-spacing: .3em; font-weight: 600; margin-bottom: 18px; }
+  footer .brand-col p { font-family: var(--display); font-style: italic; font-size: 14px; line-height: 1.55; max-width: 340px; }
+  footer .bottom { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .32em; text-transform: uppercase; padding-top: 28px; border-top: 1px solid var(--hair); }
+
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 1.4s cubic-bezier(.2,.7,.2,1), transform 1.4s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 1000px) {
+    .social-grid { grid-template-columns: repeat(2, 1fr); }
+    .perks { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 700px) {
+    .nav { padding: 18px 24px; }
+    .nav .links a { margin-left: 14px; font-size: 9px; }
+    .portal, .portals-section, .other-side, .closer { padding-left: 24px; padding-right: 24px; }
+    .portal .enter, .closer .enter { padding: 18px 28px; font-size: 10.5px; letter-spacing: .35em; }
+    footer .top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  }
+</style>
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="page-transition entering" id="pageTransition" aria-hidden="true"></div>
+<nav class="nav">
+  <a class="brand" href="homepage.html">
+    <span class="line1">BLUE PULSE</span>
+    <span class="line2">STUDIOS</span>
+  </a>
+  <div class="links">
+    <a href="homepage.html#slate">Films</a>
+    <a href="shop.html">Shop</a>
+    <span class="studio-menu">
+      <a class="studio-trigger" href="studio.html">Studio</a>
+      <div class="studio-panel" role="menu">
+        <a href="press.html" role="menuitem">Press</a>
+        <a href="journal.html" role="menuitem">Newswire</a>
+      </div>
+    </span>
+    <a href="community.html" class="on">Community</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<!-- PORTAL -->
+<section id="main" class="portal">
+  <div class="bubbles"></div>
+  <div class="bubbles2"></div>
+  <div class="rings">
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+  </div>
+  <div class="core"></div>
+  <div class="content">
+    <div class="eyebrow">The Community</div>
+    <h1>Cross over to the <em>other side.</em></h1>
+    <p class="sub">A community of people who have seen what we make, and keep watching for what comes next. Beyond the films, beyond the screen &mdash; the real conversation happens here.</p>
+    <p class="ph-note" style="margin-top:32px;font-family:var(--display);font-style:italic;color:var(--stone);">The doors open soon.</p>
+    <a class="enter" href="#" target="_blank" rel="noopener" data-placeholder>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.27 5.33C17.94 4.71 16.5 4.26 15 4a.09.09 0 0 0-.07.03c-.18.33-.39.76-.53 1.09a16.09 16.09 0 0 0-4.8 0c-.14-.34-.35-.76-.54-1.09-.01-.02-.04-.03-.07-.03-1.5.26-2.93.71-4.27 1.33-.01 0-.02.01-.03.02-2.72 4.07-3.47 8.03-3.1 11.95 0 .02.01.04.03.05 1.8 1.32 3.53 2.12 5.24 2.65.03.01.06 0 .07-.02.4-.55.76-1.13 1.07-1.74.02-.04 0-.08-.04-.09-.57-.22-1.11-.48-1.64-.78-.04-.02-.04-.08-.01-.11.11-.08.22-.17.33-.25.02-.02.05-.02.07-.01 3.44 1.57 7.15 1.57 10.55 0 .02-.01.05 0 .07.01.11.09.22.17.33.26.04.03.04.09-.01.11-.52.31-1.07.56-1.64.78-.04.01-.05.06-.04.09.32.61.68 1.19 1.07 1.74.03.01.06.02.09.01 1.72-.53 3.45-1.33 5.25-2.65.02-.01.03-.03.03-.05.44-4.53-.73-8.46-3.1-11.95-.01-.01-.02-.02-.04-.02zM8.52 14.91c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12 0 1.17-.84 2.12-1.89 2.12zm6.97 0c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12 0 1.17-.83 2.12-1.89 2.12z"/></svg>
+      Enter the community
+    </a>
+  </div>
+  <div class="cue">Scroll</div>
+</section>
+
+<!-- OTHER PORTALS -->
+<section class="portals-section">
+  <div class="head reveal"><span class="num">01</span><span class="label">Other portals</span></div>
+  <p class="lede reveal">Discord is the living room. Everywhere else is a window.</p>
+  <p class="ph-note" style="font-family:var(--display);font-style:italic;color:var(--stone);">Our portals are under construction. Handles will be posted here the moment they're live.</p>
+  <div class="social-grid reveal" data-placeholder>
+
+    <a class="soc" href="#" target="_blank" rel="noopener">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      <div class="meta">
+        <div class="name">YouTube</div>
+        <div class="handle">@bluepulsestudios</div>
+        <div class="arrow">Watch</div>
+      </div>
+    </a>
+
+    <a class="soc" href="#" target="_blank" rel="noopener">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      <div class="meta">
+        <div class="name">X</div>
+        <div class="handle">@bluepulsestudios</div>
+        <div class="arrow">Read</div>
+      </div>
+    </a>
+
+    <a class="soc" href="#" target="_blank" rel="noopener">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+      <div class="meta">
+        <div class="name">Instagram</div>
+        <div class="handle">@bluepulsestudios</div>
+        <div class="arrow">Watch</div>
+      </div>
+    </a>
+
+    <a class="soc" href="#" target="_blank" rel="noopener">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12.5c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg>
+      <div class="meta">
+        <div class="name">Reddit</div>
+        <div class="handle">r/bluepulsestudios</div>
+        <div class="arrow">Join</div>
+      </div>
+    </a>
+
+    <a class="soc" href="#" target="_blank" rel="noopener">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 10.8c-1.087-2.114-4.046-6.053-6.798-7.995C2.566.944 1.561 1.266.902 1.565.139 1.908 0 3.08 0 3.768c0 .69.378 5.65.624 6.479.815 2.736 3.713 3.66 6.383 3.364-3.912.58-7.387 2.005-2.83 7.078 5.013 5.19 6.87-1.113 7.823-4.308.953 3.195 2.05 9.271 7.733 4.308 4.267-4.308 1.172-6.498-2.74-7.078 2.67.297 5.568-.628 6.383-3.364.246-.828.624-5.79.624-6.478 0-.69-.139-1.861-.902-2.206-.659-.298-1.664-.62-4.3 1.24C16.046 4.748 13.087 8.687 12 10.8z"/></svg>
+      <div class="meta">
+        <div class="name">Bluesky</div>
+        <div class="handle">@bluepulsestudios.bsky.social</div>
+        <div class="arrow">Follow</div>
+      </div>
+    </a>
+
+    <a class="soc" href="#" target="_blank" rel="noopener">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.1z"/></svg>
+      <div class="meta">
+        <div class="name">TikTok</div>
+        <div class="handle">@bluepulsestudios</div>
+        <div class="arrow">Watch</div>
+      </div>
+    </a>
+
+    <a class="soc" href="#" target="_blank" rel="noopener">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h3.2l3.1 8.3L13.5 6h3.2l-5 13H8.9L4 6zm14 13v-13h2v13h-2z"/></svg>
+      <div class="meta">
+        <div class="name">VRChat Group</div>
+        <div class="handle">Blue Pulse Studios</div>
+        <div class="arrow">Enter VR</div>
+      </div>
+    </a>
+
+    <a class="soc" href="#" target="_blank" rel="noopener" style="background: linear-gradient(135deg, rgba(88,101,242,0.2), rgba(29,95,184,0.1));">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true" style="fill: var(--glow);"><path d="M19.27 5.33C17.94 4.71 16.5 4.26 15 4a.09.09 0 0 0-.07.03c-.18.33-.39.76-.53 1.09a16.09 16.09 0 0 0-4.8 0c-.14-.34-.35-.76-.54-1.09-.01-.02-.04-.03-.07-.03-1.5.26-2.93.71-4.27 1.33-.01 0-.02.01-.03.02-2.72 4.07-3.47 8.03-3.1 11.95 0 .02.01.04.03.05 1.8 1.32 3.53 2.12 5.24 2.65.03.01.06 0 .07-.02.4-.55.76-1.13 1.07-1.74.02-.04 0-.08-.04-.09-.57-.22-1.11-.48-1.64-.78-.04-.02-.04-.08-.01-.11.11-.08.22-.17.33-.25.02-.02.05-.02.07-.01 3.44 1.57 7.15 1.57 10.55 0 .02-.01.05 0 .07.01.11.09.22.17.33.26.04.03.04.09-.01.11-.52.31-1.07.56-1.64.78-.04.01-.05.06-.04.09.32.61.68 1.19 1.07 1.74.03.01.06.02.09.01 1.72-.53 3.45-1.33 5.25-2.65.02-.01.03-.03.03-.05.44-4.53-.73-8.46-3.1-11.95-.01-.01-.02-.02-.04-.02zM8.52 14.91c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12 0 1.17-.84 2.12-1.89 2.12zm6.97 0c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12 0 1.17-.83 2.12-1.89 2.12z"/></svg>
+      <div class="meta">
+        <div class="name" style="color: var(--glow)">Discord</div>
+        <div class="handle">The living room</div>
+        <div class="arrow" style="color: var(--foam)">Enter</div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ON THE OTHER SIDE -->
+<section class="other-side">
+  <div class="inner">
+    <div class="kicker reveal">What waits on the other side</div>
+    <h2 class="reveal">The conversation doesn&rsquo;t end <em>when the credits roll.</em></h2>
+    <div class="perks">
+      <div class="perk reveal">
+        <div class="n">i.</div>
+        <h4>Early access</h4>
+        <p>First looks at films, behind-the-scenes cuts, trailer drops, and merch pre-orders &mdash; before the rest of the internet sees any of it.</p>
+      </div>
+      <div class="perk reveal">
+        <div class="n">ii.</div>
+        <h4>The makers in the room</h4>
+        <p>Monthly AMAs with directors, writers, and cast. Real conversations, not polished PR. The people who made the things, actually talking.</p>
+      </div>
+      <div class="perk reveal">
+        <div class="n">iii.</div>
+        <h4>The other watchers</h4>
+        <p>Community watch parties, theory threads, deep reads, fan art, and the occasional unhinged 3am discussion about what was real. Find the others.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAN ART -->
+<section class="other-side" style="padding-top:0">
+  <div class="inner">
+    <div class="kicker reveal">From the other watchers</div>
+    <h2 class="reveal">Fan art <em>gallery.</em></h2>
+    <div class="perks" data-placeholder>
+      <div class="perk reveal"><div class="n" style="font-size:40px;color:var(--hair)">&#9633;</div><h4>Your piece here</h4><p>Paintings, sculpts, tattoos, cosplay &mdash; if our films made you make something, we want to see it.</p></div>
+      <div class="perk reveal"><div class="n" style="font-size:40px;color:var(--hair)">&#9633;</div><h4>Curated monthly</h4><p>We feature a handful of pieces each month on this page and the Newswire, credited and linked.</p></div>
+      <div class="perk reveal"><div class="n" style="font-size:40px;color:var(--hair)">&#9633;</div><h4>Artist-owned, always</h4><p>Your work stays yours. Featuring here never transfers rights &mdash; that&rsquo;s in writing.</p></div>
+    </div>
+    <p class="ph-note" style="font-family:var(--display);font-style:italic;color:var(--stone)">The gallery opens with our community. First submissions will hang here.</p>
+    <p style="margin-top:32px"><a href="mailto:production@bluepulsestudios.com?subject=Fan%20art%20submission" style="font-size:10.5px;letter-spacing:.42em;text-transform:uppercase;color:var(--foam);text-decoration:none;border-bottom:1px solid var(--foam);padding-bottom:4px;font-weight:500">Submit your work &rarr;</a></p>
+  </div>
+</section>
+
+<!-- CLOSER -->
+<section class="closer" data-placeholder>
+  <div class="inner">
+    <h2>You&rsquo;ve read enough. <em>Come over.</em></h2>
+    <a class="enter" href="#" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.27 5.33C17.94 4.71 16.5 4.26 15 4a.09.09 0 0 0-.07.03c-.18.33-.39.76-.53 1.09a16.09 16.09 0 0 0-4.8 0c-.14-.34-.35-.76-.54-1.09-.01-.02-.04-.03-.07-.03-1.5.26-2.93.71-4.27 1.33-.01 0-.02.01-.03.02-2.72 4.07-3.47 8.03-3.1 11.95 0 .02.01.04.03.05 1.8 1.32 3.53 2.12 5.24 2.65.03.01.06 0 .07-.02.4-.55.76-1.13 1.07-1.74.02-.04 0-.08-.04-.09-.57-.22-1.11-.48-1.64-.78-.04-.02-.04-.08-.01-.11.11-.08.22-.17.33-.25.02-.02.05-.02.07-.01 3.44 1.57 7.15 1.57 10.55 0 .02-.01.05 0 .07.01.11.09.22.17.33.26.04.03.04.09-.01.11-.52.31-1.07.56-1.64.78-.04.01-.05.06-.04.09.32.61.68 1.19 1.07 1.74.03.01.06.02.09.01 1.72-.53 3.45-1.33 5.25-2.65.02-.01.03-.03.03-.05.44-4.53-.73-8.46-3.1-11.95-.01-.01-.02-.02-.04-.02zM8.52 14.91c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12 0 1.17-.84 2.12-1.89 2.12zm6.97 0c-1.03 0-1.89-.95-1.89-2.12s.84-2.12 1.89-2.12c1.06 0 1.9.96 1.89 2.12 0 1.17-.83 2.12-1.89 2.12z"/></svg>
+      Enter the community
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="top">
+    <div class="brand-col">
+      <div class="mark">BLUE PULSE STUDIOS</div>
+      <p>A boutique production house for horror and genre film, television, and video games. Small rooms, patient work, handmade stories.</p>
+    </div>
+    <div>
+      <h4>Films</h4>
+      <a href="homepage.html#slate">Stay Home</a>
+      <a href="homepage.html#slate">The Painting</a>
+      <a href="journal.html">Archive</a>
+    </div>
+    <div>
+      <h4>Shop</h4>
+      <a href="shop.html">All</a>
+      <a href="shop.html">Apparel</a>
+      <a href="shop.html">Figurines</a>
+      <a href="shop.html">Limited</a>
+    </div>
+    <div>
+      <h4>Studio</h4>
+      <a href="studio.html">About</a>
+      <a href="community.html">Community</a>
+      <a href="contact.html">Contact</a>
+      <a href="press.html">Press</a>
+    </div>
+  </div>
+  <div class="bottom">
+    <div>&copy; 2026 Blue Pulse Studios</div>
+    <div class="legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="shipping-returns.html">Shipping &amp; Returns</a></div>
+    <div>Made patiently</div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.14 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  const nav = document.querySelector('.nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) nav.style.background = 'rgba(2,4,10,0.82)';
+    else nav.style.background = 'linear-gradient(to bottom, rgba(2,4,10,0.5), transparent)';
+  }, { passive: true });
+</script>
+
+<script src="site.js"></script>
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Stay Home — the debut feature from Blue Pulse Studios. A young woman, a ring, and an empty house at the end of the road. In production for 2027." />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="theme-color" content="#02040A" />
+<meta property="og:type" content="video.movie" />
+<meta property="og:title" content="Stay Home — Blue Pulse Studios" />
+<meta property="og:description" content="A young woman, a ring, and an empty house at the end of the road. The debut feature, 2027." />
+<meta property="og:image" content="og-image.jpg" />
+<meta property="og:site_name" content="Blue Pulse Studios" />
+<title>Stay Home — Blue Pulse Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<script src="products.js"></script>
+<style>
+  :root { --abyss: #02040A; --ocean: #060F1F; --depth: #0A1A35; --tide: #0F2A52; --pulse: #1D5FB8; --glow: #6BB4E8; --foam: #CFD9E4; --stone: #8B929C; --hair: #132341; --display: 'Fraunces', serif; --ui: 'Inter', sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; overflow-x: clip; }
+  body { background: var(--abyss); color: var(--foam); font-family: var(--ui); -webkit-font-smoothing: antialiased; }
+  body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.04; mix-blend-mode: overlay; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 28px 48px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, rgba(2,4,10,0.5), transparent); font-size: 10.5px; letter-spacing: .28em; text-transform: uppercase; transition: background .8s; }
+  .nav .brand { display: inline-flex; flex-direction: column; gap: 3px; line-height: 1; color: var(--foam); text-decoration: none; }
+  .nav .brand .line1 { font-weight: 600; letter-spacing: .32em; font-size: 11px; }
+  .nav .brand .line2 { font-weight: 500; letter-spacing: .42em; font-size: 9px; color: var(--stone); }
+  .nav .links a { color: var(--stone); text-decoration: none; margin-left: 28px; transition: color .5s; }
+  .nav .links a:hover, .nav .links a.on { color: var(--foam); }
+
+  /* HERO — film title over atmospheric backdrop */
+  .hero { position: relative; min-height: 100vh; display: flex; align-items: flex-end; padding: 140px 48px 80px; overflow: hidden; isolation: isolate; }
+  .hero .bg-img { position: absolute; inset: 0; background: url('assets/dark-heart.webp') center/cover no-repeat; filter: brightness(0.7) contrast(1.1); z-index: -2; }
+  .hero .bg-bubbles { position: absolute; inset: -8%; background: url('assets/bubbles-v2.webp') center/cover no-repeat; opacity: 0.32; mix-blend-mode: screen; animation: drift 38s ease-in-out infinite alternate; z-index: -1; }
+  @keyframes drift { 0% { transform: translate3d(-2%, 3%, 0) scale(1.06); } 100% { transform: translate3d(3%, -4%, 0) scale(1.14); } }
+  .hero .vig { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(2,4,10,0.4) 0%, transparent 30%, transparent 60%, rgba(2,4,10,0.95) 100%); pointer-events: none; }
+  .hero .content { position: relative; max-width: 1200px; }
+  .hero .status { display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px; border: 1px solid var(--glow); color: var(--glow); font-size: 10px; letter-spacing: .5em; text-transform: uppercase; font-weight: 500; margin-bottom: 32px; }
+  .hero .status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--glow); box-shadow: 0 0 8px var(--glow); animation: blink 2s ease-in-out infinite; }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+  .hero h1 { font-family: var(--display); font-weight: 200; font-size: clamp(72px, 14vw, 220px); line-height: 0.92; letter-spacing: -0.04em; color: var(--foam); }
+  .hero h1 em { font-style: italic; color: var(--glow); }
+  .hero .tagline { margin-top: 32px; font-family: var(--display); font-style: italic; font-weight: 300; font-size: clamp(20px, 2.2vw, 28px); line-height: 1.45; max-width: 680px; color: var(--stone); }
+  .hero .meta-row { display: flex; flex-wrap: wrap; gap: 32px; margin-top: 48px; font-size: 10.5px; letter-spacing: .35em; text-transform: uppercase; color: var(--stone); font-weight: 500; }
+  .hero .meta-row span { display: flex; align-items: center; gap: 10px; }
+  .hero .meta-row span::before { content: ''; width: 16px; height: 1px; background: var(--glow); }
+
+  .rule { height: 1px; background: var(--hair); margin: 0 72px; }
+
+  section { padding: 120px 72px; position: relative; }
+  .head { display: flex; align-items: baseline; gap: 24px; margin-bottom: 24px; }
+  .head .num { font-size: 10px; letter-spacing: .32em; color: var(--glow); font-weight: 600; text-transform: uppercase; }
+  .head .label { font-size: 10px; letter-spacing: .32em; color: var(--foam); font-weight: 500; text-transform: uppercase; }
+  .lede { font-family: var(--display); font-weight: 400; font-size: clamp(17px, 1.5vw, 22px); line-height: 1.5; color: var(--foam); opacity: 0.88; max-width: 820px; margin-bottom: 64px; }
+
+  /* SYNOPSIS */
+  .synopsis { background: linear-gradient(to bottom, var(--abyss), var(--ocean)); }
+  .synopsis .body { display: grid; grid-template-columns: 1fr 1.6fr; gap: 80px; align-items: start; max-width: 1200px; margin: 0 auto; }
+  .synopsis .body h2 { font-family: var(--display); font-weight: 300; font-size: clamp(34px, 4vw, 56px); letter-spacing: -0.02em; color: var(--foam); line-height: 1.1; }
+  .synopsis .body h2 em { font-style: italic; color: var(--glow); }
+  .synopsis .body p { font-family: var(--display); font-weight: 400; font-size: 19px; line-height: 1.7; color: var(--foam); margin-bottom: 28px; }
+  .synopsis .body p.drop::first-letter { font-size: 1.6em; line-height: 1; font-style: italic; color: var(--glow); float: left; padding: 4px 12px 0 0; }
+
+  /* CHARACTERS */
+  .characters { background: var(--ocean); position: relative; overflow: hidden; }
+  .characters::before { content: ''; position: absolute; inset: 0; background: url('assets/bubbles-v3.webp') center/cover no-repeat; opacity: 0.1; mix-blend-mode: screen; pointer-events: none; }
+  .char-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; position: relative; z-index: 2; }
+  .char { background: var(--depth); border: 1px solid var(--hair); display: grid; grid-template-columns: 220px 1fr; min-height: 360px; overflow: hidden; }
+  .char .portrait { background: var(--abyss); position: relative; overflow: hidden; }
+  .char .portrait img { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; }
+  .char .info { padding: 36px 32px; display: flex; flex-direction: column; justify-content: space-between; }
+  .char .info .role { font-size: 9.5px; letter-spacing: .45em; color: var(--glow); text-transform: uppercase; font-weight: 600; margin-bottom: 14px; }
+  .char .info h3 { font-family: var(--display); font-weight: 300; font-size: 38px; letter-spacing: -0.015em; color: var(--foam); margin-bottom: 18px; line-height: 1; }
+  .char .info p { font-family: var(--display); font-style: italic; font-weight: 300; font-size: 15px; line-height: 1.6; color: var(--stone); }
+  .char .info .actor { margin-top: 24px; font-size: 11px; letter-spacing: .25em; text-transform: uppercase; color: var(--foam); font-weight: 500; padding-top: 18px; border-top: 1px solid var(--hair); }
+  .char .info .actor span { color: var(--stone); display: block; font-size: 9px; letter-spacing: .4em; margin-bottom: 6px; }
+
+  /* CREW */
+  .crew { background: linear-gradient(to bottom, var(--ocean), var(--abyss)); }
+  .crew-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--hair); border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair); max-width: 1200px; margin: 0 auto; }
+  .crew-item { background: var(--ocean); padding: 32px 28px; }
+  .crew-item .role { font-size: 9px; letter-spacing: .45em; color: var(--glow); text-transform: uppercase; font-weight: 600; margin-bottom: 12px; }
+  .crew-item .name { font-family: var(--display); font-weight: 400; font-size: 22px; letter-spacing: -0.01em; color: var(--foam); }
+
+  /* JOURNAL CROSS-LINK */
+  .journal-link { background: var(--abyss); padding: 100px 72px; text-align: center; }
+  .journal-link h3 { font-family: var(--display); font-weight: 300; font-size: clamp(28px, 3vw, 40px); letter-spacing: -0.02em; color: var(--foam); margin-bottom: 18px; }
+  .journal-link h3 em { font-style: italic; color: var(--glow); }
+  .journal-link p { font-family: var(--display); font-style: italic; color: var(--stone); margin-bottom: 32px; }
+  .journal-link a { display: inline-flex; align-items: center; gap: 14px; padding: 18px 32px; border: 1px solid var(--foam); color: var(--foam); text-decoration: none; font-size: 11px; letter-spacing: .42em; text-transform: uppercase; font-weight: 500; transition: background .4s, color .4s; }
+  .journal-link a:hover { background: var(--foam); color: var(--abyss); }
+
+  /* RELATED MERCH */
+  .related-merch { background: var(--ocean); }
+  .merch-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+  .merch-card { text-decoration: none; color: inherit; display: flex; flex-direction: column; }
+  .merch-card .img { aspect-ratio: 4/5; background: var(--depth); border: 1px solid var(--hair); display: flex; align-items: center; justify-content: center; padding: 20px; overflow: hidden; transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+  .merch-card:hover .img { transform: translateY(-4px); }
+  .merch-card .img img { max-width: 86%; max-height: 86%; object-fit: contain; filter: drop-shadow(0 16px 24px rgba(0,0,0,0.4)); }
+  .merch-card.baked .img img { filter: none; }
+  .merch-card.boardgame .img { padding: 8px; }
+  .merch-card .info { margin-top: 18px; }
+  .merch-card .k { font-size: 9px; letter-spacing: .4em; text-transform: uppercase; color: var(--glow); margin-bottom: 6px; font-weight: 500; }
+  .merch-card .n { font-family: var(--display); font-weight: 400; font-size: 17px; color: var(--foam); letter-spacing: -0.01em; }
+  .merch-card .p { margin-top: 6px; font-size: 13px; color: var(--foam); font-weight: 500; }
+
+  footer { padding: 96px 48px 56px; background: var(--abyss); color: var(--stone); border-top: 1px solid var(--hair); }
+  footer .top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 64px; margin-bottom: 72px; }
+  footer h4 { font-size: 10px; letter-spacing: .4em; text-transform: uppercase; color: var(--foam); font-weight: 500; margin-bottom: 20px; }
+  footer a { display: block; color: var(--stone); text-decoration: none; font-size: 13px; margin-bottom: 10px; transition: color .5s; }
+  footer a:hover { color: var(--foam); }
+  footer .brand-col .mark { color: var(--foam); font-size: 13px; letter-spacing: .3em; font-weight: 600; margin-bottom: 18px; }
+  footer .brand-col p { font-family: var(--display); font-style: italic; font-size: 14px; line-height: 1.55; max-width: 340px; }
+  footer .bottom { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .32em; text-transform: uppercase; padding-top: 28px; border-top: 1px solid var(--hair); }
+
+  @media (max-width: 1000px) {
+    .synopsis .body { grid-template-columns: 1fr; gap: 32px; }
+    .char-grid { grid-template-columns: 1fr; }
+    .crew-grid { grid-template-columns: 1fr 1fr; }
+    .merch-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 700px) {
+    .nav { padding: 18px 24px; } .nav .links a { margin-left: 14px; font-size: 9px; }
+    .hero, section, .rule, .journal-link { padding-left: 24px; padding-right: 24px; }
+    .rule { margin: 0 24px; }
+    .char { grid-template-columns: 1fr; }
+    .char .portrait { aspect-ratio: 4/3; }
+    .crew-grid { grid-template-columns: 1fr; }
+    footer .top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="page-transition entering" id="pageTransition" aria-hidden="true"></div>
+
+<nav class="nav">
+  <a class="brand" href="homepage.html"><span class="line1">BLUE PULSE</span><span class="line2">STUDIOS</span></a>
+  <div class="links">
+    <a href="homepage.html#slate" class="on">Films</a>
+    <a href="shop.html">Shop</a>
+    <span class="studio-menu">
+      <a class="studio-trigger" href="studio.html">Studio</a>
+      <div class="studio-panel" role="menu">
+        <a href="press.html" role="menuitem">Press</a>
+        <a href="journal.html" role="menuitem">Newswire</a>
+      </div>
+    </span>
+    <a href="community.html">Community</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<header class="hero" id="main">
+  <div class="bg-img"></div>
+  <div class="bg-bubbles"></div>
+  <div class="vig"></div>
+  <div class="content">
+    <div class="status">Now in Production</div>
+    <h1>Stay <em>Home.</em></h1>
+    <p class="tagline">A young woman, a ring, and an empty house at the end of the road. Some doors are better left locked.</p>
+    <div class="meta-row">
+      <span>Feature Film</span>
+      <span>2027</span>
+      <span>94 min</span>
+      <span>Horror</span>
+    </div>
+    <button id="trailerBtn" style="margin-top:36px;display:inline-flex;align-items:center;gap:14px;padding:16px 32px;background:transparent;border:1px solid var(--foam);color:var(--foam);font-family:var(--ui);font-size:10.5px;letter-spacing:.42em;text-transform:uppercase;font-weight:500;cursor:pointer;transition:background .5s,color .5s" onmouseover="this.style.background='var(--foam)';this.style.color='var(--abyss)'" onmouseout="this.style.background='transparent';this.style.color='var(--foam)'">&#9656; Watch the teaser</button>
+  </div>
+</header>
+
+<!-- TRAILER LIGHTBOX -->
+<dialog id="trailerBox" style="border:1px solid var(--hair);background:var(--abyss);color:var(--foam);padding:0;max-width:960px;width:94vw">
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 20px">
+    <span style="font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:var(--glow);font-weight:600">Stay Home &middot; Teaser</span>
+    <button onclick="this.closest('dialog').close()" style="background:none;border:0;color:var(--foam);font-size:22px;cursor:pointer" aria-label="Close">&times;</button>
+  </div>
+  <div id="trailerMount" style="aspect-ratio:16/9;background:#000;display:flex;align-items:center;justify-content:center"></div>
+</dialog>
+
+<div class="rule"></div>
+
+<section class="synopsis">
+  <div class="head"><span class="num">01</span><span class="label">The Film</span></div>
+  <div class="body">
+    <h2>A debut feature about <em>what waits</em> when the road runs out.</h2>
+    <div>
+      <p class="drop">Shelby and her fianc&eacute; pull off the highway looking for somewhere to spend the night. They find the only thing the woods will give them: a cabin at the end of a dirt road, lights on, door open, no one home.</p>
+      <p>What follows is a slow descent into a town that has forgotten how to sleep, a ring that won&rsquo;t come off, and a figure at the door that calls itself the Ashen Man. The film unfolds in patient, in-camera horror &mdash; long takes, practical effects, no jump cuts. It is about the sound a house makes when it&rsquo;s pretending to be empty. It is about the moments before the moment.</p>
+      <p>Stay Home is the debut feature from Blue Pulse Studios, written and directed in-house, scored by Blue Pulse&rsquo;s own composer team, and shot over forty-three days in the woods outside Pittsburgh in early 2026. Currently in post for a 2027 release.</p>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<section class="characters">
+  <div class="head"><span class="num">02</span><span class="label">Characters</span></div>
+  <p class="lede">Two figures the audience will not forget. One they will follow. One they will not.</p>
+  <div class="char-grid">
+    <article class="char">
+      <div class="portrait"><img src="assets/zera-figure.webp" alt="Shelby" loading="lazy" /></div>
+      <div class="info">
+        <div>
+          <div class="role">Lead</div>
+          <h3>Shelby</h3>
+          <p>An archaeology student a year from her dissertation, three years from a wedding she keeps postponing, and forty-three minutes from a cabin she shouldn&rsquo;t have stopped at. The film is hers from the first frame.</p>
+        </div>
+        <div class="actor"><span>Played by</span>Casting in progress</div>
+      </div>
+    </article>
+    <article class="char">
+      <div class="portrait"><img src="assets/dark-heart.webp" alt="The Ashen Man" loading="lazy" /></div>
+      <div class="info">
+        <div>
+          <div class="role">Antagonist</div>
+          <h3>The Ashen Man</h3>
+          <p>A figure from a story Shelby&rsquo;s grandmother used to tell. He arrives the way folk-horror antagonists arrive: at the threshold, not over it. The film never quite shows you his face. You will think you saw it anyway.</p>
+        </div>
+        <div class="actor"><span>Performance &amp; sculpt</span>Production team</div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<section class="crew">
+  <div class="head"><span class="num">03</span><span class="label">Cast &amp; Crew</span></div>
+  <p class="lede">A small team. Most of them have other names you might recognize.</p>
+  <div class="crew-grid">
+    <div class="crew-item"><div class="role">Director</div><div class="name">Maximum Studios</div></div>
+    <div class="crew-item"><div class="role">Screenplay</div><div class="name">Blue Pulse Writers&rsquo; Room</div></div>
+    <div class="crew-item"><div class="role">Producer</div><div class="name">Blue Pulse Studios</div></div>
+    <div class="crew-item"><div class="role">Director of Photography</div><div class="name">In post</div></div>
+    <div class="crew-item"><div class="role">Production Design</div><div class="name">In post</div></div>
+    <div class="crew-item"><div class="role">Original Score</div><div class="name">Blue Pulse Composers</div></div>
+    <div class="crew-item"><div class="role">Editor</div><div class="name">In post</div></div>
+    <div class="crew-item"><div class="role">Sound Design</div><div class="name">In post</div></div>
+    <div class="crew-item"><div class="role">VFX</div><div class="name">In-house, practical-first</div></div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<section class="journal-link">
+  <h3>Notes from the cabin <em>are in the journal.</em></h3>
+  <p>Production posts, behind-the-scenes essays, and the scenes we cut.</p>
+  <a href="journal.html">Read the newswire &rarr;</a>
+</section>
+
+<div class="rule"></div>
+
+<section class="related-merch">
+  <div class="head"><span class="num">04</span><span class="label">From the world</span></div>
+  <p class="lede">Numbered, limited-run pieces tied to the film. Once they&rsquo;re gone, they&rsquo;re gone.</p>
+  <div class="merch-grid" id="merchGrid"></div>
+</section>
+
+<footer>
+  <div class="top">
+    <div class="brand-col"><div class="mark">BLUE PULSE STUDIOS</div><p>A boutique production house for horror and genre film, television, and video games.</p></div>
+    <div><h4>Films</h4><a href="stay-home.html">Stay Home</a><a href="the-painting.html">The Painting</a></div>
+    <div><h4>Shop</h4><a href="shop.html">All</a><a href="cart.html">Cart</a></div>
+    <div><h4>Studio</h4><a href="studio.html">About</a><a href="press.html">Press</a><a href="journal.html">Newswire</a><a href="contact.html">Contact</a></div>
+  </div>
+  <div class="bottom"><div>&copy; 2026 Blue Pulse Studios</div><div class="legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="shipping-returns.html">Shipping &amp; Returns</a></div><div>Made patiently</div></div>
+</footer>
+
+<script>
+  // Render merch grid: hoodie, shelby, ashen, board-game
+  const stayHomeIds = ['ashen-hoodie','shelby-figure','ashen-figure','board-game'];
+  const grid = document.getElementById('merchGrid');
+  stayHomeIds.forEach(id => {
+    const p = window.PRODUCTS[id];
+    if (!p) return;
+    const a = document.createElement('a');
+    a.className = 'merch-card';
+    if (p.bakedShadow) a.classList.add('baked');
+    if (id === 'board-game') a.classList.add('boardgame');
+    a.href = 'product.html?id=' + id;
+    a.innerHTML = `<div class="img"><img src="${p.image}" alt="${p.name}" loading="lazy" /></div>
+      <div class="info"><div class="k">${(p.kicker || '').split(' · ')[0]}</div><div class="n">${p.name}</div><div class="p">$${p.price}</div></div>`;
+    grid.appendChild(a);
+  });
+</script>
+<script src="site.js"></script>
+<script>
+  // Trailer lightbox — set the YouTube ID in site.js BPS_CONFIG.trailers['stay-home']
+  document.getElementById('trailerBtn').addEventListener('click', () => {
+    const ytid = ((window.BPS_CONFIG || {}).trailers || {})['stay-home'];
+    const mount = document.getElementById('trailerMount');
+    mount.innerHTML = ytid
+      ? '<iframe width="100%" height="100%" src="https://www.youtube-nocookie.com/embed/' + ytid + '?autoplay=1" title="Stay Home teaser" frameborder="0" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe>'
+      : '<div style="text-align:center;padding:40px"><div style="font-family:var(--display);font-style:italic;font-size:22px;color:var(--foam)">The teaser is still in the edit.</div><div style="margin-top:14px;font-size:12px;color:var(--stone)">Join the newsletter or the Discord &mdash; it drops there first.</div></div>';
+    document.getElementById('trailerBox').showModal();
+  });
+  document.getElementById('trailerBox').addEventListener('close', () => {
+    document.getElementById('trailerMount').innerHTML = '';
+  });
+
+  // Structured data — Movie schema
+  const ldM = document.createElement('script');
+  ldM.type = 'application/ld+json';
+  ldM.textContent = JSON.stringify({
+    '@context': 'https://schema.org', '@type': 'Movie',
+    name: 'Stay Home', genre: 'Horror', duration: 'PT94M',
+    description: 'A young woman, a ring, and an empty house at the end of the road. The debut feature from Blue Pulse Studios — in post-production for a 2027 release.',
+    productionCompany: { '@type': 'Organization', name: 'Blue Pulse Studios' }
+  });
+  document.head.appendChild(ldM);
+</script>
+</body>
+</html>

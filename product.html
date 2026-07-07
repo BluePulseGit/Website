@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="A piece from the world of Blue Pulse Studios." />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="theme-color" content="#02040A" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Blue Pulse Studios · Shop" />
+<meta property="og:description" content="A piece from the world of Blue Pulse Studios." />
+<meta property="og:image" content="og-image.jpg" />
+<meta property="og:site_name" content="Blue Pulse Studios" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Blue Pulse Studios · Shop" />
+<meta name="twitter:description" content="A piece from the world of Blue Pulse Studios." />
+<meta name="twitter:image" content="og-image.jpg" />
+<title>shop.bluepulsestudios.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="products.js"></script>
+<style>
+  :root {
+    --paper:    #FAFAFA;
+    --paper-2:  #F2F2F2;
+    --ink:      #0F0F0F;
+    --stone:    #6B6B6B;
+    --ash:      #B0B0B0;
+    --hair:     #E5E5E5;
+    --hair-2:   #D8D8D8;
+    --accent:   #1D3A6B;
+    --accent-glow: #2F6DB8;
+    --display:  'Fraunces', 'Times New Roman', serif;
+    --ui:       'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--paper); color: var(--ink); font-family: var(--ui); -webkit-font-smoothing: antialiased; }
+
+  /* ——— NAV ——— */
+  .nav { position: sticky; top: 0; z-index: 100; background: var(--paper); border-bottom: 1px solid var(--hair); }
+  .nav .inner {
+    display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 48px;
+    padding: 22px 40px; font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+  }
+  .nav .brand { display: inline-flex; flex-direction: column; gap: 3px; line-height: 1; text-decoration: none; color: var(--ink); }
+  .nav .brand .line1 { font-weight: 600; letter-spacing: 0.32em; font-size: 11px; }
+  .nav .brand .line2 { font-weight: 500; letter-spacing: 0.42em; font-size: 9px; color: var(--stone); transition: color .6s; }
+  .nav .brand:hover .line2 { color: var(--ink); }
+  .nav .links { justify-self: center; display: flex; gap: 36px; }
+  .nav .links a { color: var(--stone); text-decoration: none; transition: color .5s; font-weight: 500; }
+  .nav .links a:hover, .nav .links a.on { color: var(--ink); }
+  .nav .right { display: flex; align-items: center; gap: 22px; justify-self: end; }
+  .nav .right a, .nav .right button {
+    color: var(--ink); text-decoration: none; background: none; border: 0;
+    font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; transition: color .5s; font-weight: 500;
+  }
+  .nav .right a:hover, .nav .right button:hover { color: var(--stone); }
+  .nav .right .auth .sep { color: var(--ash); margin: 0 4px; }
+  .nav .right .cart-btn sup { font-size: 10px; letter-spacing: 0.1em; color: var(--stone); font-weight: 500; margin-left: 4px; transition: color .4s; }
+  .nav .right .cart-btn.active sup { color: var(--ink); }
+
+  /* ——— CRUMBS ——— */
+  .crumbs {
+    padding: 20px 40px;
+    font-size: 10.5px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--stone);
+    border-bottom: 1px solid var(--hair);
+  }
+  .crumbs a { color: var(--stone); text-decoration: none; transition: color .4s; }
+  .crumbs a:hover { color: var(--ink); }
+  .crumbs .sep { margin: 0 10px; color: var(--ash); }
+  .crumbs .current { color: var(--ink); font-weight: 500; }
+
+  /* ——— PRODUCT HERO ——— */
+  .pd-hero {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0; min-height: 80vh;
+  }
+  .pd-media {
+    background: var(--paper-2);
+    padding: 60px; aspect-ratio: auto;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    overflow: visible;
+    border-right: 1px solid var(--hair);
+  }
+  .pd-media img {
+    max-width: 100%; max-height: 70vh;
+    object-fit: contain;
+    filter: drop-shadow(0 24px 40px rgba(15,15,15,0.22));
+  }
+  .pd-media.baked img { filter: none; }
+  .pd-media.boardgame { background: var(--paper-2); }
+  .pd-media.boardgame img { filter: drop-shadow(0 20px 32px rgba(15,15,15,0.14)); }
+  .pd-media.coming {
+    display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 18px;
+    color: var(--stone);
+  }
+  .pd-media.coming .plus { font-size: 56px; color: var(--ash); font-weight: 300; line-height: 1; }
+  .pd-media.coming .soon { font-size: 10px; letter-spacing: .5em; text-transform: uppercase; font-weight: 500; }
+
+  .pd-info {
+    padding: 80px 64px;
+    display: flex; flex-direction: column;
+    max-width: 640px;
+  }
+  .pd-info .kicker {
+    font-size: 10px; letter-spacing: .5em; text-transform: uppercase; color: var(--stone); font-weight: 500;
+    margin-bottom: 20px;
+  }
+  .pd-info .pill {
+    display: inline-flex; width: fit-content;
+    font-size: 9px; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--ink); background: #fff; border: 1px solid var(--ink);
+    padding: 6px 12px; font-weight: 500; margin-bottom: 22px;
+  }
+  .pd-info h1 {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(36px, 4vw, 56px); letter-spacing: -0.02em;
+    line-height: 1.02; color: var(--ink);
+  }
+  .pd-info .tagline {
+    margin-top: 18px;
+    font-family: var(--display); font-style: italic; font-weight: 300;
+    font-size: 18px; line-height: 1.5; color: var(--stone);
+  }
+  .pd-info .price {
+    margin-top: 28px;
+    font-size: 22px; color: var(--ink); font-weight: 500;
+  }
+  .pd-info .stock {
+    margin-top: 10px;
+    font-size: 11px; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--stone); font-weight: 500;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .pd-info .stock::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent-glow);
+    box-shadow: 0 0 6px var(--accent-glow);
+  }
+
+  .pd-section { margin-top: 40px; }
+  .pd-section .sec-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 14px; border-bottom: 1px solid var(--hair); margin-bottom: 18px;
+  }
+  .pd-section .sec-head span { font-size: 10px; letter-spacing: .4em; text-transform: uppercase; color: var(--stone); font-weight: 500; }
+  .pd-section .sec-head a { font-size: 10px; letter-spacing: .4em; text-transform: uppercase; color: var(--stone); text-decoration: none; font-weight: 500; transition: color .3s; }
+  .pd-section .sec-head a:hover { color: var(--ink); }
+  .pd-opts { display: flex; gap: 14px; flex-wrap: wrap; }
+  .pd-opt {
+    background: transparent; border: 0; padding: 6px 4px;
+    font: 500 18px/1 var(--ui); color: var(--ash);
+    cursor: pointer; transition: color .3s; min-width: 18px;
+  }
+  .pd-opt:hover { color: var(--ink); }
+  .pd-opt.selected { color: var(--ink); position: relative; }
+  .pd-opt.selected::after {
+    content: ''; position: absolute; left: 4px; right: 4px; bottom: -2px; height: 1px; background: var(--ink);
+  }
+
+  .pd-add {
+    margin-top: 44px;
+    background: var(--ink); color: var(--paper);
+    border: 0; padding: 22px 40px; width: 100%;
+    font: 500 12px/1 var(--ui);
+    letter-spacing: .5em; text-transform: uppercase;
+    cursor: pointer; transition: background .4s, transform .4s;
+  }
+  .pd-add:hover { background: #000; transform: translateY(-2px); }
+  .pd-add.added { background: var(--accent-glow); }
+  .pd-add.coming { background: var(--ash); cursor: not-allowed; }
+  .pd-add.coming:hover { background: var(--ash); transform: none; }
+
+  /* ——— DESCRIPTION ——— */
+  .description {
+    padding: 120px 80px;
+    background: var(--paper);
+    border-top: 1px solid var(--hair);
+  }
+  .description .inner { display: grid; grid-template-columns: 1fr 1.5fr; gap: 80px; max-width: 1200px; margin: 0 auto; align-items: start; }
+  .description h2 {
+    font-family: var(--display); font-weight: 300;
+    font-size: clamp(30px, 3.4vw, 46px); letter-spacing: -0.02em; line-height: 1.05;
+    color: var(--ink);
+  }
+  .description h2 em { font-style: italic; }
+  .description .label {
+    font-size: 10px; letter-spacing: .5em; text-transform: uppercase; color: var(--stone); font-weight: 500;
+    margin-bottom: 20px;
+  }
+  .description p {
+    font-family: var(--display); font-weight: 400;
+    font-size: 18px; line-height: 1.65; color: var(--ink);
+    margin-bottom: 24px;
+  }
+  .description ul {
+    list-style: none; padding: 0; margin: 32px 0 0;
+    border-top: 1px solid var(--hair);
+  }
+  .description li {
+    padding: 18px 0; font-size: 14px; color: var(--stone);
+    border-bottom: 1px solid var(--hair);
+    display: flex; align-items: baseline; gap: 20px;
+  }
+  .description li::before {
+    content: ''; width: 8px; height: 1px; background: var(--ink); flex-shrink: 0;
+  }
+
+  /* ——— YOU MIGHT ALSO LIKE ——— */
+  .related {
+    padding: 120px 40px;
+    background: var(--paper-2);
+    border-top: 1px solid var(--hair);
+  }
+  .related .head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding-bottom: 20px; border-bottom: 1px solid var(--hair);
+    margin-bottom: 56px;
+  }
+  .related h3 {
+    font-family: var(--display); font-weight: 300;
+    font-size: clamp(26px, 2.6vw, 38px); letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+  .related .head a {
+    font-size: 10.5px; letter-spacing: .4em; text-transform: uppercase;
+    color: var(--ink); text-decoration: none; font-weight: 500;
+    padding-bottom: 6px; border-bottom: 1px solid var(--ink);
+  }
+  .related .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
+  .rel-card { text-decoration: none; color: inherit; display: flex; flex-direction: column; cursor: pointer; }
+  .rel-card .img {
+    aspect-ratio: 4 / 5;
+    background: var(--paper);
+    border: 1px solid var(--hair);
+    display: flex; align-items: center; justify-content: center;
+    overflow: visible;
+    position: relative;
+  }
+  .rel-card .img img {
+    max-width: 86%; max-height: 86%; object-fit: contain;
+    filter: drop-shadow(0 14px 20px rgba(15,15,15,0.18));
+    transition: transform .8s cubic-bezier(.2,.7,.2,1);
+  }
+  .rel-card:hover .img img { transform: translateY(-5px); }
+  .rel-card.baked .img img { filter: none; }
+  .rel-card.boardgame .img { background: var(--paper); padding: 16px; overflow: hidden; }
+  .rel-card.boardgame .img img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 12px 18px rgba(15,15,15,0.14)); }
+  .rel-card.empty .img {
+    display: flex; align-items: center; justify-content: center; position: relative;
+  }
+  .rel-card.empty .img::before {
+    content: '+'; font-size: 28px; color: var(--ash); font-weight: 300;
+  }
+  .rel-card.empty .img::after {
+    content: 'coming soon';
+    position: absolute; bottom: 22px; left: 0; right: 0; text-align: center;
+    font-size: 9px; letter-spacing: .4em; text-transform: uppercase; color: var(--stone); font-weight: 500;
+  }
+  .rel-card .info { margin-top: 16px; }
+  .rel-card .k { font-size: 9px; letter-spacing: .4em; text-transform: uppercase; color: var(--stone); font-weight: 500; margin-bottom: 6px; }
+  .rel-card .n { font-family: var(--display); font-weight: 400; font-size: 16px; color: var(--ink); letter-spacing: -0.01em; line-height: 1.2; }
+  .rel-card .p { margin-top: 6px; font-size: 12px; color: var(--ink); font-weight: 500; }
+
+  /* ——— NEWSLETTER BAND ——— */
+  .band {
+    padding: 80px 40px 100px;
+    border-top: 1px solid var(--hair);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 56px;
+    align-items: start; background: var(--paper);
+  }
+  .band h3 {
+    font-family: var(--display); font-weight: 300;
+    font-size: clamp(30px, 3vw, 42px); letter-spacing: -0.018em; line-height: 1.1; color: var(--ink); max-width: 460px;
+  }
+  .band form { display: flex; border-bottom: 1px solid var(--ink); max-width: 520px; }
+  .band input {
+    flex: 1; border: 0; background: transparent; font: inherit;
+    color: var(--ink); font-size: 14px; padding: 14px 0; outline: none;
+  }
+  .band input::placeholder { color: var(--ash); }
+  .band button {
+    border: 0; background: transparent; font: inherit; cursor: pointer;
+    font-size: 10.5px; letter-spacing: .4em; text-transform: uppercase; color: var(--ink); font-weight: 500; padding: 14px 4px;
+  }
+
+  /* ——— FOOTER ——— */
+  footer.site { padding: 72px 40px 48px; background: var(--ink); color: var(--ash); }
+  footer.site .top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 56px; }
+  footer.site h4 { font-size: 10px; letter-spacing: .42em; text-transform: uppercase; color: var(--paper); font-weight: 500; margin-bottom: 18px; }
+  footer.site a { display: block; color: var(--ash); text-decoration: none; font-size: 13px; margin-bottom: 8px; transition: color .5s; }
+  footer.site a:hover { color: var(--paper); }
+  footer.site .brand-col .mark { color: var(--paper); font-size: 13px; letter-spacing: .3em; font-weight: 600; margin-bottom: 16px; }
+  footer.site .brand-col p { font-family: var(--display); font-style: italic; font-size: 14px; line-height: 1.55; max-width: 340px; }
+  footer.site .bottom { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .32em; text-transform: uppercase; padding-top: 28px; border-top: 1px solid #222226; }
+
+  @media (max-width: 1100px) {
+    .pd-hero { grid-template-columns: 1fr; }
+    .pd-media { border-right: 0; border-bottom: 1px solid var(--hair); }
+    .pd-info { padding: 56px 32px; }
+    .description .inner { grid-template-columns: 1fr; gap: 32px; }
+    .related .grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  }
+  @media (max-width: 700px) {
+    .nav .inner { grid-template-columns: auto 1fr; gap: 16px; padding: 16px 24px; }
+    .nav .links { display: none; }
+    .nav .right { justify-self: end; }
+    .crumbs { padding: 16px 24px; font-size: 9px; }
+    .pd-media { padding: 36px; }
+    .description { padding: 60px 24px; }
+    .related { padding: 60px 24px; }
+    .band { grid-template-columns: 1fr; padding: 48px 24px; }
+    footer.site .top { grid-template-columns: 1fr 1fr; gap: 36px; padding: 0; }
+  }
+</style>
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="page-transition entering" id="pageTransition" aria-hidden="true"></div>
+<nav class="nav">
+  <div class="inner">
+    <a class="brand" href="shop.html">
+      <span class="line1">BLUE PULSE</span>
+      <span class="line2">SHOP</span>
+    </a>
+    <div class="links">
+      <a href="homepage.html">Home</a>
+      <a href="shop.html" class="on">Shop</a>
+      <span class="studio-menu">
+        <a class="studio-trigger" href="studio.html">Studio</a>
+        <div class="studio-panel" role="menu">
+          <a href="press.html" role="menuitem">Press</a>
+          <a href="journal.html" role="menuitem">Newswire</a>
+        </div>
+      </span>
+      <a href="community.html">Community</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="right">
+      <a href="#" class="icon-link" aria-label="Search">Search</a>
+      <a href="#" class="auth">Log In <span class="sep">/</span> Join</a>
+      <button class="cart-btn" id="navCartBtn">Cart <sup id="navCartCount">(0)</sup></button>
+    </div>
+  </div>
+</nav>
+
+<div class="crumbs">
+  <a href="shop.html">Shop</a>
+  <span class="sep">/</span>
+  <a href="shop.html" id="crumbCat">Category</a>
+  <span class="sep">/</span>
+  <span class="current" id="crumbName">Product</span>
+</div>
+
+<!-- PRODUCT HERO -->
+<section id="main" class="pd-hero">
+  <div class="pd-media" id="pdMedia">
+    <img id="pdImage" alt="" />
+  </div>
+  <div class="pd-info">
+    <div class="kicker" id="pdKicker"></div>
+    <div class="pill" id="pdPill" style="display:none"></div>
+    <h1 id="pdName"></h1>
+    <p class="tagline" id="pdTagline" style="display:none"></p>
+    <div class="price" id="pdPrice"></div>
+    <div class="stock" id="pdStock" style="display:none"></div>
+
+    <div class="pd-section" id="pdSizeSection">
+      <div class="sec-head">
+        <span>Size</span>
+        <a href="#" onclick="event.preventDefault();document.getElementById('sizeGuide').showModal();">Size Guide</a>
+      </div>
+      <div class="pd-opts" id="pdSizeOpts"></div>
+    </div>
+
+    <div class="pd-section" id="pdQtySection">
+      <div class="sec-head"><span>Quantity</span></div>
+      <div class="pd-opts" id="pdQtyOpts"></div>
+    </div>
+
+    <button class="pd-add" id="pdAdd">Add to Cart</button>
+  </div>
+</section>
+
+<!-- DESCRIPTION -->
+<section class="description">
+  <div class="inner">
+    <div>
+      <div class="label">About this piece</div>
+      <h2 id="descHead"><em>Built</em> in small numbers.</h2>
+    </div>
+    <div>
+      <p id="descText"></p>
+      <ul id="descFeatures"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- YOU MIGHT ALSO LIKE -->
+<section class="related">
+  <div class="head">
+    <h3>You might also like</h3>
+    <a href="shop.html">See everything &rarr;</a>
+  </div>
+  <div class="grid" id="relatedGrid"></div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="band">
+  <h3>Be first when the next drop goes live.</h3>
+  <form onsubmit="return window.bpsSubscribe(this, event);">
+    <input type="email" placeholder="your email" required />
+    <button type="submit">Subscribe</button>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer class="site">
+  <div class="top">
+    <div class="brand-col">
+      <div class="mark">BLUE PULSE STUDIOS</div>
+      <p>A boutique production house for horror and genre film, television, and video games.</p>
+    </div>
+    <div>
+      <h4>Films</h4>
+      <a href="homepage.html#slate">Stay Home</a>
+      <a href="homepage.html#slate">The Painting</a>
+    </div>
+    <div>
+      <h4>Shop</h4>
+      <a href="shop.html">All</a>
+      <a href="shop.html?filter=apparel">Apparel</a>
+      <a href="shop.html?filter=figurines">Figurines</a>
+      <a href="shop.html?filter=limited">Limited</a>
+    </div>
+    <div>
+      <h4>Studio</h4>
+      <a href="studio.html">About</a>
+      <a href="community.html">Community</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+  <div class="bottom">
+    <div>&copy; 2026 Blue Pulse Studios</div>
+    <div class="legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="shipping-returns.html">Shipping &amp; Returns</a></div>
+    <div>Made patiently</div>
+  </div>
+</footer>
+
+<dialog id="sizeGuide" style="border:1px solid #0F0F0F;padding:0;max-width:520px;width:92vw;background:#FAFAFA;color:#0F0F0F">
+  <div style="padding:40px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px">
+      <h3 style="font-family:'Fraunces',serif;font-weight:400;font-size:24px;margin:0">Size guide</h3>
+      <button onclick="this.closest('dialog').close()" style="background:none;border:0;font-size:20px;cursor:pointer;color:#0F0F0F" aria-label="Close">&times;</button>
+    </div>
+    <p style="font-size:12.5px;color:#6B6B6B;margin:0 0 20px;font-style:italic">Oversized unisex fit — size down for a standard fit. Measurements in inches, garment laid flat.</p>
+    <table style="width:100%;border-collapse:collapse;font-size:13px">
+      <tr style="border-bottom:1px solid #0F0F0F;text-align:left">
+        <th style="padding:10px 8px;font-size:10px;letter-spacing:.2em;text-transform:uppercase">Size</th>
+        <th style="padding:10px 8px;font-size:10px;letter-spacing:.2em;text-transform:uppercase">Chest</th>
+        <th style="padding:10px 8px;font-size:10px;letter-spacing:.2em;text-transform:uppercase">Length</th>
+        <th style="padding:10px 8px;font-size:10px;letter-spacing:.2em;text-transform:uppercase">Sleeve</th>
+      </tr>
+      <tr style="border-bottom:1px solid #E5E5E5"><td style="padding:10px 8px">S</td><td style="padding:10px 8px">22</td><td style="padding:10px 8px">27</td><td style="padding:10px 8px">23.5</td></tr>
+      <tr style="border-bottom:1px solid #E5E5E5"><td style="padding:10px 8px">M</td><td style="padding:10px 8px">23.5</td><td style="padding:10px 8px">28</td><td style="padding:10px 8px">24.5</td></tr>
+      <tr style="border-bottom:1px solid #E5E5E5"><td style="padding:10px 8px">L</td><td style="padding:10px 8px">25</td><td style="padding:10px 8px">29</td><td style="padding:10px 8px">25.5</td></tr>
+      <tr style="border-bottom:1px solid #E5E5E5"><td style="padding:10px 8px">XL</td><td style="padding:10px 8px">26.5</td><td style="padding:10px 8px">30</td><td style="padding:10px 8px">26.5</td></tr>
+      <tr><td style="padding:10px 8px">2XL</td><td style="padding:10px 8px">28</td><td style="padding:10px 8px">31</td><td style="padding:10px 8px">27.5</td></tr>
+    </table>
+    <p style="font-size:11.5px;color:#6B6B6B;margin:20px 0 0;font-style:italic">Between sizes? Email <a href="mailto:production@bluepulsestudios.com" style="color:#0F0F0F">production@bluepulsestudios.com</a> with your measurements.</p>
+  </div>
+</dialog>
+
+<script>
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id');
+  const p = window.PRODUCTS[id];
+
+  if (!p) {
+    document.body.innerHTML = '<div style="padding:120px 40px;font-family:\'Fraunces\',serif;color:#0F0F0F;background:#FAFAFA;min-height:100vh;"><h1 style="font-size:42px;font-weight:300;">Product not found.</h1><p style="margin-top:24px;"><a href="shop.html" style="color:#0F0F0F;">Back to shop →</a></p></div>';
+  } else {
+    document.title = p.name + ' · Blue Pulse Studios Shop';
+    window.renderNavCartCount();
+
+    // Crumbs
+    document.getElementById('crumbCat').textContent = p.categoryLabel || 'All';
+    document.getElementById('crumbCat').href = 'shop.html?filter=' + (p.category || '');
+    document.getElementById('crumbName').textContent = p.name;
+
+    // Media
+    const pdMedia = document.getElementById('pdMedia');
+    const pdImage = document.getElementById('pdImage');
+    if (p.image) {
+      pdImage.src = p.image;
+      pdImage.alt = p.name;
+      if (p.bakedShadow)    pdMedia.classList.add('baked');
+      if (id === 'board-game') pdMedia.classList.add('boardgame');
+    } else {
+      // coming-soon placeholder
+      pdMedia.classList.add('coming');
+      pdMedia.innerHTML = '<div class="plus">+</div><div class="soon">Coming Soon</div>';
+    }
+
+    // Info
+    document.getElementById('pdKicker').textContent = p.kicker || '';
+    document.getElementById('pdName').textContent = p.name;
+    document.getElementById('pdPrice').textContent = '$' + p.price;
+    if (p.tagline) {
+      const t = document.getElementById('pdTagline');
+      t.textContent = p.tagline;
+      t.style.display = '';
+    }
+    if (p.pill) {
+      const pill = document.getElementById('pdPill');
+      pill.textContent = p.pill;
+      pill.style.display = '';
+    }
+    if (p.stock) {
+      const stockEl = document.getElementById('pdStock');
+      stockEl.textContent = p.stock;
+      stockEl.style.display = '';
+    }
+
+    // Sizes
+    const sizeSection = document.getElementById('pdSizeSection');
+    const sizeOpts = document.getElementById('pdSizeOpts');
+    let selectedSize = null;
+    if (p.sizes && p.sizes.length) {
+      p.sizes.forEach((s, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'pd-opt';
+        b.textContent = s;
+        if (i === 0 && !p.comingSoon) { b.classList.add('selected'); selectedSize = s; }
+        b.onclick = () => {
+          sizeOpts.querySelectorAll('.pd-opt').forEach(n => n.classList.remove('selected'));
+          b.classList.add('selected'); selectedSize = s;
+        };
+        sizeOpts.appendChild(b);
+      });
+    } else {
+      sizeSection.style.display = 'none';
+    }
+
+    // Quantity
+    const qtyOpts = document.getElementById('pdQtyOpts');
+    let selectedQty = 1;
+    for (let i = 1; i <= 9; i++) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'pd-opt' + (i === 1 ? ' selected' : '');
+      b.textContent = i;
+      b.onclick = () => {
+        qtyOpts.querySelectorAll('.pd-opt').forEach(n => n.classList.remove('selected'));
+        b.classList.add('selected'); selectedQty = i;
+      };
+      qtyOpts.appendChild(b);
+    }
+
+    // Edition picker — numbered runs let the buyer request a number
+    let selectedEdition = null;
+    if (p.editionSize && !p.comingSoon) {
+      const qtySec = qtyOpts.closest('.pd-section');
+      const sec = document.createElement('div');
+      sec.className = 'pd-section';
+      const taken = [1, 2, 3, 13, 66, 100]; // demo: reserved/collector numbers
+      let opts = '<option value="">Assign at random</option>';
+      for (let n = 1; n <= p.editionSize; n++) {
+        if (!taken.includes(n)) opts += '<option value="' + n + '">№ ' + String(n).padStart(3, '0') + ' of ' + p.editionSize + '</option>';
+      }
+      sec.innerHTML = '<div class="sec-head"><span>Edition &#8470;</span></div>'
+        + '<select style="width:100%;font:inherit;font-size:14px;padding:12px;border:1px solid #E5E5E5;background:#FAFAFA;color:#0F0F0F;cursor:pointer" aria-label="Choose your edition number">' + opts + '</select>'
+        + '<p style="margin-top:10px;font-size:11.5px;color:#6B6B6B;font-style:italic">Numbered run of ' + p.editionSize + '. Pick a number or let fate assign one. Availability confirmed at fulfillment.</p>';
+      sec.querySelector('select').addEventListener('change', function () { selectedEdition = this.value || null; });
+      qtySec.parentNode.insertBefore(sec, qtySec);
+    }
+
+    // Add to Cart
+    const pdAdd = document.getElementById('pdAdd');
+    if (p.comingSoon) {
+      pdAdd.textContent = 'Coming Soon';
+      pdAdd.classList.add('coming');
+      pdAdd.disabled = true;
+
+      // Waitlist — notify-me capture for unreleased items
+      const wl = document.createElement('form');
+      wl.setAttribute('onsubmit', 'return window.bpsSubscribe(this, event);');
+      wl.style.cssText = 'margin-top:18px;display:flex;gap:0;border:1px solid #0F0F0F;';
+      wl.innerHTML = '<input type="email" required placeholder="your email — get notified at release" aria-label="Email for release notification" style="flex:1;font:inherit;font-size:13px;padding:14px 16px;border:0;outline:none;background:#FAFAFA;color:#0F0F0F;">'
+        + '<button type="submit" style="font-family:inherit;font-size:10px;letter-spacing:.3em;text-transform:uppercase;font-weight:600;padding:0 22px;border:0;background:#0F0F0F;color:#FAFAFA;cursor:pointer">Notify me</button>';
+      pdAdd.insertAdjacentElement('afterend', wl);
+    } else {
+      pdAdd.addEventListener('click', () => {
+        window.bpsCart.add({ id, name: p.name, size: selectedSize, edition: selectedEdition, qty: selectedQty, price: p.price });
+        window.renderNavCartCount();
+        pdAdd.classList.add('added');
+        pdAdd.textContent = 'Added ✓';
+        setTimeout(() => {
+          pdAdd.classList.remove('added');
+          pdAdd.textContent = 'Add to Cart';
+        }, 1400);
+      });
+    }
+
+    // Description
+    const descText = document.getElementById('descText');
+    descText.textContent = p.description || '';
+    const descFeatures = document.getElementById('descFeatures');
+    if (p.features && p.features.length) {
+      p.features.forEach(f => {
+        const li = document.createElement('li');
+        li.textContent = f;
+        descFeatures.appendChild(li);
+      });
+    } else {
+      descFeatures.style.display = 'none';
+    }
+
+    // Related
+    const related = window.getRelatedProducts(id, 4);
+    const relGrid = document.getElementById('relatedGrid');
+    related.forEach(rid => {
+      const r = window.PRODUCTS[rid];
+      if (!r) return;
+      const a = document.createElement('a');
+      a.className = 'rel-card';
+      if (r.bakedShadow) a.classList.add('baked');
+      if (rid === 'board-game') a.classList.add('boardgame');
+      if (!r.image) a.classList.add('empty');
+      a.href = 'product.html?id=' + rid;
+
+      const imgDiv = document.createElement('div');
+      imgDiv.className = 'img';
+      if (r.image) {
+        const im = document.createElement('img');
+        im.src = r.image;
+        im.alt = r.name;
+        imgDiv.appendChild(im);
+      }
+      const info = document.createElement('div');
+      info.className = 'info';
+      info.innerHTML = '<div class="k">' + (r.kicker || '').split(' · ')[0] + '</div>'
+        + '<div class="n">' + r.name + '</div>'
+        + '<div class="p">$' + r.price + '</div>';
+
+      a.appendChild(imgDiv);
+      a.appendChild(info);
+      relGrid.appendChild(a);
+    });
+
+    // Cart button — go to the cart page
+    document.getElementById('navCartBtn').addEventListener('click', () => {
+      window.location.href = 'cart.html';
+    });
+
+    // Structured data — Product schema for search engines
+    const ld = {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: p.name,
+      description: p.description || '',
+      brand: { '@type': 'Brand', name: 'Blue Pulse Studios' },
+      offers: {
+        '@type': 'Offer',
+        priceCurrency: 'USD',
+        price: String(p.price),
+        availability: 'https://schema.org/' + (p.comingSoon ? 'PreOrder' : 'InStock')
+      }
+    };
+    if (p.image) ld.image = new URL(p.image, location.href).href;
+    const ldScript = document.createElement('script');
+    ldScript.type = 'application/ld+json';
+    ldScript.textContent = JSON.stringify(ld);
+    document.head.appendChild(ldScript);
+  }
+</script>
+
+<script src="site.js"></script>
+</body>
+</html>

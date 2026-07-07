@@ -1,0 +1,8 @@
+# Blue Pulse Studios
+# Note: hidden pages (client portal, admin console) are protected by
+# noindex meta tags — deliberately NOT listed here, since robots.txt
+# entries are public and would reveal their URLs.
+User-agent: *
+Allow: /
+
+Sitemap: https://bluepulsestudios.com/sitemap.xml

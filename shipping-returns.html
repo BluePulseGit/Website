@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Shipping & Returns for Blue Pulse Studios." />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<meta name="theme-color" content="#02040A" />
+<title>Shipping & Returns — Blue Pulse Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<style>
+  :root { --abyss:#02040A; --ocean:#060F1F; --glow:#6BB4E8; --foam:#CFD9E4; --stone:#8B929C; --hair:#132341; --display:'Fraunces',serif; --ui:'Inter',sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--abyss); color: var(--foam); font-family: var(--ui); -webkit-font-smoothing: antialiased; }
+  .nav { position: fixed; top:0; left:0; right:0; z-index:100; padding: 28px 48px; display:flex; justify-content:space-between; align-items:center; background: linear-gradient(to bottom, rgba(2,4,10,0.5), transparent); font-size:10.5px; letter-spacing:.28em; text-transform:uppercase; }
+  .nav .brand { display:inline-flex; flex-direction:column; gap:3px; line-height:1; color:var(--foam); text-decoration:none; }
+  .nav .brand .line1 { font-weight:600; letter-spacing:.32em; font-size:11px; }
+  .nav .brand .line2 { font-weight:500; letter-spacing:.42em; font-size:9px; color:var(--stone); }
+  .nav .links a { color: var(--stone); text-decoration: none; margin-left: 28px; transition: color .5s; }
+  .nav .links a:hover { color: var(--foam); }
+  .doc { max-width: 780px; margin: 0 auto; padding: 190px 32px 120px; }
+  .kicker { font-size:10px; letter-spacing:.5em; text-transform:uppercase; color:var(--glow); font-weight:500; margin-bottom:24px; }
+  h1 { font-family:var(--display); font-weight:300; font-size:clamp(40px,6vw,72px); letter-spacing:-0.025em; line-height:1.02; margin-bottom:16px; }
+  h1 em { font-style:italic; color:var(--glow); }
+  .updated { font-family:var(--display); font-style:italic; font-size:13px; color:var(--stone); margin-bottom:56px; }
+  h2 { font-family:var(--display); font-weight:400; font-size:24px; letter-spacing:-0.01em; margin:48px 0 16px; }
+  p { font-size:15px; line-height:1.75; color:var(--foam); opacity:.85; margin-bottom:18px; }
+  .draft { padding:16px 20px; border:1px solid var(--hair); background:rgba(29,95,184,0.08); font-size:12px; color:var(--glow); line-height:1.6; margin-bottom:48px; }
+  footer { padding:56px 48px; color:var(--stone); border-top:1px solid var(--hair); display:flex; justify-content:space-between; font-size:10px; letter-spacing:.32em; text-transform:uppercase; }
+  footer .legal { display:flex; gap:24px; }
+  footer .legal a { color:inherit; text-decoration:none; }
+  footer .legal a:hover { color:var(--foam); }
+  @media (max-width:800px){ .nav{padding:18px 24px} .doc{padding:150px 24px 80px} footer{flex-wrap:wrap;gap:12px} }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="page-transition entering" id="pageTransition" aria-hidden="true"></div>
+<nav class="nav">
+  <a class="brand" href="homepage.html"><span class="line1">BLUE PULSE</span><span class="line2">STUDIOS</span></a>
+  <div class="links"><a href="homepage.html#slate">Films</a><a href="shop.html">Shop</a><a href="studio.html">Studio</a><a href="contact.html">Contact</a></div>
+</nav>
+
+<main class="doc" id="main">
+  <div class="kicker">Legal</div>
+  <h1>Shipping &amp; <em>returns.</em></h1>
+  <p class="updated">Last updated: July 2026</p>
+  <div class="draft" data-placeholder>Draft for demonstration &mdash; to be reviewed by counsel before launch.</div>
+
+  <h2>Production &amp; ship times</h2>
+  <p>In-stock items ship within 3&ndash;5 business days. Limited and made-to-order pieces ship when their production run completes &mdash; the estimated window is listed on each product page, and we email you when your piece leaves the studio.</p>
+
+  <h2>Shipping</h2>
+  <p>We ship from the United States. Rates are calculated at checkout by weight and destination. International customers are responsible for any customs duties or import taxes.</p>
+
+  <h2>Returns</h2>
+  <p>Unworn, unopened items can be returned within 30 days of delivery for a full refund of the item price. Numbered limited editions and signed pieces are final sale unless they arrive damaged.</p>
+
+  <h2>Damaged or lost orders</h2>
+  <p>If something arrives damaged, email us a photo within 7 days and we&rsquo;ll replace it or refund you &mdash; whichever you prefer. If tracking stalls, contact us and we&rsquo;ll chase the carrier so you don&rsquo;t have to.</p>
+
+  <h2>Contact</h2>
+  <p>All shipping questions: <a href="mailto:production@bluepulsestudios.com" style="color:var(--glow)">production@bluepulsestudios.com</a>.</p>
+
+</main>
+
+<footer>
+  <div>&copy; 2026 Blue Pulse Studios</div>
+  <div class="legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="shipping-returns.html">Shipping &amp; Returns</a></div>
+</footer>
+<script src="site.js"></script>
+</body>
+</html>

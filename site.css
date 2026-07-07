@@ -1,0 +1,187 @@
+/* ============================================================
+   site.css — site-wide accessibility, focus, and page-transition
+   shared across every page in Blue Pulse Studios
+   ============================================================ */
+
+/* ——— SKIP-TO-CONTENT — keyboard-focusable, hidden until used ——— */
+.skip-link {
+  position: fixed;
+  top: 12px; left: 12px;
+  z-index: 100000;
+  background: #FAFAFA;
+  color: #0F0F0F;
+  font: 500 11px/1 'Inter', -apple-system, sans-serif;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 14px 18px;
+  border: 1px solid #0F0F0F;
+  transform: translateY(-200%);
+  transition: transform .25s ease;
+}
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 2px solid #6BB4E8;
+  outline-offset: 2px;
+}
+
+/* ——— FOCUS RINGS — keyboard users get a visible halo ——— */
+:focus-visible {
+  outline: 2px solid #6BB4E8;
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+/* Mouse users don't get the ring on click */
+:focus:not(:focus-visible) { outline: none; }
+
+/* Buttons and links get a subtle focus glow on dark backgrounds */
+.nav a:focus-visible,
+.nav button:focus-visible,
+.links a:focus-visible {
+  outline-color: #6BB4E8;
+  outline-offset: 4px;
+}
+
+/* ——— REDUCED MOTION — respect the OS setting ——— */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Specifically kill the heart-pulse-Zera and bubble drifts so vestibular users don't get hit */
+  .scene .heart, .scene .zera, .scene .pulse, .scene .flash,
+  .scene .bg-bubbles, .hero .drift, .hero .drift-2,
+  .portal .ring, .portal .core, .portal .bubbles, .portal .bubbles2 {
+    animation: none !important;
+  }
+  /* Make the scene's final states visible immediately */
+  .scene .heart  { opacity: 0; }
+  .scene .zera   { opacity: 1; transform: none !important; }
+}
+
+/* ——— PAGE TRANSITION OVERLAY — fade-to-black between routes ——— */
+.page-transition {
+  position: fixed; inset: 0; z-index: 99999;
+  background: #02040A;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s cubic-bezier(.4, 0, .2, 1);
+}
+.page-transition.fade-in  { opacity: 1; pointer-events: auto; }
+.page-transition.fade-out { opacity: 0; pointer-events: none; }
+/* On initial page load, fade-from-black */
+@keyframes pageEnter {
+  from { opacity: 1; pointer-events: auto; }
+  to   { opacity: 0; pointer-events: none; }
+}
+.page-transition.entering {
+  opacity: 1;
+  animation: pageEnter .55s cubic-bezier(.4, 0, .2, 1) forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-transition, .page-transition.entering { animation: none !important; transition: none !important; }
+}
+
+/* ——— STUDIO DROPDOWN — pops out under the Studio nav link.
+   Used on every page; the parent .nav .links can be flex-with-gap (shop pages)
+   or margin-spaced (everywhere else) — the wrapper is inline-flex so both work. */
+.nav .links .studio-menu {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.nav .links .studio-menu > .studio-trigger {
+  /* trigger inherits the regular nav-link styling from each page's own
+     .nav .links a rule (color, hover, etc.). No overrides needed. */
+}
+.nav .links .studio-menu .studio-panel {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, 8px);
+  background: rgba(2, 4, 10, 0.96);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 18px 24px 14px;
+  min-width: 152px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+  z-index: 1000;
+}
+.nav .links .studio-menu:hover .studio-panel,
+.nav .links .studio-menu:focus-within .studio-panel {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+/* Invisible bridge so the cursor can traverse from the trigger to the panel
+   without the dropdown snapping closed mid-travel. */
+.nav .links .studio-menu::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: -12px;
+  right: -12px;
+  height: 16px;
+  pointer-events: auto;
+}
+/* Panel links — kill the inherited margin-left and re-style cleanly. */
+.nav .links .studio-menu .studio-panel a {
+  margin: 0 !important;
+  padding: 0;
+  font-size: 10.5px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #8B929C;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.3s ease;
+}
+.nav .links .studio-menu .studio-panel a:hover,
+.nav .links .studio-menu .studio-panel a:focus-visible {
+  color: #CFD9E4;
+}
+.nav .links .studio-menu .studio-panel a.on {
+  color: #CFD9E4;
+}
+@media (max-width: 800px) {
+  .nav .links .studio-menu .studio-panel { display: none; }
+}
+
+/* ——— PLACEHOLDER MODE — sitewide hide toggle, set from the admin
+   console (Newswire Console → Site Settings). When ON, everything
+   tagged data-placeholder disappears and .ph-note fallbacks show. ——— */
+html.bps-hide-ph [data-placeholder] { display: none !important; }
+.ph-note { display: none; }
+html.bps-hide-ph .ph-note { display: block; }
+/* Shop "coming soon" tiles + imageless related-product cards */
+html.bps-hide-ph .card.placeholder { display: none !important; }
+html.bps-hide-ph .rel-card.empty { display: none !important; }
+
+/* ——— FOOTER LEGAL LINKS — inline row in the footer bottom bar ——— */
+footer .bottom .legal { display: flex; gap: 24px; }
+footer .bottom .legal a { display: inline; margin: 0; font-size: inherit; color: inherit; text-decoration: none; transition: color .5s; }
+footer .bottom .legal a:hover { color: #CFD9E4; }
+@media (max-width: 800px) {
+  footer .bottom { flex-wrap: wrap; gap: 12px; }
+}
+
+/* ——— SR-ONLY — visually hidden but readable to screen readers ——— */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
