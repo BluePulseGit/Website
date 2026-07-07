@@ -115,6 +115,8 @@
   <a class="brand" href="homepage.html">BLUE PULSE <span>// NEWSWIRE CONSOLE</span></a>
   <div class="actions" id="topActions" style="display:none">
     <a href="journal.html" target="_blank" rel="noopener">View Newswire</a>
+    <button id="copyBtn" title="Edit the words on any page">Copy Editor</button>
+    <button id="socialBtn" title="Set your social media links">Social Links</button>
     <button id="pageSeoBtn">Page SEO</button>
     <button id="rssBtn" title="Download feed.xml built from current posts">Export RSS</button>
     <button id="resetBtn" title="Restore the original demo posts">Reset Demo Data</button>
@@ -246,6 +248,33 @@
       </div>
       <textarea id="mExport" readonly style="display:none;margin-top:24px;width:100%;min-height:130px;font-family:monospace;font-size:11.5px;color:var(--foam);background:var(--depth);border:1px solid var(--hair);padding:14px"></textarea>
     </form>
+
+    <!-- COPY EDITOR -->
+    <div id="copyPanel" style="display:none;max-width:760px">
+      <h2 style="font-family:var(--display);font-weight:300;font-size:28px;margin-bottom:8px">Copy editor</h2>
+      <p style="font-family:var(--display);font-style:italic;font-size:13px;color:var(--stone);margin-bottom:28px">Edit the words directly on any page. Click a page below — it opens in edit mode where you can click any headline or paragraph and type over it. Changes save to this browser and preview instantly. To publish for everyone, hit &ldquo;Export edited copy&rdquo; and it gets baked into the site.</p>
+      <div id="copyPageLinks" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:32px"></div>
+      <div class="bar" style="margin-top:0">
+        <button type="button" class="btn primary" id="copyExport">Export edited copy</button>
+        <button type="button" class="btn danger" id="copyClear">Reset all copy edits</button>
+        <span class="status" id="copyStatus"></span>
+      </div>
+      <textarea id="copyExportBox" readonly style="display:none;margin-top:20px;width:100%;min-height:150px;font-family:monospace;font-size:11.5px;color:var(--foam);background:var(--depth);border:1px solid var(--hair);padding:14px"></textarea>
+    </div>
+
+    <!-- SOCIAL LINKS -->
+    <form id="socialForm" style="display:none;max-width:640px">
+      <h2 style="font-family:var(--display);font-weight:300;font-size:28px;margin-bottom:8px">Social links</h2>
+      <p style="font-family:var(--display);font-style:italic;font-size:13px;color:var(--stone);margin-bottom:32px">Paste the full URL for each account. They wire up the buttons on the Community page (and anywhere else they appear). Leave a field blank to keep that one hidden.</p>
+      <div id="socialFields"></div>
+      <div class="bar">
+        <button type="submit" class="btn primary">Save links</button>
+        <button type="button" class="btn ghost" id="socialCopy">Copy for launch</button>
+        <button type="button" class="btn danger" id="socialClear">Clear all</button>
+        <span class="status" id="socialStatus"></span>
+      </div>
+      <textarea id="socialExport" readonly style="display:none;margin-top:20px;width:100%;min-height:120px;font-family:monospace;font-size:11.5px;color:var(--foam);background:var(--depth);border:1px solid var(--hair);padding:14px"></textarea>
+    </form>
   </main>
 </div>
 
@@ -345,6 +374,8 @@
     $('status').textContent = '';
     $('edPlaceholder').style.display = 'none';
     $('metaForm').style.display = 'none';
+    var _cp = $('copyPanel'); if (_cp) _cp.style.display = 'none';
+    var _sf = $('socialForm'); if (_sf) _sf.style.display = 'none';
     $('edForm').classList.add('on');
     renderList();
   }
@@ -357,6 +388,8 @@
     $('status').textContent = '';
     $('edPlaceholder').style.display = 'none';
     $('metaForm').style.display = 'none';
+    var _cp = $('copyPanel'); if (_cp) _cp.style.display = 'none';
+    var _sf = $('socialForm'); if (_sf) _sf.style.display = 'none';
     $('edForm').classList.add('on');
     renderList();
     $('fTitle').focus();
@@ -449,13 +482,111 @@
     $('mPage').appendChild(o);
   });
   $('mPage').addEventListener('change', metaLoadPage);
+  function hideExtraPanels() {
+    ['copyPanel', 'socialForm'].forEach(id => { const e = $(id); if (e) e.style.display = 'none'; });
+  }
   $('pageSeoBtn').addEventListener('click', () => {
     const showing = $('metaForm').style.display !== 'none';
+    hideExtraPanels();
     $('metaForm').style.display = showing ? 'none' : 'block';
     $('edForm').classList.remove('on');
     $('edPlaceholder').style.display = showing ? 'block' : 'none';
     if (!showing) metaLoadPage();
   });
+
+  /* ——— Copy Editor ——— */
+  (function () {
+    const links = $('copyPageLinks');
+    SITE_PAGES.forEach(p => {
+      const a = document.createElement('a');
+      a.href = p + '#bps-edit';
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.className = 'btn ghost';
+      a.style.cssText = 'justify-content:space-between;text-transform:none;letter-spacing:.04em;font-size:12px;padding:12px 16px';
+      a.innerHTML = p + ' <span style="color:var(--glow)">edit &rarr;</span>';
+      links.appendChild(a);
+    });
+    $('copyBtn').addEventListener('click', () => {
+      const showing = $('copyPanel').style.display !== 'none';
+      $('metaForm').style.display = 'none';
+      $('socialForm').style.display = 'none';
+      $('edForm').classList.remove('on');
+      $('copyPanel').style.display = showing ? 'none' : 'block';
+      $('edPlaceholder').style.display = showing ? 'block' : 'none';
+      $('copyExportBox').style.display = 'none';
+      $('copyStatus').textContent = '';
+    });
+    $('copyExport').addEventListener('click', () => {
+      let o = {};
+      try { o = JSON.parse(localStorage.getItem('bpsCopyOverrides') || '{}'); } catch (_) {}
+      const n = Object.keys(o).length;
+      $('copyExportBox').value = n
+        ? JSON.stringify(o, null, 2)
+        : 'No copy edits yet. Open a page above, click text, edit it, and Save.';
+      $('copyExportBox').style.display = 'block';
+      $('copyExportBox').select();
+      try { document.execCommand('copy'); } catch (_) {}
+      $('copyStatus').textContent = n ? (n + ' edits copied — send to your developer to bake in permanently.') : '';
+    });
+    $('copyClear').addEventListener('click', () => {
+      if (!confirm('Reset ALL copy edits across every page to the original text?')) return;
+      localStorage.removeItem('bpsCopyOverrides');
+      $('copyStatus').textContent = 'All copy edits cleared.';
+      $('copyExportBox').style.display = 'none';
+    });
+  })();
+
+  /* ——— Social Links ——— */
+  (function () {
+    const PLATFORMS = [
+      ['youtube', 'YouTube'], ['x', 'X (Twitter)'], ['instagram', 'Instagram'],
+      ['reddit', 'Reddit'], ['bluesky', 'Bluesky'], ['tiktok', 'TikTok'],
+      ['vrchat', 'VRChat'], ['discord', 'Discord']
+    ];
+    const KEY = 'bpsSocialLinks';
+    function all() { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (_) { return {}; } }
+    const wrap = $('socialFields');
+    PLATFORMS.forEach(([k, label]) => {
+      const d = document.createElement('div');
+      d.className = 'fld';
+      d.innerHTML = '<label for="soc_' + k + '">' + label + '</label>'
+        + '<input id="soc_' + k + '" type="url" placeholder="https://…" style="width:100%;font:inherit;font-size:14px;color:var(--foam);background:transparent;border:0;border-bottom:1px solid var(--hair);padding:10px 0;outline:none">';
+      wrap.appendChild(d);
+    });
+    function load() { const s = all(); PLATFORMS.forEach(([k]) => { $('soc_' + k).value = s[k] || ''; }); }
+    $('socialBtn').addEventListener('click', () => {
+      const showing = $('socialForm').style.display !== 'none';
+      $('metaForm').style.display = 'none';
+      $('copyPanel').style.display = 'none';
+      $('edForm').classList.remove('on');
+      $('socialForm').style.display = showing ? 'none' : 'block';
+      $('edPlaceholder').style.display = showing ? 'block' : 'none';
+      $('socialExport').style.display = 'none';
+      $('socialStatus').textContent = '';
+      if (!showing) load();
+    });
+    $('socialForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const s = {};
+      PLATFORMS.forEach(([k]) => { const v = $('soc_' + k).value.trim(); if (v) s[k] = v; });
+      localStorage.setItem(KEY, JSON.stringify(s));
+      $('socialStatus').textContent = 'Saved. Live on the Community page in this browser.';
+    });
+    $('socialCopy').addEventListener('click', () => {
+      const s = all();
+      $('socialExport').value = 'window.BPS_SOCIALS = ' + JSON.stringify(s, null, 2) + ';';
+      $('socialExport').style.display = 'block';
+      $('socialExport').select();
+      try { document.execCommand('copy'); } catch (_) {}
+      $('socialStatus').textContent = 'Copied — send to your developer to publish for all visitors.';
+    });
+    $('socialClear').addEventListener('click', () => {
+      if (!confirm('Clear all social links?')) return;
+      localStorage.removeItem(KEY); load();
+      $('socialStatus').textContent = 'Cleared.';
+    });
+  })();
   $('metaForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const all = metaAll();

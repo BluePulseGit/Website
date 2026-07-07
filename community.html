@@ -560,7 +560,7 @@
   <div class="top">
     <div class="brand-col">
       <div class="mark">BLUE PULSE STUDIOS</div>
-      <p>A boutique production house for horror and genre film, television, and video games. Small rooms, patient work, handmade stories.</p>
+      <p>An independent studio for horror and genre film, television, and video games, based in Los Angeles and Pittsburgh.</p>
     </div>
     <div>
       <h4>Films</h4>
@@ -586,7 +586,7 @@
   <div class="bottom">
     <div>&copy; 2026 Blue Pulse Studios</div>
     <div class="legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="shipping-returns.html">Shipping &amp; Returns</a></div>
-    <div>Made patiently</div>
+    <div>Los Angeles &middot; Pittsburgh</div>
   </div>
 </footer>
 
@@ -603,6 +603,20 @@
   }, { passive: true });
 </script>
 
+<script>
+  /* Tag each social link so the admin Social Links connector can set its URL.
+     Matches by the visible platform name; "Enter the community" buttons -> Discord. */
+  (function () {
+    var keys = ['youtube', 'x', 'instagram', 'reddit', 'bluesky', 'tiktok', 'vrchat', 'discord'];
+    document.querySelectorAll('a.soc').forEach(function (a) {
+      var name = (a.querySelector('.name') ? a.querySelector('.name').textContent : '').trim().toLowerCase();
+      for (var i = 0; i < keys.length; i++) {
+        if (name === keys[i] || name.indexOf(keys[i]) === 0) { a.setAttribute('data-social', keys[i]); break; }
+      }
+    });
+    document.querySelectorAll('a.enter').forEach(function (a) { a.setAttribute('data-social', 'discord'); });
+  })();
+</script>
 <script src="site.js"></script>
 </body>
 </html>

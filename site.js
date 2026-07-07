@@ -258,6 +258,83 @@ window.bpsSubscribe = function (form, e) {
   });
 })();
 
+/* ——— SOCIAL LINKS — set from the admin console (Social Links).
+   Any element tagged data-social="youtube|x|instagram|reddit|bluesky|
+   tiktok|vrchat|discord" gets its href from the saved links. ——— */
+(function () {
+  let links = {};
+  try { links = JSON.parse(localStorage.getItem('bpsSocialLinks') || '{}'); } catch (_) {}
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('[data-social]').forEach(function (a) {
+      const url = links[a.getAttribute('data-social')];
+      if (url) {
+        a.href = url;
+        a.removeAttribute('data-placeholder'); // a real link is no longer a placeholder
+      }
+    });
+  });
+})();
+
+/* ——— COPY EDITOR — page-by-page in-place text editing.
+   Overrides saved from edit mode are re-applied on every load, so copy
+   changes show without touching the HTML. To publish for all visitors,
+   use "Export" in the admin console and bake the text into the page.
+   Enter edit mode: open any page with #bps-edit (the admin console has
+   one-click links), or the admin "Copy Editor" tab. ——— */
+(function () {
+  const KEY = 'bpsCopyOverrides';
+  const page = (location.pathname.split('/').pop() || 'index.html');
+  const SEL = 'h1,h2,h3,h4,p,li,blockquote,.lede,.sub,.tagline,.blurb,.logline,.kicker,.eyebrow,.drop';
+  function store() { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (_) { return {}; } }
+  function put(o) { localStorage.setItem(KEY, JSON.stringify(o)); }
+  function editable() {
+    return Array.prototype.slice.call(document.querySelectorAll(SEL)).filter(function (el) {
+      if (el.closest('nav, .nav, .meta-bar, script, style, .legal, #bpsCopyBar')) return false;
+      if (el.querySelector(SEL)) return false;              // only leaf text blocks
+      return el.textContent.trim().length > 0;
+    });
+  }
+  function keyOf(i) { return page + '::' + i; }
+
+  // Re-apply saved overrides on every load
+  (function apply() {
+    const o = store(), els = editable();
+    els.forEach(function (el, i) { const k = keyOf(i); if (o[k] != null) el.innerHTML = o[k]; });
+  })();
+
+  // Edit mode
+  if (location.hash === '#bps-edit') enterEditMode();
+  function enterEditMode() {
+    const els = editable();
+    els.forEach(function (el) { el.setAttribute('contenteditable', 'true'); el.style.outline = '1px dashed rgba(107,180,232,.6)'; el.style.outlineOffset = '3px'; });
+    const bar = document.createElement('div');
+    bar.id = 'bpsCopyBar';
+    bar.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:200000;background:#02040A;border-top:1px solid #1D5FB8;color:#CFD9E4;font-family:Inter,sans-serif;font-size:12px;letter-spacing:.05em;display:flex;gap:14px;align-items:center;justify-content:center;padding:12px';
+    bar.innerHTML = '<span style="color:#6BB4E8;letter-spacing:.3em;text-transform:uppercase;font-size:10px;font-weight:600">Copy edit mode</span>'
+      + '<span style="color:#8B929C">Click any text to edit it.</span>'
+      + '<button id="bpsCopySave" style="padding:8px 18px;background:#CFD9E4;color:#02040A;border:0;font-weight:600;font-size:10px;letter-spacing:.3em;text-transform:uppercase;cursor:pointer">Save</button>'
+      + '<button id="bpsCopyReset" style="padding:8px 18px;background:transparent;color:#C94F4F;border:1px solid #C94F4F;font-size:10px;letter-spacing:.3em;text-transform:uppercase;cursor:pointer">Reset page</button>'
+      + '<button id="bpsCopyExit" style="padding:8px 18px;background:transparent;color:#8B929C;border:1px solid #132341;font-size:10px;letter-spacing:.3em;text-transform:uppercase;cursor:pointer">Exit</button>';
+    document.body.appendChild(bar);
+    document.body.style.paddingBottom = '64px';
+    document.getElementById('bpsCopySave').onclick = function () {
+      const o = store();
+      editable().forEach(function (el, i) { o[keyOf(i)] = el.innerHTML; });
+      put(o);
+      this.textContent = 'Saved ✓';
+      setTimeout(function () { location.hash = ''; location.reload(); }, 600);
+    };
+    document.getElementById('bpsCopyReset').onclick = function () {
+      if (!confirm('Reset all copy on this page to the original?')) return;
+      const o = store();
+      Object.keys(o).forEach(function (k) { if (k.indexOf(page + '::') === 0) delete o[k]; });
+      put(o);
+      location.hash = ''; location.reload();
+    };
+    document.getElementById('bpsCopyExit').onclick = function () { location.hash = ''; location.reload(); };
+  }
+})();
+
 /* Placeholder mode — flag is set from the admin console (Site Settings).
    When on, content tagged data-placeholder is hidden sitewide. */
 (function () {
