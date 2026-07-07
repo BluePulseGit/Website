@@ -1,6 +1,7 @@
 /* Shared product catalog — loaded by shop.html and product.html */
 window.PRODUCTS = {
   'ashen-hoodie': {
+    comingSoon: true,
     name: 'The Ashen Man Hoodie',
     kicker: 'Stay Home · Drop 01',
     price: 95,
@@ -23,6 +24,7 @@ window.PRODUCTS = {
     ]
   },
   'shelby-figure': {
+    comingSoon: true,
     name: 'Shelby Collectible Figure',
     kicker: 'Stay Home · 1/6 Scale · Preorder',
     price: 220,
@@ -45,6 +47,7 @@ window.PRODUCTS = {
     ]
   },
   'ashen-figure': {
+    comingSoon: true,
     name: 'The Ashen Man Figure',
     kicker: 'Stay Home · 1/6 Scale · Preorder',
     price: 240,
@@ -67,6 +70,7 @@ window.PRODUCTS = {
     ]
   },
   'board-game': {
+    comingSoon: true,
     name: 'Change History. Survive the Night.',
     kicker: 'Stay Home · Cooperative Board Game',
     price: 75,
@@ -87,6 +91,7 @@ window.PRODUCTS = {
     ]
   },
   'painting-poster': {
+    comingSoon: true,
     name: 'Original Poster Print',
     kicker: 'The Painting · 2025',
     price: 35,
@@ -137,7 +142,29 @@ window.PRODUCTS = {
       'One size fits most'
     ]
   },
+  'bps-tee': {
+    name: 'Blue Pulse Logo Tee',
+    kicker: 'Studio · Staple',
+    price: 35,
+    image: 'assets/bps-logo-tee.webp',
+    category: 'apparel',
+    categoryLabel: 'Apparel',
+    sizes: ['S', 'M', 'L', 'XL', '2XL'],
+    fit: 'contain',
+    pill: 'Studio · Staple',
+    stock: 'In stock',
+    tagline: 'The mark, in white, on black. Nothing else.',
+    description: "A simple black tee carrying the Blue Pulse Studios mark in white — nothing else. Heavyweight combed cotton, screen-printed and pre-shrunk. Not a drop, not a limited run: the quiet one you actually reach for.",
+    features: [
+      'Heavyweight combed ring-spun cotton, black',
+      'White screen-printed BPS mark, chest',
+      'Pre-shrunk, reinforced collar',
+      'Unisex fit',
+      'A studio staple — always in stock'
+    ]
+  },
   'red-winter-rulebook': {
+    comingSoon: true,
     name: 'Red Winter \u2014 Core Rulebook',
     kicker: 'Red Winter \u00b7 WWII RPG',
     price: 65,
@@ -158,6 +185,7 @@ window.PRODUCTS = {
     ]
   },
   'red-winter-ivan': {
+    comingSoon: true,
     name: 'Ivan \u2014 Russian Super Soldier',
     kicker: 'Red Winter \u00b7 Hero Expansion',
     price: 45,

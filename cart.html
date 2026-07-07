@@ -20,6 +20,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="site.css">
 <script src="products.js"></script>
+<script src="shopify.js"></script>
 <style>
   :root {
     --paper: #FAFAFA; --paper-2: #F2F2F2; --ink: #0F0F0F; --stone: #6B6B6B;
@@ -438,7 +439,7 @@
         render();
       });
     });
-    document.getElementById('checkoutBtn').addEventListener('click', openCheckout);
+    document.getElementById('checkoutBtn').addEventListener('click', handleCheckout);
     // Related: based on cart contents
     const cartIds = cart.map(c => c.id);
     let related = [];
@@ -469,6 +470,28 @@
         <div class="info"><div class="k">${(r.kicker || '').split(' · ')[0]}</div><div class="n">${r.name}</div><div class="p">$${r.price}</div></div>`;
       grid.appendChild(a);
     });
+  }
+
+  // Checkout — route to Shopify's secure checkout when connected,
+  // otherwise fall back to the built-in demo modal.
+  async function handleCheckout() {
+    const items = window.bpsCart.get();
+    if (!items.length) return;
+    if (window.bpsShopify && window.bpsShopify.configured()) {
+      const btn = document.getElementById('checkoutBtn');
+      const label = btn.textContent;
+      btn.disabled = true; btn.textContent = 'Opening secure checkout…';
+      try {
+        const { url } = await window.bpsShopify.checkout(items);
+        window.location.href = url;   // Shopify hosted checkout
+        return;
+      } catch (e) {
+        btn.disabled = false; btn.textContent = label;
+        alert('Could not reach checkout just now. Please try again in a moment.');
+        return;
+      }
+    }
+    openCheckout(); // demo checkout (no Shopify token configured yet)
   }
 
   // Checkout modal
