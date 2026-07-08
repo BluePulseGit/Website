@@ -616,6 +616,48 @@ window.bpsSubscribe = function (form, e) {
   });
 })();
 
+/* ——— LANGUAGE — auto-translate switcher (Google Translate). A globe control
+   (bottom-right) lets visitors read the whole site in dozens of languages.
+   The choice is stored in the googtrans cookie and applied on load. ——— */
+(function () {
+  window.googleTranslateElementInit = function () {
+    try { new google.translate.TranslateElement({ pageLanguage: 'en', autoDisplay: false }, 'bpsGT'); } catch (_) {}
+  };
+  function currentLang() { var m = document.cookie.match(/googtrans=\/en\/([\w-]+)/); return m ? m[1] : ''; }
+  document.addEventListener('DOMContentLoaded', function () {
+    var st = document.createElement('style');
+    st.textContent =
+      '.goog-te-banner-frame,.goog-te-gadget-icon,.skiptranslate iframe,#goog-gt-tt{display:none !important}' +
+      'body{top:0 !important;position:static !important}' +
+      '#bpsLang{position:fixed;right:18px;bottom:18px;z-index:8500;display:flex;align-items:center;gap:7px;background:#0A1A35;border:1px solid #1D5FB8;border-radius:999px;padding:8px 12px 8px 14px;box-shadow:0 8px 30px rgba(0,0,0,.5)}' +
+      '#bpsLang svg{width:15px;height:15px;color:#6BB4E8;flex:none}' +
+      '#bpsLang select{background:transparent;border:0;color:#CFD9E4;font:500 11px/1 Inter,sans-serif;letter-spacing:.06em;cursor:pointer;outline:none}' +
+      '#bpsLang select option{background:#0A1A35;color:#CFD9E4}';
+    document.head.appendChild(st);
+    var mount = document.createElement('div'); mount.id = 'bpsGT'; mount.style.cssText = 'position:absolute;left:-9999px;top:-9999px'; document.body.appendChild(mount);
+    var LANGS = [['', 'English'], ['es', 'Español'], ['fr', 'Français'], ['de', 'Deutsch'], ['ja', '日本語'], ['zh-CN', '中文'], ['pt', 'Português'], ['it', 'Italiano'], ['ko', '한국어'], ['ru', 'Русский'], ['ar', 'العربية'], ['hi', 'हिन्दी'], ['nl', 'Nederlands'], ['pl', 'Polski'], ['tr', 'Türkçe'], ['vi', 'Tiếng Việt'], ['id', 'Indonesia'], ['th', 'ไทย'], ['uk', 'Українська'], ['sv', 'Svenska']];
+    var wrap = document.createElement('div'); wrap.id = 'bpsLang'; wrap.className = 'notranslate';
+    wrap.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.5 4 6 4 9s-1.5 6.5-4 9c-2.5-2.5-4-6-4-9s1.5-6.5 4-9z"/></svg>';
+    var sel = document.createElement('select'); sel.setAttribute('aria-label', 'Choose language');
+    LANGS.forEach(function (l) { var o = document.createElement('option'); o.value = l[0]; o.textContent = l[1]; sel.appendChild(o); });
+    wrap.appendChild(sel); document.body.appendChild(wrap);
+    sel.value = currentLang();
+    var host = location.hostname;
+    sel.addEventListener('change', function () {
+      var lang = sel.value;
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/';
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + host;
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.' + host;
+      if (lang) {
+        document.cookie = 'googtrans=/en/' + lang + ';path=/';
+        document.cookie = 'googtrans=/en/' + lang + ';path=/;domain=.' + host;
+      }
+      location.reload();
+    });
+    var sc = document.createElement('script'); sc.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'; document.body.appendChild(sc);
+  });
+})();
+
 /* ——— CLOUDFLARE WEB ANALYTICS — cookieless page-view analytics for the whole
    site. Skipped only if the visitor chose "Deny" in the cookie banner. Data
    lives in the Cloudflare dashboard (linked from the admin Analytics tab). ——— */
