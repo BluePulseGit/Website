@@ -649,7 +649,7 @@
       $('socialExport').style.display = 'block';
       $('socialExport').select();
       try { document.execCommand('copy'); } catch (_) {}
-      $('socialStatus').textContent = 'Copied — send to your developer to publish for all visitors.';
+      $('socialStatus').textContent = 'Copied — paste this over the window.BPS_SOCIALS = {…} block in socials.js and commit to publish for all visitors.';
     });
     $('socialClear').addEventListener('click', () => {
       if (!confirm('Clear all social links?')) return;

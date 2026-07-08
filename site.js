@@ -262,14 +262,27 @@ window.bpsSubscribe = function (form, e) {
    Any element tagged data-social="youtube|x|instagram|reddit|bluesky|
    tiktok|vrchat|discord" gets its href from the saved links. ——— */
 (function () {
+  // Published links (socials.js → window.BPS_SOCIALS) as the base, with the
+  // admin console's in-browser saves (localStorage) layered on top for preview.
   let links = {};
-  try { links = JSON.parse(localStorage.getItem('bpsSocialLinks') || '{}'); } catch (_) {}
+  try { links = Object.assign({}, (window.BPS_SOCIALS || {})); } catch (_) {}
+  try { Object.assign(links, JSON.parse(localStorage.getItem('bpsSocialLinks') || '{}')); } catch (_) {}
+  function isRealUrl(u) { return typeof u === 'string' && /^https?:\/\//i.test(u.trim()); }
   document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('[data-social]').forEach(function (a) {
       const url = links[a.getAttribute('data-social')];
-      if (url) {
-        a.href = url;
-        a.removeAttribute('data-placeholder'); // a real link is no longer a placeholder
+      if (isRealUrl(url)) {
+        a.href = url.trim();
+        a.setAttribute('target', '_blank');
+        a.setAttribute('rel', 'noopener noreferrer');
+        a.removeAttribute('data-placeholder');   // a real link is no longer a placeholder
+        a.removeAttribute('aria-disabled');
+      } else {
+        // Not configured yet — mark as placeholder and stop the "#" href from
+        // reloading the page when clicked.
+        a.setAttribute('data-placeholder', '');
+        a.setAttribute('aria-disabled', 'true');
+        a.addEventListener('click', function (e) { e.preventDefault(); });
       }
     });
   });
