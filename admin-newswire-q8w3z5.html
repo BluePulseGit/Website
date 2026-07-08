@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow, noarchive" />
 <link rel="icon" href="favicon.ico" sizes="any" />
 <meta name="theme-color" content="#02040A" />
-<title>Newswire Console — Blue Pulse Studios</title>
+<title>Admin Console — Blue Pulse Studios</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -22,6 +22,7 @@
   .topbar .actions { display: flex; gap: 20px; align-items: center; }
   .topbar a, .topbar button { background: none; border: 0; color: var(--stone); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; text-decoration: none; transition: color .4s; }
   .topbar a:hover, .topbar button:hover { color: var(--foam); }
+  .topbar .active { color: var(--glow); }
 
   .demo-note { padding: 12px 40px; background: rgba(29,95,184,0.12); border-bottom: 1px solid var(--hair); font-size: 11.5px; color: var(--glow); line-height: 1.5; }
 
@@ -112,7 +113,7 @@
 <body>
 
 <div class="topbar">
-  <a class="brand" href="homepage.html">BLUE PULSE <span>// NEWSWIRE CONSOLE</span></a>
+  <a class="brand" href="homepage.html">BLUE PULSE <span>// ADMIN CONSOLE</span></a>
   <div class="actions" id="topActions" style="display:none">
     <a href="journal.html" target="_blank" rel="noopener">View Newswire</a>
     <button id="copyBtn" title="Edit the words on any page">Copy Editor</button>
@@ -282,9 +283,13 @@
       <h2 style="font-family:var(--display);font-weight:300;font-size:28px;margin-bottom:8px">Pitch decks</h2>
       <p style="font-family:var(--display);font-style:italic;font-size:13px;color:var(--stone);margin-bottom:26px">Password-protected screening pages for industry contacts &mdash; send a branded link instead of a raw Canva share. Each deck plays either a live Canva embed or a hosted MP4, with an optional ambient background loop. Highly sensitive: these pages are noindexed, and for real security they sit behind Cloudflare Access (see ADMIN-ACCESS). After adding or editing a deck, hit <strong style="color:var(--foam)">Export</strong> and commit <code style="color:var(--glow)">pitch-decks.js</code> so recipients actually see it.</p>
 
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <span style="font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:var(--stone);font-weight:500">Your decks</span>
+        <button type="button" class="btn" id="pkAddBtn">+ Add deck</button>
+      </div>
       <div id="pitchList" style="display:grid;gap:10px;margin-bottom:30px"></div>
 
-      <form id="pitchForm">
+      <form id="pitchForm" style="display:block">
         <div class="two">
           <div class="fld"><label for="pkTitle">Title</label><input id="pkTitle" type="text" required></div>
           <div class="fld"><label for="pkMode">Playback</label>
@@ -297,9 +302,13 @@
           <div class="fld"><label for="pkPoster">Poster image (optional)</label><input id="pkPoster" type="text" placeholder="assets/decks/stay-home.jpg"></div>
         </div>
         <div class="two">
-          <div class="fld"><label for="pkCompanies">Production companies</label><input id="pkCompanies" type="text" placeholder="Blue Pulse Studios, Partner Co."><div class="help">Comma-separated. Listed on the screening page.</div></div>
-          <div class="fld"><label for="pkLogline">Logline</label><input id="pkLogline" type="text" placeholder="One line under the title."></div>
+          <div class="fld"><label for="pkFormat">Format</label>
+            <select id="pkFormat"><option>Feature Film</option><option>Short Film</option><option>Television</option><option>Limited Series</option><option>Video Game</option><option>Other</option></select>
+          </div>
+          <div class="fld"><label for="pkGenre">Genre</label><input id="pkGenre" type="text" placeholder="Horror, Sci-Fi Thriller…"></div>
         </div>
+        <div class="fld"><label for="pkCompanies">Production companies</label><input id="pkCompanies" type="text" placeholder="Blue Pulse Studios, Partner Co."><div class="help">Comma-separated. Listed on the screening page.</div></div>
+        <div class="fld"><label for="pkLogline">Accompanying text (logline / description)</label><textarea id="pkLogline" style="min-height:90px" placeholder="A sentence or two shown under the title on the screening page."></textarea><div class="help">Tailor it per project — film, series, or game. Line breaks are kept.</div></div>
         <div class="two">
           <div class="fld"><label for="pkVis">Access</label>
             <select id="pkVis"><option value="password">Password protected</option><option value="unlisted">Unlisted (link only)</option></select>
@@ -341,6 +350,10 @@
   const F = window.bpsNews.fmt;
   let currentId = null;
   let currentImage = '';
+
+  /* highlight the active topbar tab in blue */
+  const NAVBTNS = ['copyBtn', 'socialBtn', 'pitchBtn', 'pageSeoBtn'];
+  function setActiveNav(id) { NAVBTNS.forEach(b => { const el = $(b); if (el) el.classList.toggle('active', b === id); }); }
 
   /* ——— login ——— */
   function showConsole(on) {
@@ -425,6 +438,7 @@
     var _cp = $('copyPanel'); if (_cp) _cp.style.display = 'none';
     var _sf = $('socialForm'); if (_sf) _sf.style.display = 'none';
     var _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none';
+    setActiveNav(null);
     $('edForm').classList.add('on');
     renderList();
   }
@@ -440,6 +454,7 @@
     var _cp = $('copyPanel'); if (_cp) _cp.style.display = 'none';
     var _sf = $('socialForm'); if (_sf) _sf.style.display = 'none';
     var _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none';
+    setActiveNav(null);
     $('edForm').classList.add('on');
     renderList();
     $('fTitle').focus();
@@ -542,6 +557,7 @@
     $('edForm').classList.remove('on');
     $('edPlaceholder').style.display = showing ? 'block' : 'none';
     if (!showing) metaLoadPage();
+    setActiveNav(showing ? null : 'pageSeoBtn');
   });
 
   /* ——— Copy Editor ——— */
@@ -567,6 +583,7 @@
       $('edPlaceholder').style.display = showing ? 'block' : 'none';
       $('copyExportBox').style.display = 'none';
       $('copyStatus').textContent = '';
+      setActiveNav(showing ? null : 'copyBtn');
     });
     $('copyExport').addEventListener('click', () => {
       let o = {};
@@ -617,6 +634,7 @@
       $('socialExport').style.display = 'none';
       $('socialStatus').textContent = '';
       if (!showing) load();
+      setActiveNav(showing ? null : 'socialBtn');
     });
     $('socialForm').addEventListener('submit', (e) => {
       e.preventDefault();
@@ -746,6 +764,7 @@ ${items}
     function fill(d) {
       P('pkTitle').value = d.title || ''; P('pkMode').value = d.mode || 'canva';
       P('pkCanva').value = d.canvaUrl || ''; P('pkVideo').value = d.videoUrl || ''; P('pkPoster').value = d.poster || '';
+      P('pkFormat').value = d.format || 'Feature Film'; P('pkGenre').value = d.genre || '';
       P('pkCompanies').value = (d.companies || []).join(', '); P('pkLogline').value = d.logline || '';
       P('pkVis').value = d.visibility || 'password'; P('pkPass').value = d.password || '';
       P('pkAmbient').value = d.ambient || ''; P('pkAmbVol').value = (d.ambientVol != null ? d.ambientVol : 0.35);
@@ -754,6 +773,7 @@ ${items}
     function openDeck(slug) { const d = all().find((x) => x.slug === slug); if (!d) return; selSlug = slug; fill(d); P('pkStatus').textContent = ''; P('pkExportBox').style.display = 'none'; renderList(); }
     function blankForm() { selSlug = null; P('pitchForm').reset(); P('pkMode').value = 'canva'; P('pkVis').value = 'password'; P('pkAmbVol').value = '0.35'; modeSync(); visSync(); P('pkStatus').textContent = ''; P('pkExportBox').style.display = 'none'; renderList(); P('pkTitle').focus(); }
     P('pkNew').addEventListener('click', blankForm);
+    var _pkAdd = P('pkAddBtn'); if (_pkAdd) _pkAdd.addEventListener('click', blankForm);
 
     P('pitchForm').addEventListener('submit', (e) => {
       e.preventDefault();
@@ -766,6 +786,8 @@ ${items}
       d.videoUrl = P('pkVideo').value.trim();
       d.poster = P('pkPoster').value.trim();
       d.companies = P('pkCompanies').value.split(',').map((s) => s.trim()).filter(Boolean);
+      d.format = P('pkFormat').value;
+      d.genre = P('pkGenre').value.trim();
       d.logline = P('pkLogline').value.trim();
       d.visibility = P('pkVis').value;
       d.password = P('pkPass').value.trim();
@@ -804,6 +826,7 @@ ${items}
       P('pitchPanel').style.display = showing ? 'none' : 'block';
       $('edPlaceholder').style.display = showing ? 'block' : 'none';
       if (!showing) { selSlug = null; blankForm(); }
+      setActiveNav(showing ? null : 'pitchBtn');
     });
   })();
 

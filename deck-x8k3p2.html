@@ -6,6 +6,9 @@
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 <meta name="referrer" content="no-referrer">
 <title>Screening Room — Blue Pulse Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="site.css">
 <style>
   :root{
@@ -79,7 +82,8 @@
     background:linear-gradient(0deg,rgba(0,0,0,.6),transparent);
     font:400 12px/1.4 'Inter';color:var(--dim);z-index:5;
   }
-  .infobar .logline{color:var(--ink)}
+  .infobar .logline{color:var(--ink);font-family:'Fraunces',serif;font-style:italic;font-size:14px}
+  .infobar .filmmeta{letter-spacing:.2em;text-transform:uppercase;font-size:10px;color:var(--blue);font-weight:600}
   .infobar .companies{color:var(--dim)}
   .infobar .companies b{color:var(--blue);font-weight:500}
   .infobar .conf{margin-left:auto;letter-spacing:.2em;text-transform:uppercase;font-size:10px;color:#5a5f66;border:1px solid var(--line);border-radius:4px;padding:5px 9px}
@@ -96,7 +100,7 @@
     box-shadow:0 30px 90px rgba(0,0,0,.6);
   }
   .card .mark{font:600 11px/1 'Inter';letter-spacing:.36em;text-transform:uppercase;color:var(--blue);margin-bottom:20px}
-  .card h1{font:600 22px/1.25 'Inter';letter-spacing:.01em;margin:0 0 6px}
+  .card h1{font-family:'Fraunces',serif;font-weight:300;font-size:27px;line-height:1.2;letter-spacing:.005em;margin:0 0 6px}
   .card p{color:var(--dim);margin:0 0 22px;font-size:13px}
   .card input[type=password]{
     width:100%;padding:14px 16px;border-radius:9px;border:1px solid var(--line);
@@ -136,6 +140,7 @@
     </div>
 
     <div class="infobar">
+      <span class="filmmeta" id="iMeta"></span>
       <span class="logline" id="iLogline"></span>
       <span class="companies" id="iCompanies"></span>
       <span class="conf">Confidential</span>
@@ -180,6 +185,8 @@
   document.getElementById('tTitle').textContent = deck.title;
   document.getElementById('gTitle').textContent = deck.title;
   document.getElementById('iLogline').textContent = deck.logline || '';
+  var _meta=[deck.genre, deck.format].filter(Boolean).join(' · ');
+  var _mEl=document.getElementById('iMeta'); if(_mEl) _mEl.textContent=_meta;
   var comp = (deck.companies||[]).filter(Boolean);
   document.getElementById('iCompanies').innerHTML = comp.length ? ('Produced by ' + comp.map(function(c){return '<b>'+c.replace(/</g,'&lt;')+'</b>';}).join(' &middot; ')) : '';
 

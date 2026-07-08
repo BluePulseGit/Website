@@ -21,7 +21,9 @@
      videoUrl    path/URL to the MP4 (for mode 'video'), e.g. assets/decks/stay-home.mp4
      poster      optional poster image for video mode
      companies   array of production-company names listed on the page
-     logline     one-line description under the title
+     format      medium — e.g. "Feature Film", "Television", "Video Game", "Short"
+     genre       e.g. "Horror", "Sci-Fi Thriller"
+     logline     accompanying text / description under the title (supports line breaks)
      visibility  'unlisted' (link-only, noindex) | 'password' (blurred gate)
      password    client-side gate value (obscurity; pair with Cloudflare Access)
      ambient     optional path/URL to an ambient background loop (mp3), e.g. assets/decks/stay-home-amb.mp3
@@ -36,7 +38,9 @@ window.BPS_PITCH_DECKS = [
     videoUrl: "",
     poster: "",
     companies: ["Blue Pulse Studios"],
-    logline: "A feature pitch — patient dread, handmade horror.",
+    format: "Feature Film",
+    genre: "Horror",
+    logline: "A no-holds-barred single-location horror — a woman trapped in a deadly loop, hunted by masked killers.",
     visibility: "password",
     password: "stayhome2026",
     ambient: "",
