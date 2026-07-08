@@ -699,6 +699,66 @@ window.bpsSubscribe = function (form, e) {
   if (foot) document.addEventListener('DOMContentLoaded', function () { inject(foot, document.body); });
 })();
 
+/* ——— CURRENCY — show shop prices in the visitor's currency. Reads whatever
+   price is on the page (so it tracks Shopify's live price automatically) and
+   converts with daily FX rates. Estimate only — checkout charges in USD. ——— */
+(function () {
+  var CUR = { USD: { s: '$', d: 2 }, EUR: { s: '€', d: 2 }, GBP: { s: '£', d: 2 }, CAD: { s: 'CA$', d: 2 }, JPY: { s: '¥', d: 0 } };
+  var KEY = 'bpsCurrency', RKEY = 'bpsFxRates', PRICE_RE = /^\s*\$\s?([\d,]+(?:\.\d{1,2})?)\s*$/;
+  function cur() { try { return localStorage.getItem(KEY) || 'USD'; } catch (_) { return 'USD'; } }
+  var rates = null, observer = null;
+  function convert() {
+    var code = cur();
+    if (observer) observer.disconnect();
+    var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT), nodes = [], n;
+    while (n = w.nextNode()) nodes.push(n);
+    nodes.forEach(function (t) {
+      var el = t.parentElement; if (!el) return;
+      if (el.closest('script,style,input,textarea,#bpsCur,#bpsLang,#bpsA11yPanel,#bpsCookie,#bpsGalleryPicker')) return;
+      var stored = el.getAttribute('data-bps-usd');
+      if (!stored) {
+        var raw = t.nodeValue || '';
+        if (!PRICE_RE.test(raw)) return;
+        stored = raw; el.setAttribute('data-bps-usd', raw); el.classList.add('notranslate');
+      }
+      var m = stored.match(PRICE_RE); if (!m) return;
+      var usd = parseFloat(m[1].replace(/,/g, ''));
+      if (code === 'USD' || !rates || !rates[code]) { if (t.nodeValue !== stored) t.nodeValue = stored; }
+      else { var c = CUR[code]; t.nodeValue = '≈ ' + c.s + (usd * rates[code]).toLocaleString(undefined, { minimumFractionDigits: c.d, maximumFractionDigits: c.d }); }
+    });
+    if (observer) observer.observe(document.body, { childList: true, subtree: true });
+  }
+  var _t; function schedule() { clearTimeout(_t); _t = setTimeout(convert, 250); }
+  function loadRates(cb) {
+    if (rates) { cb(); return; }
+    try { var c = JSON.parse(localStorage.getItem(RKEY) || 'null'); if (c && (Date.now() - c.t) < 86400000) { rates = c.r; cb(); return; } } catch (_) {}
+    fetch('https://open.er-api.com/v6/latest/USD').then(function (r) { return r.json(); }).then(function (j) {
+      if (j && j.rates) { rates = j.rates; try { localStorage.setItem(RKEY, JSON.stringify({ t: Date.now(), r: rates })); } catch (_) {} }
+      cb();
+    }).catch(cb);
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.nav .brand, footer .mark, .brand-col .mark').forEach(function (e) { e.classList.add('notranslate'); e.setAttribute('translate', 'no'); });
+    var st = document.createElement('style');
+    st.textContent =
+      '#bpsCur{position:fixed;right:18px;bottom:62px;z-index:8500;display:flex;align-items:center;gap:7px;background:#0A1A35;border:1px solid #1D5FB8;border-radius:999px;padding:8px 12px 8px 14px;box-shadow:0 8px 30px rgba(0,0,0,.5)}' +
+      '#bpsCur svg{width:14px;height:14px;color:#6BB4E8;flex:none}' +
+      '#bpsCur select{background:transparent;border:0;color:#CFD9E4;font:500 11px/1 Inter,sans-serif;letter-spacing:.06em;cursor:pointer;outline:none}' +
+      '#bpsCur select option{background:#0A1A35;color:#CFD9E4}';
+    document.head.appendChild(st);
+    var wrap = document.createElement('div'); wrap.id = 'bpsCur'; wrap.className = 'notranslate';
+    wrap.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>';
+    var s = document.createElement('select'); s.setAttribute('aria-label', 'Currency');
+    Object.keys(CUR).forEach(function (c) { var o = document.createElement('option'); o.value = c; o.textContent = c; s.appendChild(o); });
+    wrap.appendChild(s); document.body.appendChild(wrap);
+    s.value = cur();
+    s.addEventListener('change', function () { try { localStorage.setItem(KEY, s.value); } catch (_) {} rates = null; loadRates(convert); });
+    if (cur() !== 'USD') loadRates(convert); else convert();
+    setTimeout(function () { convert(); }, 700);
+    try { observer = new MutationObserver(schedule); observer.observe(document.body, { childList: true, subtree: true }); } catch (_) {}
+  });
+})();
+
 /* ——— COPY EDITOR — page-by-page in-place text editing.
    Overrides saved from edit mode are re-applied on every load, so copy
    changes show without touching the HTML. To publish for all visitors,
