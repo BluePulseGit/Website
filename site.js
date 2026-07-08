@@ -599,7 +599,7 @@ window.bpsSubscribe = function (form, e) {
       '.bps-burger svg{width:26px;height:26px;display:block}' +
       '@media (max-width:760px){' +
       '.nav .bps-burger{display:block}' +
-      '.nav .links{position:fixed;top:0;right:0;height:100vh;width:min(80vw,320px);background:#02040A;border-left:1px solid #132341;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:4px;padding:90px 28px 28px;transform:translateX(100%);transition:transform .35s cubic-bezier(.2,.7,.2,1);overflow-y:auto;z-index:120}' +
+      '.nav .links{position:fixed !important;top:0;right:0;height:100vh;width:min(80vw,320px);background:#02040A;border-left:1px solid #132341;display:flex !important;flex-direction:column !important;align-items:flex-start;justify-content:flex-start;gap:4px;padding:90px 28px 28px;transform:translateX(100%);transition:transform .35s cubic-bezier(.2,.7,.2,1);overflow-y:auto;z-index:120}' +
       '.nav .links.bps-open{transform:none}' +
       '.nav .links a{margin:0 !important;padding:12px 0;font-size:12px !important;width:100%}' +
       '.nav .links .studio-menu,.nav .links .bps-proj{margin:0 !important;display:block;width:100%}' +
