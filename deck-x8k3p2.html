@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="referrer" content="no-referrer">
+<title>Screening Room — Blue Pulse Studios</title>
+<link rel="stylesheet" href="site.css">
+<style>
+  :root{
+    --bg:#08080A; --ink:#FAFAFA; --dim:#8A8F98; --line:#1E2126;
+    --blue:#6BB4E8; --panel:#0E0F12;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--bg); color:var(--ink);
+    font:400 15px/1.5 'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    overflow:hidden;
+  }
+  .wrap{position:fixed;inset:0;display:flex;flex-direction:column}
+
+  /* ——— top bar ——— */
+  .topbar{
+    display:flex;align-items:center;gap:16px;
+    padding:14px 22px;border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(0,0,0,.6),transparent);
+    z-index:5;
+  }
+  .brand{font:600 12px/1 'Inter';letter-spacing:.34em;text-transform:uppercase;color:var(--ink)}
+  .brand b{color:var(--blue);font-weight:600}
+  .deck-title{font:500 13px/1 'Inter';letter-spacing:.06em;color:var(--dim);margin-left:2px}
+  .deck-title strong{color:var(--ink);font-weight:600}
+  .spacer{flex:1}
+  .sound{
+    display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+    border:1px solid var(--line);border-radius:999px;padding:7px 13px;
+    background:var(--panel);color:var(--dim);font:500 11px/1 'Inter';
+    letter-spacing:.14em;text-transform:uppercase;user-select:none;
+  }
+  .sound:hover{color:var(--ink);border-color:#31363d}
+  .sound svg{width:14px;height:14px}
+  input.vol{width:78px;accent-color:var(--blue)}
+
+  /* ——— stage ——— */
+  .stage{position:relative;flex:1;min-height:0;background:#000;display:flex;align-items:center;justify-content:center}
+  .stage iframe,.stage video{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+  video{object-fit:contain}
+
+  /* nav arrows (video mode) */
+  .arrow{
+    position:absolute;top:50%;transform:translateY(-50%);
+    width:52px;height:52px;border-radius:999px;z-index:6;
+    display:none;align-items:center;justify-content:center;cursor:pointer;
+    background:rgba(8,8,10,.55);border:1px solid var(--line);color:var(--ink);
+    backdrop-filter:blur(6px);transition:background .2s,border-color .2s;
+  }
+  .arrow:hover{background:rgba(8,8,10,.85);border-color:var(--blue)}
+  .arrow svg{width:22px;height:22px}
+  .arrow.left{left:20px}.arrow.right{right:20px}
+  body.mode-video .arrow{display:flex}
+
+  .canva-hint{
+    position:absolute;bottom:16px;left:50%;transform:translateX(-50%);z-index:6;
+    font:500 11px/1.4 'Inter';letter-spacing:.06em;color:var(--dim);
+    background:rgba(8,8,10,.7);border:1px solid var(--line);border-radius:999px;
+    padding:8px 15px;display:none;text-align:center;
+  }
+  body.mode-canva .canva-hint{display:block}
+
+  /* ——— info bar ——— */
+  .infobar{
+    display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+    padding:12px 22px;border-top:1px solid var(--line);
+    background:linear-gradient(0deg,rgba(0,0,0,.6),transparent);
+    font:400 12px/1.4 'Inter';color:var(--dim);z-index:5;
+  }
+  .infobar .logline{color:var(--ink)}
+  .infobar .companies{color:var(--dim)}
+  .infobar .companies b{color:var(--blue);font-weight:500}
+  .infobar .conf{margin-left:auto;letter-spacing:.2em;text-transform:uppercase;font-size:10px;color:#5a5f66;border:1px solid var(--line);border-radius:4px;padding:5px 9px}
+
+  /* ——— gate / splash ——— */
+  .gate{
+    position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
+    background:rgba(4,4,6,.55);backdrop-filter:blur(22px) saturate(.7);-webkit-backdrop-filter:blur(22px) saturate(.7);
+  }
+  .gate.hidden{display:none}
+  .card{
+    width:min(92vw,420px);text-align:center;padding:38px 34px;
+    background:rgba(14,15,18,.9);border:1px solid var(--line);border-radius:14px;
+    box-shadow:0 30px 90px rgba(0,0,0,.6);
+  }
+  .card .mark{font:600 11px/1 'Inter';letter-spacing:.36em;text-transform:uppercase;color:var(--blue);margin-bottom:20px}
+  .card h1{font:600 22px/1.25 'Inter';letter-spacing:.01em;margin:0 0 6px}
+  .card p{color:var(--dim);margin:0 0 22px;font-size:13px}
+  .card input[type=password]{
+    width:100%;padding:14px 16px;border-radius:9px;border:1px solid var(--line);
+    background:#050506;color:var(--ink);font:500 15px/1 'Inter';letter-spacing:.18em;text-align:center;
+  }
+  .card input[type=password]:focus{outline:none;border-color:var(--blue)}
+  .card button{
+    margin-top:14px;width:100%;padding:14px;border:0;border-radius:9px;cursor:pointer;
+    background:var(--blue);color:#04121d;font:600 12px/1 'Inter';letter-spacing:.2em;text-transform:uppercase;
+  }
+  .card button:hover{filter:brightness(1.08)}
+  .card .err{color:#E0533D;font-size:12px;min-height:16px;margin-top:12px;letter-spacing:.02em}
+  .enterbtn{margin-top:6px}
+  .missing{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--dim);z-index:60}
+</style>
+</head>
+<body>
+  <div class="wrap" id="wrap" aria-hidden="true">
+    <div class="topbar">
+      <span class="brand">BLUE&nbsp;PULSE&nbsp;<b>STUDIOS</b></span>
+      <span class="deck-title">Screening Room · <strong id="tTitle">—</strong></span>
+      <span class="spacer"></span>
+      <span class="sound" id="soundToggle" title="Toggle ambient sound" hidden>
+        <svg id="sIconOn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8a5 5 0 0 1 0 8"/></svg>
+        <span id="sLabel">Ambient</span>
+        <input class="vol" id="vol" type="range" min="0" max="1" step="0.01" hidden>
+      </span>
+    </div>
+
+    <div class="stage" id="stage">
+      <div class="arrow left" id="prev" title="Previous" role="button" tabindex="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></div>
+      <div class="arrow right" id="next" title="Next" role="button" tabindex="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div>
+      <div class="canva-hint" id="canvaHint">Use the deck's own arrows to advance · click the slide once to enable its sound</div>
+    </div>
+
+    <div class="infobar">
+      <span class="logline" id="iLogline"></span>
+      <span class="companies" id="iCompanies"></span>
+      <span class="conf">Confidential</span>
+    </div>
+  </div>
+
+  <!-- gate: password or enter-splash -->
+  <div class="gate" id="gate">
+    <div class="card">
+      <div class="mark">BLUE PULSE STUDIOS</div>
+      <h1 id="gTitle">Screening Room</h1>
+      <p id="gSub">This presentation is protected.</p>
+      <form id="gForm">
+        <input type="password" id="gPass" placeholder="••••••••" autocomplete="off" hidden>
+        <button type="submit" id="gBtn">Enter</button>
+        <div class="err" id="gErr"></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="missing" id="missing" hidden><div><div style="letter-spacing:.34em;text-transform:uppercase;font-size:11px;color:var(--blue);margin-bottom:10px">Blue Pulse Studios</div>This link isn't valid or has been retired.</div></div>
+
+<script src="pitch-decks.js"></script>
+<script>
+(function(){
+  // ——— locate the deck ———
+  var params = new URLSearchParams(location.search);
+  var slug = params.get('d');
+  var baked = window.BPS_PITCH_DECKS || [];
+  // admin live-preview overlay (admin's own browser only)
+  var local = [];
+  try { local = JSON.parse(localStorage.getItem('bpsPitchDecks')||'[]'); } catch(e){}
+  var all = baked.slice();
+  local.forEach(function(d){ var i=all.findIndex(function(x){return x.slug===d.slug;}); if(i>=0) all[i]=d; else all.push(d); });
+  var deck = all.find(function(d){ return d.slug===slug; });
+
+  var wrap=document.getElementById('wrap'), gate=document.getElementById('gate'), missing=document.getElementById('missing');
+
+  if(!deck){ gate.classList.add('hidden'); missing.hidden=false; return; }
+
+  document.title = deck.title + ' — Screening Room · Blue Pulse Studios';
+  document.getElementById('tTitle').textContent = deck.title;
+  document.getElementById('gTitle').textContent = deck.title;
+  document.getElementById('iLogline').textContent = deck.logline || '';
+  var comp = (deck.companies||[]).filter(Boolean);
+  document.getElementById('iCompanies').innerHTML = comp.length ? ('Produced by ' + comp.map(function(c){return '<b>'+c.replace(/</g,'&lt;')+'</b>';}).join(' &middot; ')) : '';
+
+  // ——— gate setup ———
+  var gPass=document.getElementById('gPass'), gErr=document.getElementById('gErr'), gSub=document.getElementById('gSub'), gBtn=document.getElementById('gBtn');
+  var needsPass = deck.visibility==='password' && deck.password;
+  if(needsPass){ gPass.hidden=false; gSub.textContent='Enter the access code to view this presentation.'; gBtn.textContent='Unlock'; setTimeout(function(){gPass.focus();},60); }
+  else { gSub.textContent='Click to enter the screening room.'; gBtn.textContent='Enter'; }
+
+  document.getElementById('gForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    if(needsPass){
+      if((gPass.value||'') !== deck.password){ gErr.textContent='Incorrect code.'; gPass.select(); return; }
+    }
+    enter(); // this click IS the user gesture that lets audio start
+  });
+
+  // ——— enter the room ———
+  var entered=false;
+  function enter(){
+    if(entered) return; entered=true;
+    gate.classList.add('hidden');
+    wrap.setAttribute('aria-hidden','false');
+    render();
+    startAmbient();
+  }
+
+  // ——— render deck ———
+  var stage=document.getElementById('stage');
+  var videoEl=null, slideIdx=0, chapters=[];
+  function render(){
+    if(deck.mode==='video' && deck.videoUrl){
+      document.body.classList.add('mode-video');
+      videoEl=document.createElement('video');
+      videoEl.src=deck.videoUrl;
+      if(deck.poster) videoEl.poster=deck.poster;
+      videoEl.controls=true; videoEl.playsInline=true; videoEl.autoplay=true;
+      videoEl.setAttribute('controlsList','nodownload noremoteplayback');
+      videoEl.addEventListener('contextmenu',function(e){e.preventDefault();});
+      stage.insertBefore(videoEl, stage.firstChild);
+      chapters = Array.isArray(deck.chapters)? deck.chapters.slice() : [];
+      videoEl.play().catch(function(){});
+    } else {
+      document.body.classList.add('mode-canva');
+      var f=document.createElement('iframe');
+      var url=deck.canvaUrl||'';
+      if(url && url.indexOf('embed')===-1) url += (url.indexOf('?')>-1?'&':'?')+'embed';
+      f.src=url; f.allow='fullscreen; autoplay; encrypted-media';
+      f.allowFullscreen=true; f.loading='eager';
+      stage.insertBefore(f, stage.firstChild);
+    }
+  }
+
+  // arrows (video mode)
+  function step(dir){
+    if(!videoEl) return;
+    if(chapters.length){
+      slideIdx=Math.max(0,Math.min(chapters.length-1,slideIdx+dir));
+      videoEl.currentTime=chapters[slideIdx];
+      videoEl.play().catch(function(){});
+    } else {
+      videoEl.currentTime=Math.max(0,videoEl.currentTime+dir*8);
+    }
+  }
+  document.getElementById('prev').addEventListener('click',function(){step(-1);});
+  document.getElementById('next').addEventListener('click',function(){step(1);});
+  document.addEventListener('keydown',function(e){
+    if(!entered) return;
+    if(e.key==='ArrowLeft') step(-1);
+    if(e.key==='ArrowRight') step(1);
+  });
+
+  // ——— ambient loop (our own audio; starts on the entry gesture) ———
+  var amb=null, ambOn=false;
+  var soundToggle=document.getElementById('soundToggle'), sLabel=document.getElementById('sLabel'), vol=document.getElementById('vol');
+  function startAmbient(){
+    if(!deck.ambient) return;
+    amb=new Audio(deck.ambient); amb.loop=true; amb.volume=(deck.ambientVol!=null?deck.ambientVol:0.35);
+    amb.play().then(function(){ ambOn=true; syncSound(); }).catch(function(){ ambOn=false; syncSound(); });
+    soundToggle.hidden=false; vol.hidden=false; vol.value=amb.volume;
+  }
+  function syncSound(){ sLabel.textContent = ambOn ? 'Ambient on' : 'Ambient off'; soundToggle.style.color = ambOn ? 'var(--ink)' : 'var(--dim)'; }
+  soundToggle.addEventListener('click',function(e){
+    if(e.target===vol) return;
+    if(!amb) return;
+    if(ambOn){ amb.pause(); ambOn=false; } else { amb.play().then(function(){ambOn=true;syncSound();}).catch(function(){}); }
+    syncSound();
+  });
+  vol.addEventListener('input',function(){ if(amb) amb.volume=parseFloat(vol.value); });
+})();
+</script>
+</body>
+</html>

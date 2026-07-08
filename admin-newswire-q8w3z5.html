@@ -117,6 +117,7 @@
     <a href="journal.html" target="_blank" rel="noopener">View Newswire</a>
     <button id="copyBtn" title="Edit the words on any page">Copy Editor</button>
     <button id="socialBtn" title="Set your social media links">Social Links</button>
+    <button id="pitchBtn" title="Password-protected pitch decks for industry contacts">Pitch Decks</button>
     <button id="pageSeoBtn">Page SEO</button>
     <button id="rssBtn" title="Download feed.xml built from current posts">Export RSS</button>
     <button id="resetBtn" title="Restore the original demo posts">Reset Demo Data</button>
@@ -275,10 +276,57 @@
       </div>
       <textarea id="socialExport" readonly style="display:none;margin-top:20px;width:100%;min-height:120px;font-family:monospace;font-size:11.5px;color:var(--foam);background:var(--depth);border:1px solid var(--hair);padding:14px"></textarea>
     </form>
+
+    <!-- PITCH DECKS -->
+    <div id="pitchPanel" style="display:none;max-width:840px">
+      <h2 style="font-family:var(--display);font-weight:300;font-size:28px;margin-bottom:8px">Pitch decks</h2>
+      <p style="font-family:var(--display);font-style:italic;font-size:13px;color:var(--stone);margin-bottom:26px">Password-protected screening pages for industry contacts &mdash; send a branded link instead of a raw Canva share. Each deck plays either a live Canva embed or a hosted MP4, with an optional ambient background loop. Highly sensitive: these pages are noindexed, and for real security they sit behind Cloudflare Access (see ADMIN-ACCESS). After adding or editing a deck, hit <strong style="color:var(--foam)">Export</strong> and commit <code style="color:var(--glow)">pitch-decks.js</code> so recipients actually see it.</p>
+
+      <div id="pitchList" style="display:grid;gap:10px;margin-bottom:30px"></div>
+
+      <form id="pitchForm">
+        <div class="two">
+          <div class="fld"><label for="pkTitle">Title</label><input id="pkTitle" type="text" required></div>
+          <div class="fld"><label for="pkMode">Playback</label>
+            <select id="pkMode"><option value="canva">Canva embed (paste URL)</option><option value="video">Hosted video (MP4 &mdash; our arrows + audio)</option></select>
+          </div>
+        </div>
+        <div class="fld" id="pkCanvaWrap"><label for="pkCanva">Canva presentation URL</label><input id="pkCanva" type="text" placeholder="https://www.canva.com/design/…/view"><div class="help">Paste the Canva view/share link. Canva&rsquo;s own arrows drive it; sound plays when the viewer clicks the slide.</div></div>
+        <div class="two" id="pkVideoWrap" style="display:none">
+          <div class="fld"><label for="pkVideo">Video path or URL (MP4)</label><input id="pkVideo" type="text" placeholder="assets/decks/stay-home.mp4"><div class="help">Export from Canva: File &rarr; Download &rarr; MP4. Drop it in assets/decks/ and reference it here.</div></div>
+          <div class="fld"><label for="pkPoster">Poster image (optional)</label><input id="pkPoster" type="text" placeholder="assets/decks/stay-home.jpg"></div>
+        </div>
+        <div class="two">
+          <div class="fld"><label for="pkCompanies">Production companies</label><input id="pkCompanies" type="text" placeholder="Blue Pulse Studios, Partner Co."><div class="help">Comma-separated. Listed on the screening page.</div></div>
+          <div class="fld"><label for="pkLogline">Logline</label><input id="pkLogline" type="text" placeholder="One line under the title."></div>
+        </div>
+        <div class="two">
+          <div class="fld"><label for="pkVis">Access</label>
+            <select id="pkVis"><option value="password">Password protected</option><option value="unlisted">Unlisted (link only)</option></select>
+            <div class="help">Both are noindexed. Password adds a blurred code gate. For true security keep it behind Cloudflare Access.</div>
+          </div>
+          <div class="fld" id="pkPassWrap"><label for="pkPass">Access code</label><input id="pkPass" type="text" placeholder="e.g. stayhome2026"></div>
+        </div>
+        <div class="two">
+          <div class="fld"><label for="pkAmbient">Ambient loop (optional)</label><input id="pkAmbient" type="text" placeholder="assets/decks/stay-home-amb.mp3"><div class="help">A background loop that fades in on entry. Reference an mp3 in assets/decks/.</div></div>
+          <div class="fld"><label for="pkAmbVol">Ambient volume (0&ndash;1)</label><input id="pkAmbVol" type="text" placeholder="0.35"></div>
+        </div>
+        <div class="bar">
+          <button type="submit" class="btn primary">Save deck</button>
+          <button type="button" class="btn ghost" id="pkNew">New deck</button>
+          <button type="button" class="btn ghost" id="pkCopyLink">Copy viewer link</button>
+          <button type="button" class="btn ghost" id="pkExport">Export pitch-decks.js</button>
+          <button type="button" class="btn danger" id="pkDelete">Delete</button>
+          <span class="status" id="pkStatus"></span>
+        </div>
+        <textarea id="pkExportBox" readonly style="display:none;margin-top:20px;width:100%;min-height:180px;font-family:monospace;font-size:11.5px;color:var(--foam);background:var(--depth);border:1px solid var(--hair);padding:14px"></textarea>
+      </form>
+    </div>
   </main>
 </div>
 
 <script src="newswire-data.js"></script>
+<script src="pitch-decks.js"></script>
 <script>
   /* ============================================================
      DEMO AUTHENTICATION — client-side only.
@@ -376,6 +424,7 @@
     $('metaForm').style.display = 'none';
     var _cp = $('copyPanel'); if (_cp) _cp.style.display = 'none';
     var _sf = $('socialForm'); if (_sf) _sf.style.display = 'none';
+    var _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none';
     $('edForm').classList.add('on');
     renderList();
   }
@@ -390,6 +439,7 @@
     $('metaForm').style.display = 'none';
     var _cp = $('copyPanel'); if (_cp) _cp.style.display = 'none';
     var _sf = $('socialForm'); if (_sf) _sf.style.display = 'none';
+    var _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none';
     $('edForm').classList.add('on');
     renderList();
     $('fTitle').focus();
@@ -483,7 +533,7 @@
   });
   $('mPage').addEventListener('change', metaLoadPage);
   function hideExtraPanels() {
-    ['copyPanel', 'socialForm'].forEach(id => { const e = $(id); if (e) e.style.display = 'none'; });
+    ['copyPanel', 'socialForm', 'pitchPanel'].forEach(id => { const e = $(id); if (e) e.style.display = 'none'; });
   }
   $('pageSeoBtn').addEventListener('click', () => {
     const showing = $('metaForm').style.display !== 'none';
@@ -511,6 +561,7 @@
       const showing = $('copyPanel').style.display !== 'none';
       $('metaForm').style.display = 'none';
       $('socialForm').style.display = 'none';
+      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; }
       $('edForm').classList.remove('on');
       $('copyPanel').style.display = showing ? 'none' : 'block';
       $('edPlaceholder').style.display = showing ? 'block' : 'none';
@@ -559,6 +610,7 @@
       const showing = $('socialForm').style.display !== 'none';
       $('metaForm').style.display = 'none';
       $('copyPanel').style.display = 'none';
+      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; }
       $('edForm').classList.remove('on');
       $('socialForm').style.display = showing ? 'none' : 'block';
       $('edPlaceholder').style.display = showing ? 'block' : 'none';
@@ -660,6 +712,100 @@ ${items}
     syncToggle();
   });
   syncToggle();
+
+  /* ——— Pitch Decks ——— */
+  (function () {
+    const VKEY = 'bpsPitchDecks';
+    const VIEWER = 'deck-x8k3p2.html';
+    let selSlug = null;
+    const P = (id) => document.getElementById(id);
+    function baked() { return (window.BPS_PITCH_DECKS || []).map((d) => Object.assign({}, d)); }
+    function locals() { try { return JSON.parse(localStorage.getItem(VKEY) || 'null'); } catch (_) { return null; } }
+    function all() { const l = locals(); return l === null ? baked() : l; }
+    function save(list) { localStorage.setItem(VKEY, JSON.stringify(list)); }
+    function slugify(s) { return ((s || 'deck').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40) || 'deck') + '-' + Math.random().toString(36).slice(2, 7); }
+
+    function renderList() {
+      const list = all(), el = P('pitchList');
+      if (!list.length) { el.innerHTML = '<div style="color:var(--stone);font-style:italic;font-family:var(--display)">No decks yet — fill in the form below to add one.</div>'; return; }
+      el.innerHTML = list.map((d) => {
+        const vis = d.visibility === 'password' ? '🔒 password' : '🔗 unlisted';
+        const mode = d.mode === 'video' ? 'video' : 'canva';
+        return '<button type="button" class="item ' + (d.slug === selSlug ? 'sel' : '') + '" data-slug="' + d.slug + '" style="border:1px solid var(--hair)">'
+          + '<div class="d">' + mode + ' · ' + vis + '</div>'
+          + '<div class="ti">' + (d.title || 'Untitled').replace(/</g, '&lt;') + '</div>'
+          + '<div class="tg">' + VIEWER + '?d=' + d.slug + '</div></button>';
+      }).join('');
+      el.querySelectorAll('.item').forEach((b) => b.addEventListener('click', () => openDeck(b.dataset.slug)));
+    }
+    function modeSync() { const m = P('pkMode').value; P('pkCanvaWrap').style.display = m === 'canva' ? 'block' : 'none'; P('pkVideoWrap').style.display = m === 'video' ? 'grid' : 'none'; }
+    function visSync() { P('pkPassWrap').style.display = P('pkVis').value === 'password' ? 'block' : 'none'; }
+    P('pkMode').addEventListener('change', modeSync);
+    P('pkVis').addEventListener('change', visSync);
+
+    function fill(d) {
+      P('pkTitle').value = d.title || ''; P('pkMode').value = d.mode || 'canva';
+      P('pkCanva').value = d.canvaUrl || ''; P('pkVideo').value = d.videoUrl || ''; P('pkPoster').value = d.poster || '';
+      P('pkCompanies').value = (d.companies || []).join(', '); P('pkLogline').value = d.logline || '';
+      P('pkVis').value = d.visibility || 'password'; P('pkPass').value = d.password || '';
+      P('pkAmbient').value = d.ambient || ''; P('pkAmbVol').value = (d.ambientVol != null ? d.ambientVol : 0.35);
+      modeSync(); visSync();
+    }
+    function openDeck(slug) { const d = all().find((x) => x.slug === slug); if (!d) return; selSlug = slug; fill(d); P('pkStatus').textContent = ''; P('pkExportBox').style.display = 'none'; renderList(); }
+    function blankForm() { selSlug = null; P('pitchForm').reset(); P('pkMode').value = 'canva'; P('pkVis').value = 'password'; P('pkAmbVol').value = '0.35'; modeSync(); visSync(); P('pkStatus').textContent = ''; P('pkExportBox').style.display = 'none'; renderList(); P('pkTitle').focus(); }
+    P('pkNew').addEventListener('click', blankForm);
+
+    P('pitchForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const list = all();
+      let d = selSlug ? list.find((x) => x.slug === selSlug) : null;
+      if (!d) { d = { slug: slugify(P('pkTitle').value) }; list.push(d); }
+      d.title = P('pkTitle').value.trim();
+      d.mode = P('pkMode').value;
+      d.canvaUrl = P('pkCanva').value.trim();
+      d.videoUrl = P('pkVideo').value.trim();
+      d.poster = P('pkPoster').value.trim();
+      d.companies = P('pkCompanies').value.split(',').map((s) => s.trim()).filter(Boolean);
+      d.logline = P('pkLogline').value.trim();
+      d.visibility = P('pkVis').value;
+      d.password = P('pkPass').value.trim();
+      d.ambient = P('pkAmbient').value.trim();
+      d.ambientVol = parseFloat(P('pkAmbVol').value) || 0.35;
+      selSlug = d.slug;
+      save(list); renderList();
+      P('pkStatus').textContent = 'Saved in this browser. Link: ' + VIEWER + '?d=' + d.slug + '  — hit Export to publish for recipients.';
+    });
+    P('pkDelete').addEventListener('click', () => {
+      if (!selSlug) return;
+      if (!confirm('Delete this deck?')) return;
+      save(all().filter((x) => x.slug !== selSlug));
+      blankForm(); P('pkStatus').textContent = 'Deleted here. Re-export pitch-decks.js to publish the removal.';
+    });
+    P('pkCopyLink').addEventListener('click', () => {
+      if (!selSlug) { P('pkStatus').textContent = 'Save the deck first to get its link.'; return; }
+      const url = location.origin + location.pathname.replace(/[^/]+$/, '') + VIEWER + '?d=' + selSlug;
+      const ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); } catch (_) {}
+      ta.remove(); P('pkStatus').textContent = 'Copied: ' + url;
+    });
+    P('pkExport').addEventListener('click', () => {
+      P('pkExportBox').value = 'window.BPS_PITCH_DECKS = ' + JSON.stringify(all(), null, 2) + ';\n';
+      P('pkExportBox').style.display = 'block'; P('pkExportBox').select();
+      try { document.execCommand('copy'); } catch (_) {}
+      P('pkStatus').textContent = 'Copied — replace the window.BPS_PITCH_DECKS = […]; block in pitch-decks.js and commit.';
+    });
+
+    P('pitchBtn').addEventListener('click', () => {
+      const showing = P('pitchPanel').style.display !== 'none';
+      $('metaForm').style.display = 'none';
+      $('copyPanel').style.display = 'none';
+      $('socialForm').style.display = 'none';
+      $('edForm').classList.remove('on');
+      P('pitchPanel').style.display = showing ? 'none' : 'block';
+      $('edPlaceholder').style.display = showing ? 'block' : 'none';
+      if (!showing) { selSlug = null; blankForm(); }
+    });
+  })();
 
   /* session restore */
   showConsole(sessionStorage.getItem(SESSION_KEY) === '1');
