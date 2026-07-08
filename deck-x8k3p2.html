@@ -29,8 +29,10 @@
     background:linear-gradient(180deg,rgba(0,0,0,.6),transparent);
     z-index:5;
   }
-  .brand{font:600 12px/1 'Inter';letter-spacing:.34em;text-transform:uppercase;color:var(--ink)}
-  .brand b{color:var(--blue);font-weight:600}
+  .brand{display:inline-flex;flex-direction:column;gap:3px;line-height:1;text-decoration:none}
+  .brand .line1{font:600 11px/1 'Inter';letter-spacing:.32em;color:var(--ink)}
+  .brand .line2{font:500 9px/1 'Inter';letter-spacing:.42em;color:var(--dim);transition:color .6s ease}
+  .brand:hover .line2{color:var(--ink)}
   .deck-title{font:500 13px/1 'Inter';letter-spacing:.06em;color:var(--dim);margin-left:2px}
   .deck-title strong{color:var(--ink);font-weight:600}
   .spacer{flex:1}
@@ -114,7 +116,10 @@
 <body>
   <div class="wrap" id="wrap" aria-hidden="true">
     <div class="topbar">
-      <span class="brand">BLUE&nbsp;PULSE&nbsp;<b>STUDIOS</b></span>
+      <a class="brand" href="homepage.html" title="Back to Blue Pulse Studios">
+        <span class="line1">BLUE PULSE</span>
+        <span class="line2">STUDIOS</span>
+      </a>
       <span class="deck-title">Screening Room · <strong id="tTitle">—</strong></span>
       <span class="spacer"></span>
       <span class="sound" id="soundToggle" title="Toggle ambient sound" hidden>
