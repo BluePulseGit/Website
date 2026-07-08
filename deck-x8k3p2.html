@@ -224,7 +224,12 @@
       if(url && url.indexOf('embed')===-1) url += (url.indexOf('?')>-1?'&':'?')+'embed';
       f.src=url; f.allow='fullscreen; autoplay; encrypted-media';
       f.allowFullscreen=true; f.loading='eager';
+      f.referrerPolicy='strict-origin-when-cross-origin';
       stage.insertBefore(f, stage.firstChild);
+      // Graceful fallback: some Canva share links refuse third-party framing.
+      var plain=(deck.canvaUrl||'').split(/[?&]embed/)[0].replace(/[?&]$/,'');
+      var hint=document.getElementById('canvaHint');
+      if(hint&&plain){ hint.innerHTML="Deck not appearing? Canva may block embedding for this link &mdash; <a href='"+plain+"' target='_blank' rel='noopener' style='color:var(--blue);text-decoration:underline'>open it in a new tab &#8599;</a> &middot; otherwise use the deck&rsquo;s own arrows and click once to enable sound."; }
     }
   }
 
