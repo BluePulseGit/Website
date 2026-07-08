@@ -487,6 +487,74 @@ window.bpsSubscribe = function (form, e) {
   });
 })();
 
+/* ——— ACCESSIBILITY — persistent control for text size, high contrast, reduced
+   motion, and link underlines. Choices persist (bpsA11y) and re-apply on load.
+   Pairs with the site's semantic HTML, skip links, and focus rings (WCAG). ——— */
+(function () {
+  var KEY = 'bpsA11y';
+  var SCALES = [1, 1.15, 1.3, 1.45];
+  function get() { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (_) { return {}; } }
+  function save(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (_) {} }
+  var state = get();
+  function apply() {
+    var z = SCALES[state.size || 0] || 1;
+    document.documentElement.style.zoom = (z === 1 ? '' : z);
+    document.documentElement.classList.toggle('bps-hc', !!state.contrast);
+    document.documentElement.classList.toggle('bps-rm', !!state.motion);
+    document.documentElement.classList.toggle('bps-ul', !!state.underline);
+  }
+  var st = document.createElement('style');
+  st.textContent =
+    'html.bps-hc{filter:contrast(1.18) saturate(1.05)}' +
+    'html.bps-hc a:not(.brand){text-decoration:underline}' +
+    'html.bps-rm *,html.bps-rm *::before,html.bps-rm *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}' +
+    'html.bps-ul a{text-decoration:underline!important}' +
+    '#bpsA11yBtn{position:fixed;left:18px;bottom:18px;z-index:8500;width:46px;height:46px;border-radius:50%;background:#0A1A35;border:1px solid #1D5FB8;color:#6BB4E8;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,.5)}' +
+    '#bpsA11yBtn:hover,#bpsA11yBtn:focus-visible{background:#1D5FB8;color:#fff;outline:2px solid #6BB4E8;outline-offset:3px}' +
+    '#bpsA11yBtn svg{width:24px;height:24px}' +
+    '#bpsA11yPanel{position:fixed;left:18px;bottom:74px;z-index:8500;width:252px;background:#060F1F;border:1px solid #1D5FB8;padding:18px;font-family:Inter,sans-serif;color:#CFD9E4;display:none;box-shadow:0 12px 40px rgba(0,0,0,.6)}' +
+    '#bpsA11yPanel.on{display:block}' +
+    '#bpsA11yPanel h4{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#6BB4E8;font-weight:600;margin:0 0 16px}' +
+    '#bpsA11yPanel .row{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;font-size:12.5px}' +
+    '#bpsA11yPanel .sizes button{width:30px;height:30px;background:transparent;border:1px solid #132341;color:#CFD9E4;cursor:pointer;margin-left:6px;font-family:inherit}' +
+    '#bpsA11yPanel .sizes button:hover{border-color:#6BB4E8}' +
+    '#bpsA11yPanel .tg{width:40px;height:22px;border-radius:11px;background:#132341;border:0;position:relative;cursor:pointer;flex:none}' +
+    '#bpsA11yPanel .tg::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#8B929C;transition:transform .2s,background .2s}' +
+    '#bpsA11yPanel .tg[aria-pressed="true"]{background:#1D5FB8}' +
+    '#bpsA11yPanel .tg[aria-pressed="true"]::after{transform:translateX(18px);background:#fff}';
+  document.head.appendChild(st);
+  apply();
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var btn = document.createElement('button');
+    btn.id = 'bpsA11yBtn'; btn.type = 'button'; btn.setAttribute('aria-label', 'Accessibility options'); btn.setAttribute('aria-expanded', 'false');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="3.8" r="2.1"/><path d="M21 8.5c0 .6-.5 1-1.9 1.2-1 .2-2.3.3-3.1.3l.5 3 .9 6.2c.1.7-.3 1.2-.9 1.3s-1.1-.3-1.2-.9L14.4 15h-.9l-.9 4c-.1.6-.6 1-1.2.9s-1-.6-.9-1.3l.9-6.2.5-3c-.8 0-2.1-.1-3.1-.3C3.5 9.5 3 9.1 3 8.5s.5-1 1.4-.9C6 7.8 9 8 12 8s6-.2 7.6-.4c.9-.1 1.4.3 1.4.9z"/></svg>';
+    document.body.appendChild(btn);
+    var panel = document.createElement('div');
+    panel.id = 'bpsA11yPanel'; panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-label', 'Accessibility options');
+    panel.innerHTML =
+      '<h4>Accessibility</h4>' +
+      '<div class="row"><span>Text size</span><span class="sizes"><button type="button" data-a="dec" aria-label="Decrease text size">A&minus;</button><button type="button" data-a="reset" aria-label="Reset text size">A</button><button type="button" data-a="inc" aria-label="Increase text size">A+</button></span></div>' +
+      '<div class="row"><span>High contrast</span><button type="button" class="tg" data-t="contrast" aria-pressed="false" aria-label="Toggle high contrast"></button></div>' +
+      '<div class="row"><span>Reduce motion</span><button type="button" class="tg" data-t="motion" aria-pressed="false" aria-label="Toggle reduced motion"></button></div>' +
+      '<div class="row" style="margin-bottom:0"><span>Underline links</span><button type="button" class="tg" data-t="underline" aria-pressed="false" aria-label="Toggle underline links"></button></div>';
+    document.body.appendChild(panel);
+    function syncToggles() { Array.prototype.forEach.call(panel.querySelectorAll('.tg'), function (t) { t.setAttribute('aria-pressed', state[t.getAttribute('data-t')] ? 'true' : 'false'); }); }
+    syncToggles();
+    btn.addEventListener('click', function () { var on = panel.classList.toggle('on'); btn.setAttribute('aria-expanded', on ? 'true' : 'false'); });
+    document.addEventListener('click', function (e) { if (!panel.contains(e.target) && e.target !== btn && !btn.contains(e.target)) { panel.classList.remove('on'); btn.setAttribute('aria-expanded', 'false'); } });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { panel.classList.remove('on'); btn.setAttribute('aria-expanded', 'false'); } });
+    panel.querySelector('.sizes').addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return; var a = b.getAttribute('data-a'); var s = state.size || 0;
+      if (a === 'inc') s = Math.min(SCALES.length - 1, s + 1); else if (a === 'dec') s = Math.max(0, s - 1); else s = 0;
+      state.size = s; save(state); apply();
+    });
+    Array.prototype.forEach.call(panel.querySelectorAll('.tg'), function (t) {
+      t.addEventListener('click', function () { var k = t.getAttribute('data-t'); state[k] = !state[k]; save(state); apply(); syncToggles(); });
+    });
+  });
+})();
+
 /* ——— COPY EDITOR — page-by-page in-place text editing.
    Overrides saved from edit mode are re-applied on every load, so copy
    changes show without touching the HTML. To publish for all visitors,
