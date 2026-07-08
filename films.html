@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Films from Blue Pulse Studios — Stay Home and The Swell. Independent horror and genre features." />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="theme-color" content="#02040A" />
+<meta property="og:title" content="Films — Blue Pulse Studios" />
+<meta property="og:description" content="Stay Home and The Swell. Independent horror and genre features." />
+<meta property="og:image" content="og-image.jpg" />
+<title>Films — Blue Pulse Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;1,9..144,300&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<style>
+  :root { --abyss: #02040A; --ocean: #060F1F; --depth: #0A1A35; --glow: #6BB4E8; --foam: #CFD9E4; --stone: #8B929C; --hair: #132341; --display: 'Fraunces', serif; --ui: 'Inter', sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; overflow-x: clip; }
+  body { background: var(--abyss); color: var(--foam); font-family: var(--ui); -webkit-font-smoothing: antialiased; }
+
+  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 28px 48px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, rgba(2,4,10,0.6), transparent); font-size: 10.5px; letter-spacing: .28em; text-transform: uppercase; }
+  .nav .brand { display: inline-flex; flex-direction: column; gap: 3px; line-height: 1; color: var(--foam); text-decoration: none; }
+  .nav .brand .line1 { font-weight: 600; letter-spacing: .32em; font-size: 11px; }
+  .nav .brand .line2 { font-weight: 500; letter-spacing: .42em; font-size: 9px; color: var(--stone); }
+  .nav .links a { color: var(--stone); text-decoration: none; margin-left: 28px; transition: color .5s; }
+  .nav .links a:hover, .nav .links a.on { color: var(--foam); }
+
+  .top { padding: 200px 48px 60px; max-width: 1200px; margin: 0 auto; }
+  .top .eyebrow { font-size: 10.5px; letter-spacing: .5em; text-transform: uppercase; color: var(--glow); font-weight: 500; margin-bottom: 24px; }
+  .top h1 { font-family: var(--display); font-weight: 200; font-size: clamp(52px, 9vw, 120px); letter-spacing: -0.03em; line-height: 0.95; color: var(--foam); }
+  .top p { margin-top: 26px; font-family: var(--display); font-style: italic; font-size: clamp(17px, 1.8vw, 22px); color: var(--stone); max-width: 620px; line-height: 1.5; }
+
+  .grid { max-width: 1200px; margin: 0 auto; padding: 40px 48px 140px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .film { position: relative; display: block; text-decoration: none; color: inherit; aspect-ratio: 3/4; border: 1px solid var(--hair); overflow: hidden; background: var(--depth); }
+  .film .art { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 1s cubic-bezier(.2,.7,.2,1); }
+  .film:hover .art { transform: scale(1.05); }
+  .film .glass { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .film .glass img { max-width: 78%; max-height: 60%; object-fit: contain; filter: drop-shadow(0 16px 40px rgba(0,0,0,0.6)); }
+  .film .veil { position: absolute; inset: 0; background: linear-gradient(to top, rgba(2,4,10,0.95) 0%, rgba(2,4,10,0.2) 45%, rgba(2,4,10,0.35) 100%); }
+  .film .info { position: absolute; left: 0; right: 0; bottom: 0; padding: 34px 34px 38px; }
+  .film .status { font-size: 9.5px; letter-spacing: .45em; text-transform: uppercase; color: var(--glow); font-weight: 600; margin-bottom: 12px; }
+  .film .name { font-family: var(--display); font-weight: 300; font-size: clamp(30px, 3.4vw, 48px); letter-spacing: -0.02em; color: var(--foam); line-height: 1; }
+  .film .sub { margin-top: 12px; font-size: 11px; letter-spacing: .32em; text-transform: uppercase; color: var(--stone); }
+  .film .go { margin-top: 20px; font-size: 10px; letter-spacing: .4em; text-transform: uppercase; color: var(--foam); opacity: 0; transform: translateX(-6px); transition: opacity .5s, transform .5s; }
+  .film:hover .go { opacity: 1; transform: none; }
+
+  footer { padding: 80px 48px 48px; background: var(--abyss); color: var(--stone); border-top: 1px solid var(--hair); text-align: center; }
+  footer .mark { color: var(--foam); font-size: 12px; letter-spacing: .35em; font-weight: 600; margin-bottom: 14px; }
+  footer .links2 a { color: var(--stone); text-decoration: none; margin: 0 12px; font-size: 12px; }
+  footer .links2 a:hover { color: var(--foam); }
+  footer .copy { margin-top: 22px; font-size: 10px; letter-spacing: .3em; text-transform: uppercase; }
+  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } .nav { padding: 18px 24px; } .nav .links a { margin-left: 14px; font-size: 9px; } .top { padding: 150px 24px 40px; } .grid { padding: 30px 24px 100px; } }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="nav">
+  <a class="brand" href="homepage.html"><span class="line1">BLUE PULSE</span><span class="line2">STUDIOS</span></a>
+  <div class="links">
+    <a href="films.html" class="on">Films</a>
+    <a href="shop.html">Shop</a>
+    <span class="studio-menu">
+      <a class="studio-trigger" href="studio.html">Studio</a>
+      <div class="studio-panel" role="menu">
+        <a href="press.html" role="menuitem">Press</a>
+        <a href="journal.html" role="menuitem">Newswire</a>
+      </div>
+    </span>
+    <a href="community.html">Community</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<div class="top" id="main">
+  <div class="eyebrow">Projects &middot; Films</div>
+  <h1>Films.</h1>
+  <p>Independent horror and genre features, made in-house. Long takes, practical effects, and the moments before the moment.</p>
+</div>
+
+<div class="grid">
+  <a class="film" href="stay-home.html">
+    <div class="art" style="background-image:url('assets/dark-heart.webp')"></div>
+    <div class="veil"></div>
+    <div class="glass"><img src="assets/stay-home-logo.webp" alt="Stay Home" /></div>
+    <div class="info">
+      <div class="status">Now in Production &middot; 2027</div>
+      <div class="name">Stay Home</div>
+      <div class="sub">Feature Film &middot; Horror</div>
+      <div class="go">Enter &rarr;</div>
+    </div>
+  </a>
+  <a class="film" href="the-swell.html">
+    <div class="art" style="background-image:radial-gradient(120% 90% at 50% 120%, rgba(29,95,184,0.4), transparent 60%), linear-gradient(160deg, #06121f, #02040A)"></div>
+    <div class="veil"></div>
+    <div class="glass"><img src="assets/the-swell-logo.png" alt="The Swell" /></div>
+    <div class="info">
+      <div class="status">In Development</div>
+      <div class="name">The Swell</div>
+      <div class="sub">Feature Film &middot; Horror</div>
+      <div class="go">Enter &rarr;</div>
+    </div>
+  </a>
+</div>
+
+<footer>
+  <div class="mark">BLUE PULSE STUDIOS</div>
+  <div class="links2"><a href="moth-country.html">Television</a><a href="shop.html">Shop</a><a href="community.html">Community</a><a href="contact.html">Contact</a></div>
+  <div class="copy">&copy; 2026 Blue Pulse Studios &middot; Los Angeles &middot; Pittsburgh</div>
+</footer>
+
+<script src="site.js"></script>
+</body>
+</html>

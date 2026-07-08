@@ -324,6 +324,47 @@ window.bpsSubscribe = function (form, e) {
   };
 })();
 
+/* ——— PROJECTS nav dropdown — turns the existing "Films" nav link into a
+   Projects menu (Films / Television / Books; Games & Docs to come) on every
+   page, so the nav stays in one place (here) instead of every HTML file. ——— */
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    var linksWrap = document.querySelector('.nav .links');
+    if (!linksWrap) return;
+    var filmsLink = Array.prototype.filter.call(linksWrap.querySelectorAll('a'), function (a) {
+      return a.textContent.trim().toLowerCase() === 'films';
+    })[0];
+    if (!filmsLink || filmsLink.closest('.bps-proj')) return;
+    if (!document.getElementById('bpsProjCss')) {
+      var st = document.createElement('style'); st.id = 'bpsProjCss';
+      st.textContent =
+        '.bps-proj{position:relative;display:inline-block;margin-left:28px}' +
+        '.bps-proj>a{margin-left:0}' +
+        '.bps-proj .bps-proj-panel{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(6px);min-width:176px;background:rgba(2,4,10,.97);border:1px solid #132341;padding:8px 0;opacity:0;visibility:hidden;transition:opacity .3s,transform .3s;z-index:200}' +
+        '.bps-proj:hover .bps-proj-panel,.bps-proj:focus-within .bps-proj-panel{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}' +
+        '.bps-proj .bps-proj-panel a{display:block;margin:0;padding:11px 22px;color:#8B929C;font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;white-space:nowrap;transition:color .3s,background .3s}' +
+        '.bps-proj .bps-proj-panel a:hover{color:#CFD9E4;background:rgba(29,95,184,.12)}' +
+        '@media (max-width:700px){.bps-proj{margin-left:14px}}';
+      document.head.appendChild(st);
+    }
+    var wrap = document.createElement('span');
+    wrap.className = 'bps-proj';
+    var trigger = document.createElement('a');
+    trigger.href = 'films.html';
+    trigger.textContent = 'Projects';
+    if (filmsLink.classList.contains('on')) trigger.classList.add('on');
+    var panel = document.createElement('div');
+    panel.className = 'bps-proj-panel';
+    panel.setAttribute('role', 'menu');
+    panel.innerHTML =
+      '<a href="films.html" role="menuitem">Films</a>' +
+      '<a href="moth-country.html" role="menuitem">Television</a>' +
+      '<a href="books.html" role="menuitem">Books</a>';
+    wrap.appendChild(trigger); wrap.appendChild(panel);
+    filmsLink.parentNode.replaceChild(wrap, filmsLink);
+  });
+})();
+
 /* ——— COPY EDITOR — page-by-page in-place text editing.
    Overrides saved from edit mode are re-applied on every load, so copy
    changes show without touching the HTML. To publish for all visitors,

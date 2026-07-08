@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Books from Blue Pulse Studios — the Arkive, a growing collection of horror stories set in the Blue Pulse universe. Coming soon." />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="theme-color" content="#02040A" />
+<meta property="og:title" content="Books — Blue Pulse Studios" />
+<meta property="og:description" content="The Arkive — horror stories set in the Blue Pulse universe. Coming soon." />
+<title>Books — Blue Pulse Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;1,9..144,300&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<style>
+  :root { --abyss: #02040A; --ocean: #060F1F; --glow: #6BB4E8; --foam: #CFD9E4; --stone: #8B929C; --hair: #132341; --display: 'Fraunces', serif; --ui: 'Inter', sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--abyss); color: var(--foam); font-family: var(--ui); -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 28px 48px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, rgba(2,4,10,0.6), transparent); font-size: 10.5px; letter-spacing: .28em; text-transform: uppercase; }
+  .nav .brand { display: inline-flex; flex-direction: column; gap: 3px; line-height: 1; color: var(--foam); text-decoration: none; }
+  .nav .brand .line1 { font-weight: 600; letter-spacing: .32em; font-size: 11px; }
+  .nav .brand .line2 { font-weight: 500; letter-spacing: .42em; font-size: 9px; color: var(--stone); }
+  .nav .links a { color: var(--stone); text-decoration: none; margin-left: 28px; transition: color .5s; }
+  .nav .links a:hover, .nav .links a.on { color: var(--foam); }
+  main { flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; padding: 160px 32px 100px; }
+  .eyebrow { font-size: 10.5px; letter-spacing: .5em; text-transform: uppercase; color: var(--glow); font-weight: 500; margin-bottom: 26px; }
+  h1 { font-family: var(--display); font-weight: 200; font-size: clamp(52px, 9vw, 120px); letter-spacing: -0.03em; color: var(--foam); line-height: 0.95; }
+  .lede { margin-top: 28px; font-family: var(--display); font-style: italic; font-size: clamp(18px, 2vw, 24px); color: var(--stone); max-width: 560px; line-height: 1.55; margin-left: auto; margin-right: auto; }
+  .cta { margin-top: 44px; display: inline-flex; gap: 14px; align-items: center; padding: 18px 32px; border: 1px solid var(--foam); color: var(--foam); text-decoration: none; font-size: 11px; letter-spacing: .42em; text-transform: uppercase; font-weight: 500; transition: background .4s, color .4s; }
+  .cta:hover { background: var(--foam); color: var(--abyss); }
+  footer { padding: 48px; text-align: center; color: var(--stone); border-top: 1px solid var(--hair); font-size: 10px; letter-spacing: .3em; text-transform: uppercase; }
+  @media (max-width: 700px) { .nav { padding: 18px 24px; } .nav .links a { margin-left: 14px; font-size: 9px; } }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="nav">
+  <a class="brand" href="homepage.html"><span class="line1">BLUE PULSE</span><span class="line2">STUDIOS</span></a>
+  <div class="links">
+    <a href="films.html">Films</a>
+    <a href="shop.html">Shop</a>
+    <span class="studio-menu">
+      <a class="studio-trigger" href="studio.html">Studio</a>
+      <div class="studio-panel" role="menu">
+        <a href="press.html" role="menuitem">Press</a>
+        <a href="journal.html" role="menuitem">Newswire</a>
+      </div>
+    </span>
+    <a href="community.html">Community</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<main id="main">
+  <div>
+    <div class="eyebrow">Projects &middot; Books</div>
+    <h1>The Arkive.</h1>
+    <p class="lede">A growing collection of horror short stories set in the Blue Pulse universe &mdash; the myths behind the films. The first pages are being written.</p>
+    <a class="cta" href="community.html">Follow along in the community &rarr;</a>
+  </div>
+</main>
+
+<footer>&copy; 2026 Blue Pulse Studios &middot; Los Angeles &middot; Pittsburgh</footer>
+
+<script src="site.js"></script>
+</body>
+</html>

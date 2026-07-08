@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="The Swell — a feature in development from Blue Pulse Studios. Something is coming in with the tide." />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="theme-color" content="#02040A" />
+<meta property="og:type" content="video.movie" />
+<meta property="og:title" content="The Swell — Blue Pulse Studios" />
+<meta property="og:description" content="A feature in development. Something is coming in with the tide." />
+<meta property="og:image" content="og-image.jpg" />
+<meta property="og:site_name" content="Blue Pulse Studios" />
+<title>The Swell — Blue Pulse Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;1,9..144,300&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<style>
+  :root { --abyss: #02040A; --ocean: #060F1F; --depth: #0A1A35; --glow: #6BB4E8; --foam: #CFD9E4; --stone: #8B929C; --hair: #132341; --display: 'Fraunces', serif; --ui: 'Inter', sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; overflow-x: clip; }
+  body { background: var(--abyss); color: var(--foam); font-family: var(--ui); -webkit-font-smoothing: antialiased; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+  .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 28px 48px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, rgba(2,4,10,0.5), transparent); font-size: 10.5px; letter-spacing: .28em; text-transform: uppercase; transition: background .8s; }
+  .nav .brand { display: inline-flex; flex-direction: column; gap: 3px; line-height: 1; color: var(--foam); text-decoration: none; }
+  .nav .brand .line1 { font-weight: 600; letter-spacing: .32em; font-size: 11px; }
+  .nav .brand .line2 { font-weight: 500; letter-spacing: .42em; font-size: 9px; color: var(--stone); }
+  .nav .links a { color: var(--stone); text-decoration: none; margin-left: 28px; transition: color .5s; }
+  .nav .links a:hover, .nav .links a.on { color: var(--foam); }
+
+  .hero { position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 140px 32px 80px; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background:
+      radial-gradient(120% 80% at 50% 120%, rgba(29,95,184,0.35) 0%, transparent 60%),
+      radial-gradient(80% 60% at 50% -10%, rgba(107,180,232,0.12) 0%, transparent 60%); z-index: -1; }
+  .hero .waves { position: absolute; left: 0; right: 0; bottom: 0; height: 40vh; background: linear-gradient(to top, rgba(6,15,31,0.9), transparent); z-index: -1; }
+  .hero .status { display: inline-flex; align-items: center; gap: 10px; padding: 8px 14px; border: 1px solid var(--glow); color: var(--glow); font-size: 10px; letter-spacing: .5em; text-transform: uppercase; font-weight: 500; margin-bottom: 44px; }
+  .hero .status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--glow); box-shadow: 0 0 8px var(--glow); animation: blink 2s ease-in-out infinite; }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+  .hero .swell-logo { width: min(760px, 88%); height: auto; filter: drop-shadow(0 20px 60px rgba(0,0,0,0.6)); animation: rise 2.4s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  .hero .tagline { margin-top: 44px; font-family: var(--display); font-style: italic; font-weight: 300; font-size: clamp(20px, 2.4vw, 30px); line-height: 1.45; max-width: 620px; color: var(--stone); animation: rise 2.4s cubic-bezier(.2,.7,.2,1) .3s both; }
+  .hero .meta-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 48px; font-size: 10.5px; letter-spacing: .35em; text-transform: uppercase; color: var(--stone); font-weight: 500; }
+  .hero .meta-row span { display: flex; align-items: center; gap: 10px; }
+  .hero .meta-row span::before { content: ''; width: 14px; height: 1px; background: var(--glow); }
+  .hero .note { margin-top: 56px; font-size: 12px; letter-spacing: .04em; color: var(--stone); max-width: 460px; line-height: 1.7; }
+  .hero .note a { color: var(--glow); text-decoration: none; border-bottom: 1px solid var(--glow); }
+
+  footer { padding: 80px 48px 48px; background: var(--abyss); color: var(--stone); border-top: 1px solid var(--hair); text-align: center; }
+  footer .mark { color: var(--foam); font-size: 12px; letter-spacing: .35em; font-weight: 600; margin-bottom: 14px; }
+  footer .links2 a { color: var(--stone); text-decoration: none; margin: 0 12px; font-size: 12px; }
+  footer .links2 a:hover { color: var(--foam); }
+  footer .copy { margin-top: 22px; font-size: 10px; letter-spacing: .3em; text-transform: uppercase; }
+  @media (max-width: 700px) { .nav { padding: 18px 24px; } .nav .links a { margin-left: 14px; font-size: 9px; } }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="nav">
+  <a class="brand" href="homepage.html"><span class="line1">BLUE PULSE</span><span class="line2">STUDIOS</span></a>
+  <div class="links">
+    <a href="homepage.html#slate" class="on">Films</a>
+    <a href="shop.html">Shop</a>
+    <span class="studio-menu">
+      <a class="studio-trigger" href="studio.html">Studio</a>
+      <div class="studio-panel" role="menu">
+        <a href="press.html" role="menuitem">Press</a>
+        <a href="journal.html" role="menuitem">Newswire</a>
+      </div>
+    </span>
+    <a href="community.html">Community</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<header class="hero" id="main">
+  <div class="waves"></div>
+  <div class="status">In Development</div>
+  <h1 class="sr-only">The Swell</h1>
+  <img class="swell-logo" src="assets/the-swell-logo.png" alt="The Swell" />
+  <p class="tagline">Something is coming in with the tide.</p>
+  <div class="meta-row">
+    <span>Feature Film</span>
+    <span>Horror</span>
+    <span>Blue Pulse Studios</span>
+  </div>
+  <p class="note">The next feature from Blue Pulse Studios is taking shape. Details surface soon &mdash; be first to know through the <a href="community.html">community</a> and the newsletter.</p>
+</header>
+
+<footer>
+  <div class="mark">BLUE PULSE STUDIOS</div>
+  <div class="links2"><a href="films.html">Films</a><a href="shop.html">Shop</a><a href="community.html">Community</a><a href="contact.html">Contact</a></div>
+  <div class="copy">&copy; 2026 Blue Pulse Studios &middot; Los Angeles &middot; Pittsburgh</div>
+</footer>
+
+<script src="site.js"></script>
+</body>
+</html>
