@@ -453,13 +453,14 @@ window.bpsSubscribe = function (form, e) {
     var footer = document.querySelector('footer');
     var st = document.createElement('style');
     st.textContent =
-      '#bpsFooterBand{max-width:1200px;margin:0 auto 52px;padding:0 0 42px;border-bottom:1px solid #132341;display:flex;flex-wrap:wrap;gap:36px;align-items:center;justify-content:space-between}' +
-      '#bpsFooterBand .bps-fb-signup{flex:1;min-width:280px}' +
-      "#bpsFooterBand .bps-fb-copy{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:16px;line-height:1.5;color:#CFD9E4;max-width:520px;margin-bottom:18px}" +
-      '#bpsFooterBand .bps-fb-form{display:flex;max-width:420px;border-bottom:1px solid #2a3a5c}' +
-      '#bpsFooterBand .bps-fb-form input{flex:1;background:transparent;border:0;color:#CFD9E4;font-family:inherit;font-size:14px;padding:12px 0;outline:none}' +
-      '#bpsFooterBand .bps-fb-form button{background:transparent;border:0;color:#6BB4E8;font-family:inherit;font-size:10px;letter-spacing:.3em;text-transform:uppercase;font-weight:600;cursor:pointer;padding:0 4px}' +
-      '#bpsFooterBand .bps-fb-socials{display:flex;gap:17px;align-items:center}' +
+      '#bpsFooterBand{max-width:1200px;margin:0 auto 52px;padding:0 0 44px;border-bottom:1px solid #132341;display:flex;flex-wrap:wrap;gap:48px;align-items:center;justify-content:space-between}' +
+      '#bpsFooterBand .bps-fb-signup{min-width:340px;max-width:600px;text-align:left}' +
+      "#bpsFooterBand .bps-fb-copy{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:21px;line-height:1.45;color:#F2F5F8;max-width:560px;margin-bottom:22px}" +
+      '#bpsFooterBand .bps-fb-form{display:flex;max-width:520px;border-bottom:2px solid #6BB4E8}' +
+      '#bpsFooterBand .bps-fb-form input{flex:1;background:transparent;border:0;color:#CFD9E4;font-family:inherit;font-size:17px;padding:15px 0;outline:none}' +
+      '#bpsFooterBand .bps-fb-form button{background:transparent;border:0;color:#6BB4E8;font-family:inherit;font-size:12px;letter-spacing:.3em;text-transform:uppercase;font-weight:600;cursor:pointer;padding:0 6px;white-space:nowrap}' +
+      '#bpsFooterBand .bps-fb-form button:hover{color:#CFD9E4}' +
+      '#bpsFooterBand .bps-fb-socials{display:flex;gap:18px;align-items:center;flex-shrink:0}' +
       '#bpsFooterBand .bps-fb-socials a{color:#8B929C;display:inline-flex;transition:color .3s,transform .3s}' +
       '#bpsFooterBand .bps-fb-socials a:hover{color:#CFD9E4;transform:translateY(-2px)}' +
       '#bpsFooterBand .bps-fb-socials svg{width:19px;height:19px}' +
@@ -471,9 +472,9 @@ window.bpsSubscribe = function (form, e) {
     var band = document.createElement('div');
     band.id = 'bpsFooterBand';
     band.innerHTML =
+      (iconRow ? '<div class="bps-fb-socials">' + iconRow + '</div>' : '') +
       '<div class="bps-fb-signup"><div class="bps-fb-copy">Get our emails, transmissions, podcasts, interviews with creators, and more &mdash; delivered straight to you.</div>' +
-      '<form class="bps-fb-form" id="bpsFooterSignup"><input type="email" name="email" placeholder="you@email.com" required aria-label="Email address"><button type="submit">Subscribe</button></form></div>' +
-      (iconRow ? '<div class="bps-fb-socials">' + iconRow + '</div>' : '');
+      '<form class="bps-fb-form" id="bpsFooterSignup"><input type="email" name="email" placeholder="you@email.com" required aria-label="Email address"><button type="submit">Subscribe &rarr;</button></form></div>';
     if (footer) footer.insertBefore(band, footer.firstChild); else document.body.appendChild(band);
     var form = document.getElementById('bpsFooterSignup');
     form.addEventListener('submit', function (e) {
@@ -543,6 +544,87 @@ window.bpsSubscribe = function (form, e) {
       location.hash = ''; location.reload();
     };
     document.getElementById('bpsCopyExit').onclick = function () { location.hash = ''; location.reload(); };
+  }
+})();
+
+/* ——— IMAGE SWAP (admin) — in #bps-edit mode, hover any image to replace it
+   from the media gallery, a pasted URL, or a device upload. Overrides persist
+   per page (bpsImageOverrides) and are re-applied on every load. ——— */
+(function () {
+  var KEY = 'bpsImageOverrides';
+  var page = (location.pathname.split('/').pop() || 'index.html');
+  function store() { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (_) { return {}; } }
+  function put(o) { try { localStorage.setItem(KEY, JSON.stringify(o)); return true; } catch (_) { return false; } }
+  function gallery() { try { return JSON.parse(localStorage.getItem('bpsGallery') || '[]'); } catch (_) { return []; } }
+  function imgs() {
+    return Array.prototype.slice.call(document.querySelectorAll('img')).filter(function (im) {
+      return !im.closest('#bpsTx,#bpsCookie,#bpsFooterBand,#bpsGalleryPicker,#bpsImgOverlay');
+    });
+  }
+  function keyOf(i) { return page + '::' + i; }
+
+  // Apply saved image overrides on every load
+  (function apply() { var o = store(); imgs().forEach(function (im, i) { var k = keyOf(i); if (o[k]) im.src = o[k]; }); })();
+
+  if (location.hash !== '#bps-edit') return;
+
+  var css = document.createElement('style');
+  css.textContent =
+    'img[data-bps-img]{outline:1px dashed rgba(107,180,232,.7);outline-offset:3px}' +
+    '#bpsImgOverlay{position:absolute;z-index:190000;display:none;align-items:center;justify-content:center;text-align:center;background:rgba(2,4,10,.55);border:1px solid #6BB4E8;cursor:pointer;color:#CFD9E4;font:600 10px/1.5 Inter,sans-serif;letter-spacing:.2em;text-transform:uppercase;padding:10px}' +
+    '#bpsImgOverlay:hover{background:rgba(2,4,10,.7)}';
+  document.head.appendChild(css);
+
+  var ov = document.createElement('div');
+  ov.id = 'bpsImgOverlay';
+  ov.innerHTML = '<span>&#8679; Upload new<br>photo from gallery</span>';
+  document.body.appendChild(ov);
+  var target = null;
+  function showOver(im) {
+    target = im; var r = im.getBoundingClientRect();
+    ov.style.top = (window.scrollY + r.top) + 'px'; ov.style.left = (window.scrollX + r.left) + 'px';
+    ov.style.width = r.width + 'px'; ov.style.height = r.height + 'px'; ov.style.display = 'flex';
+  }
+  function hideOver() { ov.style.display = 'none'; target = null; }
+  imgs().forEach(function (im, i) { im.setAttribute('data-bps-img', ''); im.setAttribute('data-bps-idx', i); im.addEventListener('mouseenter', function () { showOver(im); }); });
+  ov.addEventListener('mouseleave', hideOver);
+  ov.addEventListener('click', function () { if (target) openPicker(target); });
+  window.addEventListener('scroll', function () { if (target) showOver(target); }, { passive: true });
+
+  function downscale(file, cb) {
+    var img = new Image();
+    img.onload = function () {
+      var MAX = 1600, sc = Math.min(1, MAX / Math.max(img.width, img.height));
+      var c = document.createElement('canvas'); c.width = Math.round(img.width * sc); c.height = Math.round(img.height * sc);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      cb(c.toDataURL('image/jpeg', 0.85)); URL.revokeObjectURL(img.src);
+    };
+    img.src = URL.createObjectURL(file);
+  }
+
+  function openPicker(im) {
+    var g = gallery();
+    var thumbs = g.length
+      ? g.map(function (u) { return '<button class="pk-thumb" data-u="' + u + '" style="border:1px solid #132341;background:#0A1A35;padding:0;cursor:pointer;aspect-ratio:1;overflow:hidden"><img src="' + u + '" style="width:100%;height:100%;object-fit:cover" alt=""></button>'; }).join('')
+      : '<div style="grid-column:1/-1;color:#8B929C;font-style:italic;font-family:Fraunces,serif;font-size:14px">Your gallery is empty. Paste an image URL or upload from your device below &mdash; set up the media gallery to build a reusable library.</div>';
+    var modal = document.createElement('div');
+    modal.id = 'bpsGalleryPicker';
+    modal.style.cssText = 'position:fixed;inset:0;z-index:210000;background:rgba(2,4,10,.9);display:flex;align-items:center;justify-content:center;padding:24px';
+    modal.innerHTML =
+      '<div style="width:min(92vw,720px);max-height:88vh;overflow:auto;background:#060F1F;border:1px solid #132341;padding:28px">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px"><span style="color:#6BB4E8;font:600 10px/1 Inter,sans-serif;letter-spacing:.3em;text-transform:uppercase">Swap photo</span><button id="pkClose" style="background:none;border:0;color:#8B929C;font-size:24px;cursor:pointer" aria-label="Close">&times;</button></div>' +
+      '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:10px;margin-bottom:24px">' + thumbs + '</div>' +
+      '<label style="display:block;color:#8B929C;font:500 10px/1 Inter,sans-serif;letter-spacing:.28em;text-transform:uppercase;margin-bottom:8px">Or paste an image URL</label>' +
+      '<div style="display:flex;gap:10px;margin-bottom:18px"><input id="pkUrl" type="url" placeholder="https://…" style="flex:1;background:transparent;border:0;border-bottom:1px solid #132341;color:#CFD9E4;font:14px Inter,sans-serif;padding:10px 0;outline:none"><button id="pkUse" style="background:#6BB4E8;color:#04121d;border:0;font:600 10px/1 Inter,sans-serif;letter-spacing:.2em;text-transform:uppercase;padding:0 16px;cursor:pointer">Use</button></div>' +
+      '<label style="display:inline-block;color:#6BB4E8;font:600 10px/1 Inter,sans-serif;letter-spacing:.24em;text-transform:uppercase;cursor:pointer;border-bottom:1px solid #6BB4E8;padding-bottom:3px">Upload from this device<input id="pkFile" type="file" accept="image/*" style="display:none"></label>';
+    document.body.appendChild(modal);
+    function close() { modal.remove(); }
+    function set(u) { im.src = u; var o = store(); o[keyOf(+im.getAttribute('data-bps-idx'))] = u; if (!put(o)) alert('Could not save — image too large for local storage. Use the gallery/URL instead.'); close(); hideOver(); }
+    modal.querySelector('#pkClose').onclick = close;
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    Array.prototype.forEach.call(modal.querySelectorAll('.pk-thumb'), function (b) { b.onclick = function () { set(b.getAttribute('data-u')); }; });
+    modal.querySelector('#pkUse').onclick = function () { var u = modal.querySelector('#pkUrl').value.trim(); if (u) set(u); };
+    modal.querySelector('#pkFile').onchange = function (e) { var f = e.target.files[0]; if (f) downscale(f, set); };
   }
 })();
 
