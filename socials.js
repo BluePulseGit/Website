@@ -10,5 +10,12 @@
    preview in your own browser.
    ============================================================ */
 window.BPS_SOCIALS = {
-  discord: "https://discord.gg/TVXTg7jTkQ"
+  youtube:   "https://www.youtube.com/@BluePulseStudios",
+  x:         "https://x.com/BluePulseFilms",
+  instagram: "https://www.instagram.com/bluepulsestudios",
+  reddit:    "https://www.reddit.com/r/BluePulseStudios",
+  bluesky:   "https://bsky.app/profile/bluepulsestudios.bsky.social",
+  tiktok:    "https://www.tiktok.com/@bluepulsefilms",
+  vrchat:    "https://vrc.group/HELLFR.8091",
+  discord:   "https://discord.gg/mYrKDjGUQ2"
 };
