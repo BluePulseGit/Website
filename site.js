@@ -288,6 +288,42 @@ window.bpsSubscribe = function (form, e) {
   });
 })();
 
+/* ——— "TRANSMISSION RECEIVED" — reusable send confirmation.
+   Call window.bpsTransmission('Transmission received.') after any form sends:
+   a full-screen blue pulse of light with big type so the user knows it went. ——— */
+(function () {
+  let injected = false;
+  function inject() {
+    if (injected) return; injected = true;
+    const s = document.createElement('style');
+    s.textContent =
+      '@keyframes bpsTxPulse{0%{transform:translate(-50%,-50%) scale(.3);opacity:.9}70%{opacity:.22}100%{transform:translate(-50%,-50%) scale(2.7);opacity:0}}' +
+      '@keyframes bpsTxIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}' +
+      '#bpsTx{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:rgba(2,4,10,.88);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity .4s}' +
+      '#bpsTx.on{opacity:1}' +
+      '#bpsTx .ring{position:absolute;top:50%;left:50%;width:200px;height:200px;border-radius:50%;border:2px solid #6BB4E8;box-shadow:0 0 70px rgba(107,180,232,.75);animation:bpsTxPulse 1.9s ease-out infinite}' +
+      '#bpsTx .ring:nth-child(2){animation-delay:.63s}#bpsTx .ring:nth-child(3){animation-delay:1.26s}' +
+      '#bpsTx .msg{position:relative;z-index:2;text-align:center;color:#FAFAFA;font-family:"Fraunces",Georgia,serif;font-weight:300;font-size:clamp(30px,5.5vw,56px);letter-spacing:.01em;animation:bpsTxIn .6s ease .1s both;text-shadow:0 0 46px rgba(107,180,232,.55)}' +
+      '#bpsTx .sub{margin-top:16px;font-family:"Inter",sans-serif;font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:#6BB4E8;font-weight:500}';
+    document.head.appendChild(s);
+  }
+  window.bpsTransmission = function (msg) {
+    inject();
+    const old = document.getElementById('bpsTx'); if (old) old.remove();
+    const o = document.createElement('div');
+    o.id = 'bpsTx';
+    o.setAttribute('role', 'status');
+    o.setAttribute('aria-live', 'assertive');
+    o.innerHTML = '<div class="ring"></div><div class="ring"></div><div class="ring"></div>' +
+      '<div class="msg">' + (msg || 'Transmission received.') + '<div class="sub">Blue Pulse Studios</div></div>';
+    document.body.appendChild(o);
+    requestAnimationFrame(function () { o.classList.add('on'); });
+    function close() { o.classList.remove('on'); setTimeout(function () { if (o.parentNode) o.remove(); }, 400); }
+    o.addEventListener('click', close);
+    setTimeout(close, 3200);
+  };
+})();
+
 /* ——— COPY EDITOR — page-by-page in-place text editing.
    Overrides saved from edit mode are re-applied on every load, so copy
    changes show without touching the HTML. To publish for all visitors,

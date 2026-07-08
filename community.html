@@ -196,7 +196,7 @@
   .portal .enter svg { width: 22px; height: 22px; fill: currentColor; }
 
   .portal .cue {
-    position: absolute; bottom: 48px; left: 50%; transform: translateX(-50%);
+    position: absolute; bottom: 48px; left: 0; right: 0;
     z-index: 3;
     font-size: 9px; letter-spacing: 0.5em; text-transform: uppercase;
     color: var(--stone);
@@ -532,7 +532,6 @@
 <!-- FAN ART -->
 <section class="other-side" style="padding-top:0">
   <div class="inner">
-    <div class="kicker reveal">From the other watchers</div>
     <h2 class="reveal">Fan art <em>gallery.</em></h2>
     <div class="perks" data-placeholder>
       <div class="perk reveal"><div class="n" style="font-size:40px;color:var(--hair)">&#9633;</div><h4>Your piece here</h4><p>Paintings, sculpts, tattoos, cosplay &mdash; if our films made you make something, we want to see it.</p></div>
@@ -540,7 +539,38 @@
       <div class="perk reveal"><div class="n" style="font-size:40px;color:var(--hair)">&#9633;</div><h4>Artist-owned, always</h4><p>Your work stays yours. Featuring here never transfers rights &mdash; that&rsquo;s in writing.</p></div>
     </div>
     <p class="ph-note" style="font-family:var(--display);font-style:italic;color:var(--stone)">The gallery opens with our community. First submissions will hang here.</p>
-    <p style="margin-top:32px"><a href="mailto:production@bluepulsestudios.com?subject=Fan%20art%20submission" style="font-size:10.5px;letter-spacing:.42em;text-transform:uppercase;color:var(--foam);text-decoration:none;border-bottom:1px solid var(--foam);padding-bottom:4px;font-weight:500">Submit your work &rarr;</a></p>
+    <p style="margin-top:32px"><button type="button" id="fanArtOpen" style="background:none;border:0;cursor:pointer;font-family:inherit;font-size:10.5px;letter-spacing:.42em;text-transform:uppercase;color:var(--foam);border-bottom:1px solid var(--foam);padding:0 0 4px;font-weight:500">Submit your work &rarr;</button></p>
+  </div>
+
+  <style>
+    .fa-modal{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;background:rgba(2,4,10,.78);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);padding:24px}
+    .fa-modal[hidden]{display:none}
+    .fa-card{position:relative;width:min(94vw,480px);background:linear-gradient(150deg,var(--depth),var(--abyss));border:1px solid var(--hair);padding:44px 40px;max-height:90vh;overflow:auto}
+    .fa-close{position:absolute;top:14px;right:18px;background:none;border:0;color:var(--stone);font-size:26px;line-height:1;cursor:pointer}
+    .fa-close:hover{color:var(--foam)}
+    .fa-card .fa-kicker{font-size:10px;letter-spacing:.42em;text-transform:uppercase;color:var(--glow);font-weight:600;margin-bottom:14px}
+    .fa-card h3{font-family:var(--display);font-weight:300;font-size:30px;color:var(--foam);margin:0 0 10px}
+    .fa-sub{font-size:13px;line-height:1.55;color:var(--stone);margin:0 0 26px}
+    .fa-card label{display:block;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--stone);font-weight:500;margin-bottom:18px}
+    .fa-card input,.fa-card textarea{display:block;width:100%;margin-top:8px;font:inherit;font-size:14px;color:var(--foam);background:transparent;border:0;border-bottom:1px solid var(--hair);padding:10px 0;outline:none;resize:vertical}
+    .fa-card input:focus,.fa-card textarea:focus{border-color:var(--glow)}
+    .fa-send{margin-top:8px;width:100%;padding:16px;background:transparent;border:1px solid var(--foam);color:var(--foam);font-family:inherit;font-size:10.5px;letter-spacing:.42em;text-transform:uppercase;font-weight:500;cursor:pointer;transition:background .4s,color .4s}
+    .fa-send:hover{background:var(--foam);color:var(--abyss)}
+  </style>
+  <div id="fanArtModal" class="fa-modal" hidden>
+    <div class="fa-card">
+      <button type="button" class="fa-close" id="fanArtClose" aria-label="Close">&times;</button>
+      <div class="fa-kicker">Fan Art Gallery</div>
+      <h3>Submit your work</h3>
+      <p class="fa-sub">Paintings, sculpts, tattoos, cosplay, edits &mdash; if our films made you make something, send it over. Featured pieces are credited and linked; your work stays yours.</p>
+      <form id="fanArtForm">
+        <label>Name<input type="text" name="name" required></label>
+        <label>Email<input type="email" name="email" required></label>
+        <label>Link to your work<input type="url" name="link" placeholder="https://… portfolio, IG post, drive" required></label>
+        <label>Anything to add<textarea name="message" rows="3" placeholder="Title, medium, which film inspired it…"></textarea></label>
+        <button type="submit" class="fa-send">Send &rarr;</button>
+      </form>
+    </div>
   </div>
 </section>
 
@@ -615,6 +645,32 @@
       }
     });
     document.querySelectorAll('a.enter').forEach(function (a) { a.setAttribute('data-social', 'discord'); });
+  })();
+</script>
+<script>
+  /* Fan-art submission modal → routes to fanart@bluepulsestudios.com, then the
+     "Transmission received" pulse fires (window.bpsTransmission, from site.js). */
+  (function () {
+    var openBtn = document.getElementById('fanArtOpen');
+    var modal = document.getElementById('fanArtModal');
+    var closeBtn = document.getElementById('fanArtClose');
+    var form = document.getElementById('fanArtForm');
+    if (!openBtn || !modal || !form) return;
+    function open() { modal.hidden = false; var i = modal.querySelector('input'); if (i) setTimeout(function () { i.focus(); }, 50); }
+    function close() { modal.hidden = true; }
+    openBtn.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) close(); });
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var d = new FormData(form);
+      var body = 'Name: ' + d.get('name') + '\nEmail: ' + d.get('email') + '\nLink: ' + d.get('link') + '\n\n' + (d.get('message') || '');
+      var href = 'mailto:fanart@bluepulsestudios.com?subject=' + encodeURIComponent('Fan art submission — ' + d.get('name')) + '&body=' + encodeURIComponent(body);
+      var a = document.createElement('a'); a.href = href; document.body.appendChild(a); a.click(); a.remove();
+      close(); form.reset();
+      if (window.bpsTransmission) window.bpsTransmission('Transmission received.');
+    });
   })();
 </script>
 <script src="socials.js"></script>
