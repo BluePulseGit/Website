@@ -616,6 +616,18 @@ window.bpsSubscribe = function (form, e) {
   });
 })();
 
+/* ——— CLOUDFLARE WEB ANALYTICS — cookieless page-view analytics for the whole
+   site. Skipped only if the visitor chose "Deny" in the cookie banner. Data
+   lives in the Cloudflare dashboard (linked from the admin Analytics tab). ——— */
+(function () {
+  try { if (localStorage.getItem('bpsCookieConsent') === 'deny') return; } catch (_) {}
+  var s = document.createElement('script');
+  s.defer = true;
+  s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+  s.setAttribute('data-cf-beacon', '{"token": "bdf0c881c9404c73acf908971b1b8ef9"}');
+  (document.head || document.documentElement).appendChild(s);
+})();
+
 /* ——— HEADER / FOOTER CODE — custom code set from the admin (Header & Footer
    tab). Header code injects into <head>; footer code at the end of <body>;
    embedded <script> executes. Admin preview via localStorage; bake
