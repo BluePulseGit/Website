@@ -616,6 +616,35 @@ window.bpsSubscribe = function (form, e) {
   });
 })();
 
+/* ——— HEADER / FOOTER CODE — custom code set from the admin (Header & Footer
+   tab). Header code injects into <head>; footer code at the end of <body>;
+   embedded <script> executes. Admin preview via localStorage; bake
+   window.BPS_HEADER_CODE / BPS_FOOTER_CODE to publish for all visitors. ——— */
+(function () {
+  function inject(html, mount) {
+    if (!html || !mount) return;
+    var tpl = document.createElement('template');
+    tpl.innerHTML = html;
+    Array.prototype.slice.call(tpl.content.childNodes).forEach(function (n) {
+      if (n.tagName === 'SCRIPT') {
+        var s = document.createElement('script');
+        Array.prototype.forEach.call(n.attributes, function (a) { try { s.setAttribute(a.name, a.value); } catch (_) {} });
+        if (!n.src) s.textContent = n.textContent;
+        mount.appendChild(s);
+      } else {
+        mount.appendChild(document.importNode(n, true));
+      }
+    });
+  }
+  var head = '', foot = '';
+  try { head = localStorage.getItem('bpsHeaderCode') || ''; } catch (_) {}
+  try { foot = localStorage.getItem('bpsFooterCode') || ''; } catch (_) {}
+  head = head || (window.BPS_HEADER_CODE || '');
+  foot = foot || (window.BPS_FOOTER_CODE || '');
+  if (head) inject(head, document.head);
+  if (foot) document.addEventListener('DOMContentLoaded', function () { inject(foot, document.body); });
+})();
+
 /* ——— COPY EDITOR — page-by-page in-place text editing.
    Overrides saved from edit mode are re-applied on every load, so copy
    changes show without touching the HTML. To publish for all visitors,
