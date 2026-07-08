@@ -555,6 +555,67 @@ window.bpsSubscribe = function (form, e) {
   });
 })();
 
+/* ——— PERFORMANCE — lazy-load + async-decode images, and on slow connections /
+   low-memory / data-saver devices drop heavy background animations, blur, and
+   the grain overlay so the site paints faster ("lite mode"). ——— */
+(function () {
+  try {
+    var i = 0;
+    Array.prototype.forEach.call(document.querySelectorAll('img'), function (im) {
+      i++;
+      if (!im.hasAttribute('loading') && i > 1) im.setAttribute('loading', 'lazy');
+      if (!im.hasAttribute('decoding')) im.setAttribute('decoding', 'async');
+    });
+  } catch (_) {}
+  var lite = false;
+  try {
+    var c = navigator.connection || {};
+    if (c.saveData) lite = true;
+    if (c.effectiveType && /^(slow-2g|2g|3g)$/.test(c.effectiveType)) lite = true;
+    if (navigator.deviceMemory && navigator.deviceMemory <= 2) lite = true;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-data: reduce)').matches) lite = true;
+  } catch (_) {}
+  if (lite) {
+    document.documentElement.classList.add('bps-lite');
+    var s = document.createElement('style');
+    s.textContent =
+      'html.bps-lite *,html.bps-lite *::before,html.bps-lite *::after{animation:none!important}' +
+      'html.bps-lite body::before{display:none!important}' +
+      'html.bps-lite .bg-bubbles,html.bps-lite .drift,html.bps-lite .drift-2,html.bps-lite .portal .bubbles,html.bps-lite .portal .bubbles2,html.bps-lite .scene .bg-bubbles,html.bps-lite .hero .bg-bubbles{display:none!important}' +
+      'html.bps-lite .vig,html.bps-lite [class*="blur"]{filter:none!important}';
+    document.head.appendChild(s);
+  }
+})();
+
+/* ——— MOBILE NAV — collapse the nav links into a slide-in hamburger menu below
+   ~760px (handles the injected Projects dropdown + cart too). ——— */
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    var nav = document.querySelector('.nav'); var links = nav && nav.querySelector('.links');
+    if (!nav || !links || nav.querySelector('.bps-burger')) return;
+    var css = document.createElement('style');
+    css.textContent =
+      '.bps-burger{display:none;background:none;border:0;color:var(--foam,#CFD9E4);cursor:pointer;padding:6px;margin-left:auto}' +
+      '.bps-burger svg{width:26px;height:26px;display:block}' +
+      '@media (max-width:760px){' +
+      '.nav .bps-burger{display:block}' +
+      '.nav .links{position:fixed;top:0;right:0;height:100vh;width:min(80vw,320px);background:#02040A;border-left:1px solid #132341;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:4px;padding:90px 28px 28px;transform:translateX(100%);transition:transform .35s cubic-bezier(.2,.7,.2,1);overflow-y:auto;z-index:120}' +
+      '.nav .links.bps-open{transform:none}' +
+      '.nav .links a{margin:0 !important;padding:12px 0;font-size:12px !important;width:100%}' +
+      '.nav .links .studio-menu,.nav .links .bps-proj{margin:0 !important;display:block;width:100%}' +
+      '.nav .links .studio-panel,.nav .links .bps-proj-panel{position:static !important;transform:none !important;opacity:1 !important;visibility:visible !important;background:none !important;border:0 !important;padding:2px 0 6px 16px !important;min-width:0 !important}' +
+      '#bpsNavCart{margin:14px 0 0 !important}' +
+      '}';
+    document.head.appendChild(css);
+    var burger = document.createElement('button');
+    burger.className = 'bps-burger'; burger.type = 'button'; burger.setAttribute('aria-label', 'Menu'); burger.setAttribute('aria-expanded', 'false');
+    burger.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+    nav.appendChild(burger);
+    burger.addEventListener('click', function () { var open = links.classList.toggle('bps-open'); burger.setAttribute('aria-expanded', open ? 'true' : 'false'); });
+    links.addEventListener('click', function (e) { if (e.target.tagName === 'A') { links.classList.remove('bps-open'); burger.setAttribute('aria-expanded', 'false'); } });
+  });
+})();
+
 /* ——— COPY EDITOR — page-by-page in-place text editing.
    Overrides saved from edit mode are re-applied on every load, so copy
    changes show without touching the HTML. To publish for all visitors,
