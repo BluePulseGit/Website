@@ -365,6 +365,127 @@ window.bpsSubscribe = function (form, e) {
   });
 })();
 
+/* ——— PERSISTENT CART — a cart icon in the nav (right of Contact) on every
+   page, reading the shared localStorage cart so an abandoned cart is always
+   one click away from anywhere on the site. ——— */
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    var links = document.querySelector('.nav .links');
+    if (!links) return;
+    if (document.getElementById('bpsNavCart') || document.getElementById('navCartBtn')) return; // shop pages already have one
+    var count = 0;
+    try { count = (JSON.parse(localStorage.getItem('bpsCart') || '[]')).reduce(function (s, it) { return s + (it.qty || 0); }, 0); } catch (_) {}
+    if (!document.getElementById('bpsCartCss')) {
+      var st = document.createElement('style'); st.id = 'bpsCartCss';
+      st.textContent =
+        '#bpsNavCart{margin-left:28px;color:#8B929C;display:inline-flex;align-items:center;gap:7px;text-decoration:none;transition:color .5s;position:relative}' +
+        '#bpsNavCart:hover{color:#CFD9E4}' +
+        '#bpsNavCart svg{width:16px;height:16px}' +
+        '#bpsNavCart .n{font-size:9px;letter-spacing:.06em;font-weight:600;color:#6BB4E8}' +
+        '@media (max-width:700px){#bpsNavCart{margin-left:14px}}';
+      document.head.appendChild(st);
+    }
+    var a = document.createElement('a');
+    a.id = 'bpsNavCart'; a.href = 'cart.html'; a.setAttribute('aria-label', 'Cart' + (count ? ' (' + count + ' items)' : ''));
+    a.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="n">' + (count ? count : '') + '</span>';
+    links.appendChild(a);
+  });
+})();
+
+/* ——— COOKIE CONSENT — Allow / Allow essential only / Deny. Stores the choice
+   in localStorage (bpsCookieConsent); non-essential scripts (e.g. analytics)
+   check window.bpsConsent() === 'all' before loading. ——— */
+(function () {
+  var KEY = 'bpsCookieConsent';
+  function saved() { try { return localStorage.getItem(KEY); } catch (_) { return null; } }
+  window.bpsConsent = function () { return saved(); };
+  document.addEventListener('DOMContentLoaded', function () {
+    if (saved()) return;
+    var css = document.createElement('style');
+    css.textContent =
+      '#bpsCookie{position:fixed;left:0;right:0;bottom:0;z-index:9000;background:rgba(2,4,10,.97);border-top:1px solid #132341;padding:18px 24px;display:flex;flex-wrap:wrap;align-items:center;gap:18px;justify-content:center;font-family:Inter,sans-serif;animation:bpsCookieUp .5s ease both}' +
+      '@keyframes bpsCookieUp{from{transform:translateY(100%)}to{transform:none}}' +
+      '#bpsCookie p{color:#8B929C;font-size:12px;line-height:1.5;max-width:620px;margin:0}' +
+      '#bpsCookie p a{color:#6BB4E8;text-decoration:none;border-bottom:1px solid #6BB4E8}' +
+      '#bpsCookie .btns{display:flex;gap:10px;flex-wrap:wrap}' +
+      '#bpsCookie button{cursor:pointer;font-family:Inter,sans-serif;font-size:9.5px;letter-spacing:.26em;text-transform:uppercase;font-weight:500;padding:11px 18px;border:1px solid #132341;background:transparent;color:#8B929C;transition:color .3s,border-color .3s,background .3s}' +
+      '#bpsCookie button:hover{color:#CFD9E4;border-color:#6BB4E8}' +
+      '#bpsCookie button.primary{background:#6BB4E8;color:#04121d;border-color:#6BB4E8}' +
+      '#bpsCookie button.primary:hover{filter:brightness(1.08);color:#04121d}';
+    document.head.appendChild(css);
+    var bar = document.createElement('div');
+    bar.id = 'bpsCookie'; bar.setAttribute('role', 'dialog'); bar.setAttribute('aria-label', 'Cookie consent');
+    bar.innerHTML =
+      '<p>We use cookies to run the site and, with your OK, to understand how it&rsquo;s used. Choose what you&rsquo;re comfortable with. <a href="privacy.html">Privacy policy</a>.</p>' +
+      '<div class="btns"><button data-c="deny">Deny</button><button data-c="essential">Allow essential only</button><button class="primary" data-c="all">Allow</button></div>';
+    document.body.appendChild(bar);
+    bar.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      try { localStorage.setItem(KEY, b.getAttribute('data-c')); } catch (_) {}
+      bar.remove();
+      window.dispatchEvent(new CustomEvent('bps-consent', { detail: b.getAttribute('data-c') }));
+    });
+  });
+})();
+
+/* ——— FOOTER BAND — mailing-list signup + minimalist social icons, injected
+   into every page's footer so they stay consistent from one place (here). ——— */
+(function () {
+  var ICONS = {
+    youtube: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23 12s0-3.3-.4-4.9a2.6 2.6 0 0 0-1.8-1.8C19.1 5 12 5 12 5s-7.1 0-8.8.3A2.6 2.6 0 0 0 1.4 7.1C1 8.7 1 12 1 12s0 3.3.4 4.9a2.6 2.6 0 0 0 1.8 1.8C4.9 19 12 19 12 19s7.1 0 8.8-.3a2.6 2.6 0 0 0 1.8-1.8C23 15.3 23 12 23 12zM9.8 15.3V8.7l5.7 3.3-5.7 3.3z"/></svg>',
+    x: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.9 2H22l-7.1 8.1L23 22h-6.6l-5.2-6.8L5.3 22H2.2l7.6-8.7L1.5 2h6.7l4.7 6.2L18.9 2zm-1.2 18h1.8L7.4 3.9H5.5L17.7 20z"/></svg>',
+    instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>',
+    reddit: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12a2.1 2.1 0 0 0-3.6-1.5 10.3 10.3 0 0 0-5.3-1.7l.9-4.2 3 .7a1.5 1.5 0 1 0 .2-1l-3.4-.8a.5.5 0 0 0-.6.4l-1 4.7a10.4 10.4 0 0 0-5.4 1.7A2.1 2.1 0 1 0 3.6 14v.6c0 3.1 3.8 5.6 8.4 5.6s8.4-2.5 8.4-5.6V14A2.1 2.1 0 0 0 22 12zM8 13.5A1.4 1.4 0 1 1 9.4 15 1.4 1.4 0 0 1 8 13.5zm7.6 3.9a5.3 5.3 0 0 1-3.6 1.1 5.3 5.3 0 0 1-3.6-1.1.4.4 0 0 1 .6-.6 4.6 4.6 0 0 0 3 .9 4.6 4.6 0 0 0 3-.9.4.4 0 1 1 .6.6zm-.9-2.5A1.4 1.4 0 1 1 16 13a1.4 1.4 0 0 1-1.3 1.9z"/></svg>',
+    bluesky: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 10.8C10.9 8.6 7.9 4.7 5.1 3.1 3.8 2.3 2 2 2 4.2c0 1.3.8 5.6 1.2 6.3.6 1.2 1.8 1.5 3 1.3-2 .3-3.7 1-1.4 3.6 2.5 2.6 3.5-.7 4-2.4l.2-1 .3 1c.5 1.7 1.5 5 4 2.4 2.3-2.6.6-3.3-1.4-3.6 1.2.2 2.4-.1 3-1.3.4-.7 1.2-5 1.2-6.3 0-2.2-1.8-1.9-3.1-1.1C16.1 4.7 13.1 8.6 12 10.8z"/></svg>',
+    tiktok: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 3c.3 2 1.5 3.6 3.5 3.9v2.6a6.6 6.6 0 0 1-3.5-1v5.7a5.6 5.6 0 1 1-5.6-5.6c.3 0 .6 0 .9.1v2.7a2.9 2.9 0 1 0 2 2.8V3h2.7z"/></svg>',
+    vrchat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M4 4.5h16a1.8 1.8 0 0 1 1.8 1.8v8a1.8 1.8 0 0 1-1.8 1.8h-5.6L10 21v-4.9H4a1.8 1.8 0 0 1-1.8-1.8v-8A1.8 1.8 0 0 1 4 4.5z"/><path d="M6.3 8.4l1.6 4 1.6-4M12.6 8.4v4M15.2 12.4l1.4-4 1.4 4M15.6 11h2" stroke-width="1.3"/></svg>',
+    discord: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.2.4a18.3 18.3 0 0 1 4.3 1.4 16.6 16.6 0 0 0-14 0A18.3 18.3 0 0 1 9.8 3.4L9.6 3a19.8 19.8 0 0 0-4.9 1.4A20.7 20.7 0 0 0 1.3 18a19.9 19.9 0 0 0 6 3l.5-.7a13 13 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12.4 0l.5.4a13 13 0 0 1-2 1l.5.7a19.9 19.9 0 0 0 6-3 20.7 20.7 0 0 0-3.4-13.6zM8.5 14.7c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm7 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></svg>'
+  };
+  var LABELS = { youtube: 'YouTube', x: 'X', instagram: 'Instagram', reddit: 'Reddit', bluesky: 'Bluesky', tiktok: 'TikTok', vrchat: 'VRChat', discord: 'Discord' };
+  var ORDER = ['youtube', 'instagram', 'x', 'tiktok', 'bluesky', 'reddit', 'discord', 'vrchat'];
+  function socials() {
+    var m = {}; try { Object.assign(m, window.BPS_SOCIALS || {}); } catch (_) {}
+    try { Object.assign(m, JSON.parse(localStorage.getItem('bpsSocialLinks') || '{}')); } catch (_) {}
+    return m;
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    if (document.getElementById('bpsFooterBand')) return;
+    var footer = document.querySelector('footer');
+    var st = document.createElement('style');
+    st.textContent =
+      '#bpsFooterBand{max-width:1200px;margin:0 auto 52px;padding:0 0 42px;border-bottom:1px solid #132341;display:flex;flex-wrap:wrap;gap:36px;align-items:center;justify-content:space-between}' +
+      '#bpsFooterBand .bps-fb-signup{flex:1;min-width:280px}' +
+      "#bpsFooterBand .bps-fb-copy{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:16px;line-height:1.5;color:#CFD9E4;max-width:520px;margin-bottom:18px}" +
+      '#bpsFooterBand .bps-fb-form{display:flex;max-width:420px;border-bottom:1px solid #2a3a5c}' +
+      '#bpsFooterBand .bps-fb-form input{flex:1;background:transparent;border:0;color:#CFD9E4;font-family:inherit;font-size:14px;padding:12px 0;outline:none}' +
+      '#bpsFooterBand .bps-fb-form button{background:transparent;border:0;color:#6BB4E8;font-family:inherit;font-size:10px;letter-spacing:.3em;text-transform:uppercase;font-weight:600;cursor:pointer;padding:0 4px}' +
+      '#bpsFooterBand .bps-fb-socials{display:flex;gap:17px;align-items:center}' +
+      '#bpsFooterBand .bps-fb-socials a{color:#8B929C;display:inline-flex;transition:color .3s,transform .3s}' +
+      '#bpsFooterBand .bps-fb-socials a:hover{color:#CFD9E4;transform:translateY(-2px)}' +
+      '#bpsFooterBand .bps-fb-socials svg{width:19px;height:19px}' +
+      '@media (max-width:700px){#bpsFooterBand{padding-left:24px;padding-right:24px;gap:28px}}';
+    document.head.appendChild(st);
+    var links = socials();
+    var iconRow = ORDER.filter(function (k) { var u = links[k]; return typeof u === 'string' && /^https?:\/\//i.test(u); })
+      .map(function (k) { return '<a href="' + links[k].trim() + '" target="_blank" rel="noopener noreferrer" aria-label="' + LABELS[k] + '" title="' + LABELS[k] + '">' + ICONS[k] + '</a>'; }).join('');
+    var band = document.createElement('div');
+    band.id = 'bpsFooterBand';
+    band.innerHTML =
+      '<div class="bps-fb-signup"><div class="bps-fb-copy">Get our emails, transmissions, podcasts, interviews with creators, and more &mdash; delivered straight to you.</div>' +
+      '<form class="bps-fb-form" id="bpsFooterSignup"><input type="email" name="email" placeholder="you@email.com" required aria-label="Email address"><button type="submit">Subscribe</button></form></div>' +
+      (iconRow ? '<div class="bps-fb-socials">' + iconRow + '</div>' : '');
+    if (footer) footer.insertBefore(band, footer.firstChild); else document.body.appendChild(band);
+    var form = document.getElementById('bpsFooterSignup');
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var email = form.email.value.trim();
+      try { if (window.bpsSubscribe) window.bpsSubscribe(email, 'footer'); } catch (_) {}
+      form.reset();
+      if (window.bpsTransmission) window.bpsTransmission("You&rsquo;re on the list.");
+    });
+  });
+})();
+
 /* ——— COPY EDITOR — page-by-page in-place text editing.
    Overrides saved from edit mode are re-applied on every load, so copy
    changes show without touching the HTML. To publish for all visitors,
