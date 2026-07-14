@@ -524,6 +524,8 @@ window.bpsSubscribe = function (formOrEmail, ev) {
 (function () {
   var KEY = 'bpsA11y';
   var SCALES = [1, 1.15, 1.3, 1.45];
+  var BRIGHT = [0.8, 0.9, 1, 1.12, 1.25, 1.4]; // brightness levels; index 2 = normal
+  var BDEF = 2;
   function get() { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (_) { return {}; } }
   function save(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (_) {} }
   var state = get();
@@ -533,22 +535,29 @@ window.bpsSubscribe = function (formOrEmail, ev) {
     document.documentElement.classList.toggle('bps-hc', !!state.contrast);
     document.documentElement.classList.toggle('bps-rm', !!state.motion);
     document.documentElement.classList.toggle('bps-ul', !!state.underline);
+    // compose contrast + brightness into one filter (a single CSS filter property)
+    var filt = [];
+    if (state.contrast) { filt.push('contrast(1.18)'); filt.push('saturate(1.05)'); }
+    var b = BRIGHT[(state.bright == null ? BDEF : state.bright)] || 1;
+    if (b !== 1) filt.push('brightness(' + b + ')');
+    document.documentElement.style.filter = filt.length ? filt.join(' ') : '';
   }
   var st = document.createElement('style');
   st.textContent =
-    'html.bps-hc{filter:contrast(1.18) saturate(1.05)}' +
     'html.bps-hc a:not(.brand){text-decoration:underline}' +
     'html.bps-rm *,html.bps-rm *::before,html.bps-rm *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}' +
     'html.bps-ul a{text-decoration:underline!important}' +
-    '#bpsA11yBtn{position:fixed;left:18px;bottom:18px;z-index:8500;width:46px;height:46px;border-radius:50%;background:#0A1A35;border:1px solid #1D5FB8;color:#6BB4E8;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,.5)}' +
+    '#bpsA11yBtn{position:fixed;left:20px;bottom:20px;z-index:8500;width:56px;height:56px;border-radius:50%;background:#0A1A35;border:1.5px solid #1D5FB8;color:#6BB4E8;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,.5),0 0 0 0 rgba(107,180,232,.5);animation:bpsA11yPulse 2.6s ease-out infinite}' +
+    '@keyframes bpsA11yPulse{0%{box-shadow:0 8px 30px rgba(0,0,0,.5),0 0 0 0 rgba(107,180,232,.45)}70%{box-shadow:0 8px 30px rgba(0,0,0,.5),0 0 0 13px rgba(107,180,232,0)}100%{box-shadow:0 8px 30px rgba(0,0,0,.5),0 0 0 0 rgba(107,180,232,0)}}' +
+    'html.bps-rm #bpsA11yBtn{animation:none}' +
     '#bpsA11yBtn:hover,#bpsA11yBtn:focus-visible{background:#1D5FB8;color:#fff;outline:2px solid #6BB4E8;outline-offset:3px}' +
-    '#bpsA11yBtn svg{width:24px;height:24px}' +
+    '#bpsA11yBtn svg{width:28px;height:28px}' +
     '#bpsA11yPanel{position:fixed;left:18px;bottom:74px;z-index:8500;width:252px;background:#060F1F;border:1px solid #1D5FB8;padding:18px;font-family:Inter,sans-serif;color:#CFD9E4;display:none;box-shadow:0 12px 40px rgba(0,0,0,.6)}' +
     '#bpsA11yPanel.on{display:block}' +
     '#bpsA11yPanel h4{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:#6BB4E8;font-weight:600;margin:0 0 16px}' +
     '#bpsA11yPanel .row{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;font-size:12.5px}' +
-    '#bpsA11yPanel .sizes button{width:30px;height:30px;background:transparent;border:1px solid #132341;color:#CFD9E4;cursor:pointer;margin-left:6px;font-family:inherit}' +
-    '#bpsA11yPanel .sizes button:hover{border-color:#6BB4E8}' +
+    '#bpsA11yPanel .sizes button,#bpsA11yPanel .brights button{min-width:30px;height:30px;padding:0 4px;background:transparent;border:1px solid #132341;color:#CFD9E4;cursor:pointer;margin-left:6px;font-family:inherit;font-size:12px}' +
+    '#bpsA11yPanel .sizes button:hover,#bpsA11yPanel .brights button:hover{border-color:#6BB4E8}' +
     '#bpsA11yPanel .tg{width:40px;height:22px;border-radius:11px;background:#132341;border:0;position:relative;cursor:pointer;flex:none}' +
     '#bpsA11yPanel .tg::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#8B929C;transition:transform .2s,background .2s}' +
     '#bpsA11yPanel .tg[aria-pressed="true"]{background:#1D5FB8}' +
@@ -566,6 +575,7 @@ window.bpsSubscribe = function (formOrEmail, ev) {
     panel.innerHTML =
       '<h4>Accessibility</h4>' +
       '<div class="row"><span>Text size</span><span class="sizes"><button type="button" data-a="dec" aria-label="Decrease text size">A&minus;</button><button type="button" data-a="reset" aria-label="Reset text size">A</button><button type="button" data-a="inc" aria-label="Increase text size">A+</button></span></div>' +
+      '<div class="row"><span>Brightness</span><span class="brights"><button type="button" data-b="dec" aria-label="Decrease brightness">&#9788;&minus;</button><button type="button" data-b="reset" aria-label="Reset brightness">&#9788;</button><button type="button" data-b="inc" aria-label="Increase brightness">&#9788;+</button></span></div>' +
       '<div class="row"><span>High contrast</span><button type="button" class="tg" data-t="contrast" aria-pressed="false" aria-label="Toggle high contrast"></button></div>' +
       '<div class="row"><span>Reduce motion</span><button type="button" class="tg" data-t="motion" aria-pressed="false" aria-label="Toggle reduced motion"></button></div>' +
       '<div class="row" style="margin-bottom:0"><span>Underline links</span><button type="button" class="tg" data-t="underline" aria-pressed="false" aria-label="Toggle underline links"></button></div>';
@@ -579,6 +589,12 @@ window.bpsSubscribe = function (formOrEmail, ev) {
       var b = e.target.closest('button'); if (!b) return; var a = b.getAttribute('data-a'); var s = state.size || 0;
       if (a === 'inc') s = Math.min(SCALES.length - 1, s + 1); else if (a === 'dec') s = Math.max(0, s - 1); else s = 0;
       state.size = s; save(state); apply();
+    });
+    panel.querySelector('.brights').addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b) return; var a = b.getAttribute('data-b');
+      var s = (state.bright == null ? BDEF : state.bright);
+      if (a === 'inc') s = Math.min(BRIGHT.length - 1, s + 1); else if (a === 'dec') s = Math.max(0, s - 1); else s = BDEF;
+      state.bright = s; save(state); apply();
     });
     Array.prototype.forEach.call(panel.querySelectorAll('.tg'), function (t) {
       t.addEventListener('click', function () { var k = t.getAttribute('data-t'); state[k] = !state[k]; save(state); apply(); syncToggles(); });
@@ -616,6 +632,63 @@ window.bpsSubscribe = function (formOrEmail, ev) {
       'html.bps-lite .vig,html.bps-lite [class*="blur"]{filter:none!important}';
     document.head.appendChild(s);
   }
+})();
+
+/* ——— SCROLL V-ARROW — a V-shaped down button, bottom-center, that smooth-scrolls
+   to the next section (non-scroll navigation). Glows blue on hover, blue pulse on
+   click, and hides once you reach the bottom. Replaces the old "Scroll" text cue. */
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    var css = document.createElement('style');
+    css.textContent =
+      '.hero .scroll-cue{display:none!important}' +
+      '#bpsScrollV{position:fixed;left:50%;transform:translateX(-50%);bottom:22px;z-index:8400;width:48px;height:48px;display:none;align-items:center;justify-content:center;cursor:pointer;border:0;background:transparent;color:#6BB4E8;opacity:.82;transition:opacity .3s,color .3s,transform .3s}' +
+      '#bpsScrollV.show{display:flex}' +
+      '#bpsScrollV svg{width:32px;height:32px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))}' +
+      '#bpsScrollV:hover,#bpsScrollV:focus-visible{opacity:1;color:#9BD1FF;outline:none;transform:translateX(-50%) translateY(3px)}' +
+      '#bpsScrollV:hover svg,#bpsScrollV:focus-visible svg{filter:drop-shadow(0 0 9px rgba(107,180,232,.95))}' +
+      '#bpsScrollV .ring{position:absolute;left:50%;top:50%;width:12px;height:12px;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none}' +
+      '#bpsScrollV.pulse .ring{animation:bpsSvPulse .62s ease-out}' +
+      '@keyframes bpsSvPulse{0%{box-shadow:0 0 0 0 rgba(107,180,232,.6)}100%{box-shadow:0 0 0 28px rgba(107,180,232,0)}}' +
+      '#bpsScrollV.bounce svg{animation:bpsSvBounce 2s ease-in-out infinite}' +
+      '@keyframes bpsSvBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}' +
+      'html.bps-rm #bpsScrollV.bounce svg{animation:none}';
+    document.head.appendChild(css);
+
+    var btn = document.createElement('button');
+    btn.id = 'bpsScrollV'; btn.type = 'button'; btn.className = 'bounce';
+    btn.setAttribute('aria-label', 'Scroll to next section');
+    btn.innerHTML = '<span class="ring"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5 8 12 16 19 8"/></svg>';
+    document.body.appendChild(btn);
+
+    function targets() {
+      var out = [], seen = [];
+      Array.prototype.forEach.call(document.querySelectorAll('main section, body > section, section[id], [data-anchor], footer'), function (el) {
+        if (seen.indexOf(el) < 0) { seen.push(el); out.push(el); }
+      });
+      return out;
+    }
+    function atBottom() { return (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 130); }
+    function tall() { return document.documentElement.scrollHeight > window.innerHeight * 1.4; }
+    function update() {
+      var cookie = document.getElementById('bpsCookie');
+      if (cookie && cookie.offsetParent !== null) { btn.classList.remove('show'); return; }
+      if (tall() && !atBottom()) btn.classList.add('show'); else btn.classList.remove('show');
+    }
+    btn.addEventListener('click', function () {
+      btn.classList.remove('pulse'); void btn.offsetWidth; btn.classList.add('pulse');
+      var y = window.scrollY + 8, next = null;
+      targets().forEach(function (el) {
+        var top = el.getBoundingClientRect().top + window.scrollY;
+        if (top > y + 4 && (next === null || top < next)) next = top;
+      });
+      if (next === null) next = document.documentElement.scrollHeight;
+      window.scrollTo({ top: Math.max(0, next - 2), behavior: 'smooth' });
+    });
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    setTimeout(update, 350); update();
+  });
 })();
 
 /* ——— MOBILE NAV — collapse the nav links into a slide-in hamburger menu below
