@@ -65,8 +65,27 @@
   <h2>Your rights</h2>
   <p>You can request a copy of the personal data we hold about you, ask us to correct it, or ask us to delete it. Email <a href="mailto:production@bluepulsestudios.com" style="color:var(--glow)">production@bluepulsestudios.com</a> and we'll handle it promptly.</p>
 
+  <h2>Your California privacy rights (CCPA/CPRA)</h2>
+  <p>If you are a California resident, the California Consumer Privacy Act of 2018 (CCPA), as amended by the CPRA, gives you the right to: know what personal information we collect and how it's used; request a copy of that information; request that we delete it; correct inaccurate information; and opt out of any &ldquo;sale&rdquo; or &ldquo;sharing&rdquo; of your personal information. We will not discriminate against you for exercising any of these rights.</p>
+  <p><strong style="color:var(--foam)">We do not sell your personal information, and we do not share it for cross-context behavioral advertising.</strong> To exercise a California right, use the opt-out form below or email us; we verify and respond within the timeframes the law requires (generally within 45 days).</p>
+
+  <h2>Opt out &amp; unsubscribe</h2>
+  <p>You can opt out of our mailings and of the personal information we collect, at any time and easily:</p>
+  <p>&bull;&nbsp; Every email we send includes a one-click unsubscribe link.<br>
+     &bull;&nbsp; Decline non-essential cookies using the banner at the bottom of any page (&ldquo;Deny&rdquo; or &ldquo;Allow essential only&rdquo;).<br>
+     &bull;&nbsp; Or submit the form below and we&rsquo;ll remove you from our lists and delete the personal information we hold, unless we&rsquo;re legally required to keep it.</p>
+  <form id="optOutForm" class="notranslate" style="display:flex;gap:10px;max-width:460px;margin:10px 0 6px;border-bottom:1px solid var(--hair)">
+    <input type="email" name="email" placeholder="you@email.com" required aria-label="Your email" style="flex:1;background:transparent;border:0;color:var(--foam);font:inherit;font-size:15px;padding:12px 0;outline:none">
+    <button type="submit" style="background:transparent;border:0;color:var(--glow);font:inherit;font-size:10px;letter-spacing:.3em;text-transform:uppercase;font-weight:600;cursor:pointer;white-space:nowrap">Opt me out &rarr;</button>
+  </form>
+  <p style="font-size:12px;color:var(--stone);opacity:1">Sends a removal / &ldquo;Do Not Sell or Share&rdquo; request to our team.</p>
+
   <h2>Contact</h2>
-  <p>Questions about this policy: <a href="mailto:production@bluepulsestudios.com" style="color:var(--glow)">production@bluepulsestudios.com</a>.</p>
+  <p>Questions about this policy, or to exercise any privacy right, contact us at <a href="mailto:production@bluepulsestudios.com" style="color:var(--glow)">production@bluepulsestudios.com</a>.</p>
+  <p>By mail:<br>
+     Blue Pulse Studios, LLC<br>
+     PO Box 597<br>
+     Hollidaysburg, PA 16648</p>
 </main>
 
 <footer>
@@ -74,5 +93,20 @@
   <div class="legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="shipping-returns.html">Shipping &amp; Returns</a></div>
 </footer>
 <script src="site.js"></script>
+<script>
+  (function () {
+    var f = document.getElementById('optOutForm');
+    if (!f) return;
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var email = f.email.value.trim();
+      var href = 'mailto:production@bluepulsestudios.com?subject=' + encodeURIComponent('Opt-out / Do Not Sell or Share request') +
+        '&body=' + encodeURIComponent('Please remove this address from all Blue Pulse Studios mailings and delete the personal information you hold:\n\n' + email);
+      var a = document.createElement('a'); a.href = href; document.body.appendChild(a); a.click(); a.remove();
+      f.reset();
+      if (window.bpsTransmission) window.bpsTransmission('Opt-out received.');
+    });
+  })();
+</script>
 </body>
 </html>
