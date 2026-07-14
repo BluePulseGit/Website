@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="The people behind Blue Pulse Studios — leadership of a boutique horror and genre studio for film, television, books, and games." />
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<meta name="theme-color" content="#02040A" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="About Us — Blue Pulse Studios" />
+<meta property="og:description" content="The people behind Blue Pulse Studios." />
+<meta property="og:image" content="og-image.jpg" />
+<meta property="og:site_name" content="Blue Pulse Studios" />
+<title>About Us — Blue Pulse Studios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --abyss:#02040A; --ocean:#060F1F; --depth:#0A1A35; --tide:#0F2A52; --pulse:#1D5FB8; --glow:#6BB4E8; --foam:#CFD9E4; --stone:#8B929C; --hair:#132341; --display:'Fraunces','Times New Roman',serif; --ui:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; overflow-x: clip; }
+  body { background: var(--abyss); color: var(--foam); font-family: var(--ui); -webkit-font-smoothing: antialiased; overflow-x: clip; }
+  body::before { content:''; position:fixed; inset:0; pointer-events:none; z-index:9999; opacity:.04; mix-blend-mode:overlay; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  .nav { position: fixed; top:0; left:0; right:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:28px 48px; background:linear-gradient(to bottom, rgba(2,4,10,0.5), transparent); font-size:10.5px; letter-spacing:.28em; text-transform:uppercase; transition:background .8s ease; }
+  .nav .brand { display:inline-flex; flex-direction:column; gap:3px; line-height:1; color:var(--foam); text-decoration:none; }
+  .nav .brand .line1 { font-weight:600; letter-spacing:.32em; font-size:11px; }
+  .nav .brand .line2 { font-weight:500; letter-spacing:.42em; font-size:9px; color:var(--stone); transition:color .6s; }
+  .nav .brand:hover .line2 { color:var(--foam); }
+  .nav .links a { color:var(--stone); text-decoration:none; margin-left:28px; transition:color .6s; }
+  .nav .links a:hover, .nav .links a.on { color:var(--foam); }
+
+  /* HERO */
+  .hero { position:relative; overflow:hidden; padding:190px 48px 70px; text-align:center; background:radial-gradient(ellipse at 50% 20%, #0A2448 0%, #020611 80%); }
+  .hero .kicker { font-size:10.5px; letter-spacing:.5em; text-transform:uppercase; color:var(--glow); font-weight:500; margin-bottom:26px; animation:fadeUp 1.2s ease .1s both; }
+  .hero h1 { font-family:var(--display); font-weight:200; font-size:clamp(52px,9vw,120px); letter-spacing:-.03em; line-height:.98; color:var(--foam); animation:fadeUp 1.2s ease .25s both; }
+  .hero h1 em { font-style:italic; color:var(--glow); }
+  .hero .sub { margin:30px auto 0; max-width:620px; font-family:var(--display); font-style:italic; font-weight:300; font-size:clamp(17px,1.7vw,22px); line-height:1.55; color:var(--stone); animation:fadeUp 1.2s ease .45s both; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+
+  /* LEADERSHIP */
+  .leadership { padding:80px 48px 130px; background:linear-gradient(to bottom, var(--abyss), var(--ocean)); }
+  .lead-head { display:flex; align-items:baseline; gap:20px; max-width:1200px; margin:0 auto 44px; }
+  .lead-head .num { font-size:10px; letter-spacing:.32em; color:var(--glow); font-weight:600; text-transform:uppercase; }
+  .lead-head .label { font-size:10px; letter-spacing:.32em; color:var(--foam); font-weight:500; text-transform:uppercase; }
+  .lead-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:32px; max-width:1200px; margin:0 auto; }
+  .lead-card { position:relative; border:1px solid var(--hair); background:var(--depth); cursor:pointer; text-align:left; padding:0; color:inherit; font:inherit; overflow:hidden; transition:border-color .5s, transform .5s; }
+  .lead-card:hover, .lead-card:focus-visible { border-color:var(--glow); transform:translateY(-6px); outline:none; }
+  .lead-card .photo { position:relative; aspect-ratio:4/5; overflow:hidden; background:radial-gradient(circle at 50% 35%, #123056, #06101f); }
+  .lead-card .photo img { width:100%; height:100%; object-fit:cover; filter:grayscale(1) contrast(1.02) brightness(.95); transition:filter .7s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
+  .lead-card:hover .photo img, .lead-card:focus-visible .photo img { filter:grayscale(0) contrast(1.03); transform:scale(1.05); }
+  /* graceful fallback when a photo file isn't in place yet */
+  .lead-card .photo .initials { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:var(--display); font-weight:200; font-size:64px; color:rgba(107,180,232,.35); letter-spacing:.05em; }
+  .lead-card .photo img { position:relative; z-index:1; }
+  .lead-card .grad { position:absolute; inset:0; z-index:2; background:linear-gradient(to top, rgba(2,4,10,.92) 0%, rgba(2,4,10,.35) 40%, transparent 70%); pointer-events:none; }
+  .lead-card .cap { position:absolute; left:0; right:0; bottom:0; z-index:3; padding:26px 26px 24px; }
+  .lead-card .cap .name { font-family:var(--display); font-weight:400; font-size:24px; letter-spacing:-.01em; color:var(--foam); }
+  .lead-card .cap .role { margin-top:6px; font-size:10.5px; letter-spacing:.28em; text-transform:uppercase; color:var(--glow); font-weight:600; }
+  .lead-card .cap .more { margin-top:14px; font-size:10px; letter-spacing:.3em; text-transform:uppercase; color:var(--stone); opacity:0; transform:translateY(6px); transition:opacity .5s, transform .5s; }
+  .lead-card:hover .cap .more, .lead-card:focus-visible .cap .more { opacity:1; transform:none; }
+  .ph-note { max-width:1200px; margin:34px auto 0; font-family:var(--display); font-style:italic; font-size:13px; color:var(--stone); }
+
+  /* MODAL */
+  .bio-modal { position:fixed; inset:0; z-index:6000; display:flex; align-items:center; justify-content:center; background:rgba(2,4,10,.82); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); padding:24px; }
+  .bio-modal[hidden] { display:none; }
+  .bio-card { position:relative; width:min(94vw,760px); max-height:88vh; overflow:auto; background:linear-gradient(150deg, var(--depth), var(--abyss)); border:1px solid var(--hair); display:grid; grid-template-columns:0.9fr 1.1fr; }
+  .bio-card .bio-photo { background:radial-gradient(circle at 50% 35%, #123056, #06101f) center/cover; min-height:280px; position:relative; }
+  .bio-card .bio-photo img { width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
+  .bio-card .bio-body { padding:40px 40px 44px; }
+  .bio-card .bio-role { font-size:10px; letter-spacing:.4em; text-transform:uppercase; color:var(--glow); font-weight:600; margin-bottom:12px; }
+  .bio-card h3 { font-family:var(--display); font-weight:300; font-size:34px; letter-spacing:-.02em; color:var(--foam); margin-bottom:18px; }
+  .bio-card p { font-size:14.5px; line-height:1.7; color:var(--foam); opacity:.82; margin-bottom:14px; }
+  .bio-close { position:absolute; top:14px; right:18px; background:none; border:0; color:var(--stone); font-size:26px; line-height:1; cursor:pointer; z-index:4; }
+  .bio-close:hover { color:var(--foam); }
+  @media (max-width:820px){ .bio-card{ grid-template-columns:1fr; } .bio-card .bio-photo{ min-height:220px; } }
+
+  /* FOOTER */
+  footer { padding:96px 48px 56px; background:var(--abyss); color:var(--stone); border-top:1px solid var(--hair); }
+  footer .top { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:64px; margin-bottom:72px; }
+  footer h4 { font-size:10px; letter-spacing:.4em; text-transform:uppercase; color:var(--foam); font-weight:500; margin-bottom:20px; }
+  footer a { display:block; color:var(--stone); text-decoration:none; font-size:13px; margin-bottom:10px; transition:color .5s; }
+  footer a:hover { color:var(--foam); }
+  footer .brand-col .mark { color:var(--foam); font-size:13px; letter-spacing:.3em; font-weight:600; margin-bottom:18px; }
+  footer .brand-col p { font-family:var(--display); font-style:italic; font-size:14px; line-height:1.55; max-width:340px; }
+  footer .bottom { display:flex; justify-content:space-between; font-size:10px; letter-spacing:.32em; text-transform:uppercase; padding-top:28px; border-top:1px solid var(--hair); }
+
+  .reveal { opacity:0; transform:translateY(18px); transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in { opacity:1; transform:none; }
+
+  @media (max-width:900px){ .lead-grid{ grid-template-columns:1fr; max-width:440px; } footer .top{ grid-template-columns:1fr 1fr; gap:40px; } }
+  @media (max-width:700px){ .nav{ padding:18px 24px; } .nav .links a{ margin-left:14px; font-size:9px; } .hero,.leadership{ padding-left:24px; padding-right:24px; } }
+</style>
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="page-transition entering" id="pageTransition" aria-hidden="true"></div>
+<nav class="nav">
+  <a class="brand" href="homepage.html"><span class="line1">BLUE PULSE</span><span class="line2">STUDIOS</span></a>
+  <div class="links">
+    <a href="films.html">Films</a>
+    <a href="shop.html">Shop</a>
+    <span class="studio-menu">
+      <a class="studio-trigger" href="studio.html">Studio</a>
+      <div class="studio-panel" role="menu">
+        <a href="about.html" class="on" role="menuitem">About Us</a>
+        <a href="press.html" role="menuitem">Press</a>
+        <a href="journal.html" role="menuitem">Newswire</a>
+      </div>
+    </span>
+    <a href="community.html">Community</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="main" class="hero">
+  <div class="kicker">About Us</div>
+  <h1>The people behind <em>the pulse.</em></h1>
+  <p class="sub">A boutique studio is only its people. These are the ones who set the course &mdash; and answer for it.</p>
+</section>
+
+<!-- LEADERSHIP -->
+<section class="leadership">
+  <div class="lead-head reveal"><span class="num">01</span><span class="label">Leadership</span></div>
+  <div class="lead-grid">
+
+    <button type="button" class="lead-card reveal"
+      data-name="Raphael Arkera" data-role="Founder"
+      data-bio="Raphael Arkera founded Blue Pulse Studios and sets its creative direction across film, television, books, and games.&#10;&#10;This is placeholder biography copy. Edit it any time in the admin Copy Editor — add credits, background, and voice.">
+      <div class="photo">
+        <span class="initials" aria-hidden="true">RA</span>
+        <img src="assets/raphael-arkera.jpg" alt="Raphael Arkera" loading="lazy"
+             onerror="this.style.display='none'">
+      </div>
+      <div class="grad"></div>
+      <div class="cap">
+        <div class="name">Raphael Arkera</div>
+        <div class="role">Founder</div>
+        <div class="more">Read bio &rarr;</div>
+      </div>
+    </button>
+
+    <button type="button" class="lead-card reveal"
+      data-name="Michael DePiro" data-role="Co-Founder"
+      data-bio="Michael DePiro helps steer the studio's slate and productions from development through delivery.&#10;&#10;This is placeholder biography copy. Edit it any time in the admin Copy Editor — add credits, background, and voice.">
+      <div class="photo">
+        <span class="initials" aria-hidden="true">MD</span>
+        <img src="assets/michael-depiro.jpg" alt="Michael DePiro" loading="lazy"
+             onerror="this.style.display='none'">
+      </div>
+      <div class="grad"></div>
+      <div class="cap">
+        <div class="name">Michael DePiro</div>
+        <div class="role">Co-Founder</div>
+        <div class="more">Read bio &rarr;</div>
+      </div>
+    </button>
+
+    <button type="button" class="lead-card reveal"
+      data-name="Jamie Van Buren" data-role="Co-Founder"
+      data-bio="Jamie Van Buren shapes the studio's stories and long-term creative development.&#10;&#10;This is placeholder biography copy. Edit it any time in the admin Copy Editor — add credits, background, and voice.">
+      <div class="photo">
+        <span class="initials" aria-hidden="true">JV</span>
+        <img src="assets/jamie-van-buren.jpg" alt="Jamie Van Buren" loading="lazy"
+             onerror="this.style.display='none'">
+      </div>
+      <div class="grad"></div>
+      <div class="cap">
+        <div class="name">Jamie Van Buren</div>
+        <div class="role">Co-Founder</div>
+        <div class="more">Read bio &rarr;</div>
+      </div>
+    </button>
+
+  </div>
+  <p class="ph-note" data-placeholder>Roles and bios are placeholders for now &mdash; edit them any time in the admin Copy Editor. Portraits render in black &amp; white and warm to color on hover.</p>
+</section>
+
+<!-- BIO MODAL -->
+<div id="bioModal" class="bio-modal" hidden>
+  <div class="bio-card">
+    <button type="button" class="bio-close" id="bioClose" aria-label="Close">&times;</button>
+    <div class="bio-photo"><img id="bioImg" src="" alt="" onerror="this.style.display='none'"></div>
+    <div class="bio-body">
+      <div class="bio-role" id="bioRole"></div>
+      <h3 id="bioName"></h3>
+      <div id="bioText"></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="top">
+    <div class="brand-col">
+      <div class="mark">BLUE PULSE STUDIOS</div>
+      <p>An independent studio for horror and genre film, television, books, and games, based in Los Angeles and Pittsburgh.</p>
+    </div>
+    <div>
+      <h4>Projects</h4>
+      <a href="films.html">Films</a>
+      <a href="moth-country.html">Television</a>
+      <a href="books.html">Books</a>
+    </div>
+    <div>
+      <h4>Shop</h4>
+      <a href="shop.html">All</a>
+      <a href="cart.html">Cart</a>
+    </div>
+    <div>
+      <h4>Studio</h4>
+      <a href="about.html">About Us</a>
+      <a href="press.html">Press</a>
+      <a href="journal.html">Newswire</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
+  <div class="bottom">
+    <div>&copy; 2026 Blue Pulse Studios</div>
+    <div class="legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="shipping-returns.html">Shipping &amp; Returns</a></div>
+    <div>Los Angeles &middot; Pittsburgh</div>
+  </div>
+</footer>
+
+<script>
+  /* scroll reveal */
+  (function () {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.14 });
+    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+
+    var nav = document.querySelector('.nav');
+    window.addEventListener('scroll', function () {
+      nav.style.background = window.scrollY > 60 ? 'rgba(2,4,10,0.82)' : 'linear-gradient(to bottom, rgba(2,4,10,0.5), transparent)';
+    }, { passive: true });
+  })();
+
+  /* leadership bio modal */
+  (function () {
+    var modal = document.getElementById('bioModal');
+    var closeBtn = document.getElementById('bioClose');
+    var img = document.getElementById('bioImg');
+    var nameEl = document.getElementById('bioName');
+    var roleEl = document.getElementById('bioRole');
+    var textEl = document.getElementById('bioText');
+    function open(card) {
+      nameEl.textContent = card.getAttribute('data-name') || '';
+      roleEl.textContent = card.getAttribute('data-role') || '';
+      var bio = card.getAttribute('data-bio') || '';
+      textEl.innerHTML = bio.split('\n\n').map(function (p) { return '<p>' + p.replace(/</g, '&lt;') + '</p>'; }).join('');
+      var src = card.querySelector('img') ? card.querySelector('img').getAttribute('src') : '';
+      img.style.display = ''; img.src = src; img.alt = nameEl.textContent;
+      modal.hidden = false;
+    }
+    function close() { modal.hidden = true; }
+    document.querySelectorAll('.lead-card').forEach(function (c) { c.addEventListener('click', function () { open(c); }); });
+    closeBtn.addEventListener('click', close);
+    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) close(); });
+  })();
+</script>
+<script src="site.js"></script>
+</body>
+</html>

@@ -484,18 +484,17 @@ window.bpsSubscribe = function (formOrEmail, ev) {
     var footer = document.querySelector('footer');
     var st = document.createElement('style');
     st.textContent =
-      '#bpsFooterBand{max-width:1200px;margin:0 auto 52px;padding:0 0 44px;border-bottom:1px solid #132341;display:flex;flex-wrap:wrap;gap:48px;align-items:center;justify-content:space-between}' +
-      '#bpsFooterBand .bps-fb-signup{min-width:340px;max-width:600px;text-align:left}' +
-      "#bpsFooterBand .bps-fb-copy{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:21px;line-height:1.45;color:#F2F5F8;max-width:560px;margin-bottom:22px}" +
-      '#bpsFooterBand .bps-fb-form{display:flex;max-width:520px;border-bottom:2px solid #6BB4E8}' +
-      '#bpsFooterBand .bps-fb-form input{flex:1;background:transparent;border:0;color:#CFD9E4;font-family:inherit;font-size:17px;padding:15px 0;outline:none}' +
-      '#bpsFooterBand .bps-fb-form button{background:transparent;border:0;color:#6BB4E8;font-family:inherit;font-size:12px;letter-spacing:.3em;text-transform:uppercase;font-weight:600;cursor:pointer;padding:0 6px;white-space:nowrap}' +
+      /* signup + socials sit BELOW the brand summary, identical on every page */
+      '#bpsFooterBand{margin-top:26px;max-width:380px}' +
+      "#bpsFooterBand .bps-fb-copy{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:14px;line-height:1.5;color:#CFD9E4;margin-bottom:16px}" +
+      '#bpsFooterBand .bps-fb-form{display:flex;border-bottom:2px solid #6BB4E8;margin-bottom:22px}' +
+      '#bpsFooterBand .bps-fb-form input{flex:1;background:transparent;border:0;color:#CFD9E4;font-family:inherit;font-size:14px;padding:11px 0;outline:none}' +
+      '#bpsFooterBand .bps-fb-form button{background:transparent;border:0;color:#6BB4E8;font-family:inherit;font-size:10px;letter-spacing:.3em;text-transform:uppercase;font-weight:600;cursor:pointer;padding:0 4px;white-space:nowrap}' +
       '#bpsFooterBand .bps-fb-form button:hover{color:#CFD9E4}' +
-      '#bpsFooterBand .bps-fb-socials{display:flex;gap:18px;align-items:center;flex-shrink:0}' +
+      '#bpsFooterBand .bps-fb-socials{display:flex;gap:16px;align-items:center;flex-wrap:wrap}' +
       '#bpsFooterBand .bps-fb-socials a{color:#8B929C;display:inline-flex;transition:color .3s,transform .3s}' +
       '#bpsFooterBand .bps-fb-socials a:hover{color:#CFD9E4;transform:translateY(-2px)}' +
-      '#bpsFooterBand .bps-fb-socials svg{width:19px;height:19px}' +
-      '@media (max-width:700px){#bpsFooterBand{padding-left:24px;padding-right:24px;gap:28px}}';
+      '#bpsFooterBand .bps-fb-socials svg{width:18px;height:18px}';
     document.head.appendChild(st);
     var links = socials();
     var iconRow = ORDER.filter(function (k) { var u = links[k]; return typeof u === 'string' && /^https?:\/\//i.test(u); })
@@ -503,10 +502,13 @@ window.bpsSubscribe = function (formOrEmail, ev) {
     var band = document.createElement('div');
     band.id = 'bpsFooterBand';
     band.innerHTML =
-      (iconRow ? '<div class="bps-fb-socials">' + iconRow + '</div>' : '') +
-      '<div class="bps-fb-signup"><div class="bps-fb-copy">Get our emails, transmissions, podcasts, interviews with creators, and more &mdash; delivered straight to you.</div>' +
-      '<form class="bps-fb-form" id="bpsFooterSignup"><input type="email" name="email" placeholder="you@email.com" required aria-label="Email address"><button type="submit">Subscribe &rarr;</button></form></div>';
-    if (footer) footer.insertBefore(band, footer.firstChild); else document.body.appendChild(band);
+      '<div class="bps-fb-copy">Get our emails, transmissions, podcasts, interviews with creators, and more &mdash; delivered straight to you.</div>' +
+      '<form class="bps-fb-form" id="bpsFooterSignup"><input type="email" name="email" placeholder="you@email.com" required aria-label="Email address"><button type="submit">Subscribe &rarr;</button></form>' +
+      (iconRow ? '<div class="bps-fb-socials">' + iconRow + '</div>' : '');
+    var brandCol = footer ? footer.querySelector('.brand-col') : null;
+    if (brandCol) brandCol.appendChild(band);
+    else if (footer) footer.insertBefore(band, footer.firstChild);
+    else document.body.appendChild(band);
     var form = document.getElementById('bpsFooterSignup');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
@@ -632,6 +634,18 @@ window.bpsSubscribe = function (formOrEmail, ev) {
       'html.bps-lite .vig,html.bps-lite [class*="blur"]{filter:none!important}';
     document.head.appendChild(s);
   }
+})();
+
+/* ——— STUDIO MENU — add the "About Us" (leadership) page to the Studio dropdown
+   on every page that has the dropdown, from this one place. ——— */
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    var panel = document.querySelector('.studio-panel');
+    if (!panel || panel.querySelector('a[href="about.html"]')) return;
+    var a = document.createElement('a');
+    a.href = 'about.html'; a.setAttribute('role', 'menuitem'); a.textContent = 'About Us';
+    panel.insertBefore(a, panel.firstChild);
+  });
 })();
 
 /* ——— SCROLL V-ARROW — a V-shaped down button, bottom-center, that smooth-scrolls
