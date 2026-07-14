@@ -11,6 +11,13 @@
 window.BPS_CONFIG = {
   formEndpoint: '',
   newsletterEndpoint: '',
+  /* Email signups → Google Form → "Email Subscribers" Google Sheet.
+     Owned by production@bluepulsestudios.com. To point at a different list,
+     replace url (…/formResponse) and entry (the email field's entry.NNN id). */
+  newsletterForm: {
+    url: 'https://docs.google.com/forms/d/e/1FAIpQLSebZPJdrO4G_EMzjJ7bv9MLmfdw4-4Hb5qqOPJq0ml4j2Av5g/formResponse',
+    entry: 'entry.102606424'
+  },
   analyticsDomain: '',
   /* YouTube video IDs — set these and the trailer buttons go live */
   trailers: {
@@ -32,22 +39,47 @@ window.BPS_CONFIG = {
   document.head.appendChild(s);
 })();
 
-/* Newsletter signup — used by the email forms on shop/product pages.
-   POSTs to newsletterEndpoint when configured; demo-confirms otherwise. */
-window.bpsSubscribe = function (form, e) {
-  if (e) e.preventDefault();
-  const btn = form.querySelector('button');
-  const input = form.querySelector('input[type=email]');
-  const ep = (window.BPS_CONFIG || {}).newsletterEndpoint;
-  const done = () => { btn.textContent = 'Subscribed ✓'; btn.disabled = true; };
-  if (!ep) { done(); return false; }
-  btn.textContent = '…';
-  fetch(ep, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify({ email: input ? input.value : '', source: 'newsletter' })
-  }).then(r => { r.ok ? done() : (btn.textContent = 'Try again'); })
-    .catch(() => { btn.textContent = 'Try again'; });
+/* Newsletter signup — used by every email form on the site.
+   Accepts either a <form> element (shop/product pages) OR an (email, source)
+   pair (footer, account join). Preferred target is the Google Form → Sheet
+   (newsletterForm); falls back to a JSON endpoint (newsletterEndpoint). */
+window.bpsSubscribe = function (formOrEmail, ev) {
+  let email = '', source = 'newsletter', form = null, btn = null;
+  if (typeof formOrEmail === 'string') {
+    email = formOrEmail.trim();
+    source = (typeof ev === 'string' && ev) ? ev : 'newsletter';
+  } else if (formOrEmail && formOrEmail.querySelector) {
+    form = formOrEmail;
+    if (ev && ev.preventDefault) ev.preventDefault();
+    const input = form.querySelector('input[type=email]');
+    email = input ? input.value.trim() : '';
+    btn = form.querySelector('button');
+  }
+  const cfg = window.BPS_CONFIG || {};
+  const gf = cfg.newsletterForm, ep = cfg.newsletterEndpoint;
+  const done = () => { if (btn) { btn.textContent = 'Subscribed ✓'; btn.disabled = true; } };
+  if (!email) { done(); return false; }
+  if (btn) btn.textContent = '…';
+  /* Preferred: Google Form → "Email Subscribers" Sheet (fire-and-forget) */
+  if (gf && gf.url && gf.entry) {
+    const body = new URLSearchParams();
+    body.append(gf.entry, email);
+    if (source) body.append('bps_source', source); // ignored by the form; here for future fields
+    fetch(gf.url, { method: 'POST', mode: 'no-cors', body: body }).catch(function () {});
+    done();
+    return false;
+  }
+  /* Fallback: JSON endpoint (Formspree / Mailchimp / Buttondown) */
+  if (ep) {
+    fetch(ep, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ email: email, source: source })
+    }).then(r => { r.ok ? done() : (btn && (btn.textContent = 'Try again')); })
+      .catch(() => { if (btn) btn.textContent = 'Try again'; });
+    return false;
+  }
+  done();
   return false;
 };
 
@@ -229,9 +261,8 @@ window.bpsSubscribe = function (form, e) {
         e.preventDefault();
         const acc = { name: document.getElementById('bpsAccName').value.trim(), email: document.getElementById('bpsAccEmail').value.trim() };
         try { localStorage.setItem(KEY, JSON.stringify(acc)); } catch (_) {}
-        // also feed the newsletter endpoint if configured
-        const ep = (window.BPS_CONFIG || {}).newsletterEndpoint;
-        if (ep) fetch(ep, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify({ email: acc.email, name: acc.name, source: 'account-join' }) }).catch(() => {});
+        // also add them to the subscriber list (Email Subscribers sheet)
+        try { if (window.bpsSubscribe && acc.email) window.bpsSubscribe(acc.email, 'account-join'); } catch (_) {}
         labelAll(); renderPanel();
       });
     }
