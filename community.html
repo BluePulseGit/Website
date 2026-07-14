@@ -224,47 +224,39 @@
     color: var(--foam); opacity: .9; max-width: 820px; margin-bottom: 80px;
     position: relative; z-index: 2;
   }
+  /* Socials as floating "bubbles" — a cluster of round links, no scroll grid */
   .social-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1px;
-    background: var(--hair);
-    border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair);
+    display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
+    gap: 26px 30px;
     position: relative; z-index: 2;
+    padding: 24px 0 8px;
   }
   .soc {
-    background: var(--ocean);
-    padding: 40px 32px;
-    display: flex; flex-direction: column; justify-content: space-between;
-    min-height: 220px;
-    text-decoration: none;
-    color: var(--foam);
-    transition: background .6s;
+    position: relative;
+    width: 138px; height: 138px; border-radius: 50%;
+    background: radial-gradient(circle at 50% 38%, rgba(10,26,53,0.92), var(--ocean));
+    border: 1px solid var(--hair);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; text-decoration: none; color: var(--foam);
+    box-shadow: inset 0 0 24px rgba(107,180,232,0.06), 0 10px 30px rgba(0,0,0,0.35);
+    transition: transform .5s cubic-bezier(.2,.7,.2,1), border-color .5s, box-shadow .5s, background .5s;
+    animation: socFloat 6s ease-in-out infinite;
   }
-  .soc:hover { background: rgba(29,95,184,0.08); }
-  .soc .icon {
-    width: 32px; height: 32px; fill: var(--foam);
-    opacity: 0.75;
-    transition: opacity .5s, transform .5s;
+  .soc:nth-child(2n) { animation-duration: 7.4s; animation-delay: -1.5s; }
+  .soc:nth-child(3n) { animation-duration: 8.2s; animation-delay: -3s; }
+  @keyframes socFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  html.bps-rm .soc { animation: none; }
+  .soc:hover {
+    transform: translateY(-8px) scale(1.05);
+    border-color: var(--glow);
+    box-shadow: inset 0 0 26px rgba(107,180,232,0.12), 0 0 40px rgba(29,95,184,0.4);
+    background: radial-gradient(circle at 50% 38%, rgba(29,95,184,0.28), var(--ocean));
   }
-  .soc:hover .icon { opacity: 1; transform: translateY(-2px); }
-  .soc .meta { margin-top: auto; }
-  .soc .name {
-    font-family: var(--display); font-weight: 400;
-    font-size: 22px; letter-spacing: -0.01em;
-    color: var(--foam); margin-top: 24px;
-  }
-  .soc .handle {
-    font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
-    color: var(--stone); margin-top: 8px; font-weight: 500;
-  }
-  .soc .arrow {
-    font-size: 10px; letter-spacing: .4em; text-transform: uppercase;
-    color: var(--glow); margin-top: 18px; font-weight: 500;
-    display: flex; align-items: center; gap: 10px;
-  }
-  .soc .arrow::after { content: '→'; transition: transform .4s; }
-  .soc:hover .arrow::after { transform: translateX(4px); }
+  .soc .icon { width: 30px; height: 30px; fill: var(--foam); opacity: 0.82; transition: opacity .5s, transform .5s; }
+  .soc:hover .icon { opacity: 1; transform: translateY(-1px); }
+  .soc .meta { margin-top: 12px; }
+  .soc .name { font-family: var(--ui); font-weight: 500; font-size: 12.5px; letter-spacing: .04em; color: var(--foam); }
+  .soc .handle, .soc .arrow { display: none; }
 
   /* ——— ON THE OTHER SIDE ——— */
   .other-side {
@@ -358,8 +350,9 @@
   footer .brand-col p { font-family: var(--display); font-style: italic; font-size: 14px; line-height: 1.55; max-width: 340px; }
   footer .bottom { display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .32em; text-transform: uppercase; padding-top: 28px; border-top: 1px solid var(--hair); }
 
-  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 1.4s cubic-bezier(.2,.7,.2,1), transform 1.4s cubic-bezier(.2,.7,.2,1); }
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
   .reveal.in { opacity: 1; transform: none; }
+  .portal .cue { display: none; } /* replaced by the sitewide scroll V-arrow */
 
   @media (max-width: 1000px) {
     .social-grid { grid-template-columns: repeat(2, 1fr); }
@@ -529,51 +522,6 @@
   </div>
 </section>
 
-<!-- FAN ART -->
-<section class="other-side" style="padding-top:0">
-  <div class="inner">
-    <h2 class="reveal">Fan art <em>gallery.</em></h2>
-    <div class="perks" data-placeholder>
-      <div class="perk reveal"><div class="n" style="font-size:40px;color:var(--hair)">&#9633;</div><h4>Your piece here</h4><p>Paintings, sculpts, tattoos, cosplay &mdash; if our films made you make something, we want to see it.</p></div>
-      <div class="perk reveal"><div class="n" style="font-size:40px;color:var(--hair)">&#9633;</div><h4>Curated monthly</h4><p>We feature a handful of pieces each month on this page and the Newswire, credited and linked.</p></div>
-      <div class="perk reveal"><div class="n" style="font-size:40px;color:var(--hair)">&#9633;</div><h4>Artist-owned, always</h4><p>Your work stays yours. Featuring here never transfers rights &mdash; that&rsquo;s in writing.</p></div>
-    </div>
-    <p class="ph-note" style="font-family:var(--display);font-style:italic;color:var(--stone)">The gallery opens with our community. First submissions will hang here.</p>
-    <p style="margin-top:32px"><button type="button" id="fanArtOpen" style="background:none;border:0;cursor:pointer;font-family:inherit;font-size:10.5px;letter-spacing:.42em;text-transform:uppercase;color:var(--foam);border-bottom:1px solid var(--foam);padding:0 0 4px;font-weight:500">Submit your work &rarr;</button></p>
-  </div>
-
-  <style>
-    .fa-modal{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;background:rgba(2,4,10,.78);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);padding:24px}
-    .fa-modal[hidden]{display:none}
-    .fa-card{position:relative;width:min(94vw,480px);background:linear-gradient(150deg,var(--depth),var(--abyss));border:1px solid var(--hair);padding:44px 40px;max-height:90vh;overflow:auto}
-    .fa-close{position:absolute;top:14px;right:18px;background:none;border:0;color:var(--stone);font-size:26px;line-height:1;cursor:pointer}
-    .fa-close:hover{color:var(--foam)}
-    .fa-card .fa-kicker{font-size:10px;letter-spacing:.42em;text-transform:uppercase;color:var(--glow);font-weight:600;margin-bottom:14px}
-    .fa-card h3{font-family:var(--display);font-weight:300;font-size:30px;color:var(--foam);margin:0 0 10px}
-    .fa-sub{font-size:13px;line-height:1.55;color:var(--stone);margin:0 0 26px}
-    .fa-card label{display:block;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--stone);font-weight:500;margin-bottom:18px}
-    .fa-card input,.fa-card textarea{display:block;width:100%;margin-top:8px;font:inherit;font-size:14px;color:var(--foam);background:transparent;border:0;border-bottom:1px solid var(--hair);padding:10px 0;outline:none;resize:vertical}
-    .fa-card input:focus,.fa-card textarea:focus{border-color:var(--glow)}
-    .fa-send{margin-top:8px;width:100%;padding:16px;background:transparent;border:1px solid var(--foam);color:var(--foam);font-family:inherit;font-size:10.5px;letter-spacing:.42em;text-transform:uppercase;font-weight:500;cursor:pointer;transition:background .4s,color .4s}
-    .fa-send:hover{background:var(--foam);color:var(--abyss)}
-  </style>
-  <div id="fanArtModal" class="fa-modal" hidden>
-    <div class="fa-card">
-      <button type="button" class="fa-close" id="fanArtClose" aria-label="Close">&times;</button>
-      <div class="fa-kicker">Fan Art Gallery</div>
-      <h3>Submit your work</h3>
-      <p class="fa-sub">Paintings, sculpts, tattoos, cosplay, edits &mdash; if our films made you make something, send it over. Featured pieces are credited and linked; your work stays yours.</p>
-      <form id="fanArtForm">
-        <label>Name<input type="text" name="name" required></label>
-        <label>Email<input type="email" name="email" required></label>
-        <label>Link to your work<input type="url" name="link" placeholder="https://… portfolio, IG post, drive" required></label>
-        <label>Anything to add<textarea name="message" rows="3" placeholder="Title, medium, which film inspired it…"></textarea></label>
-        <button type="submit" class="fa-send">Send &rarr;</button>
-      </form>
-    </div>
-  </div>
-</section>
-
 <!-- CLOSER -->
 <section class="closer" data-placeholder>
   <div class="inner">
@@ -645,32 +593,6 @@
       }
     });
     document.querySelectorAll('a.enter').forEach(function (a) { a.setAttribute('data-social', 'discord'); });
-  })();
-</script>
-<script>
-  /* Fan-art submission modal → routes to fanart@bluepulsestudios.com, then the
-     "Transmission received" pulse fires (window.bpsTransmission, from site.js). */
-  (function () {
-    var openBtn = document.getElementById('fanArtOpen');
-    var modal = document.getElementById('fanArtModal');
-    var closeBtn = document.getElementById('fanArtClose');
-    var form = document.getElementById('fanArtForm');
-    if (!openBtn || !modal || !form) return;
-    function open() { modal.hidden = false; var i = modal.querySelector('input'); if (i) setTimeout(function () { i.focus(); }, 50); }
-    function close() { modal.hidden = true; }
-    openBtn.addEventListener('click', open);
-    closeBtn.addEventListener('click', close);
-    modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) close(); });
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      var d = new FormData(form);
-      var body = 'Name: ' + d.get('name') + '\nEmail: ' + d.get('email') + '\nLink: ' + d.get('link') + '\n\n' + (d.get('message') || '');
-      var href = 'mailto:fanart@bluepulsestudios.com?subject=' + encodeURIComponent('Fan art submission — ' + d.get('name')) + '&body=' + encodeURIComponent(body);
-      var a = document.createElement('a'); a.href = href; document.body.appendChild(a); a.click(); a.remove();
-      close(); form.reset();
-      if (window.bpsTransmission) window.bpsTransmission('Transmission received.');
-    });
   })();
 </script>
 <script src="socials.js"></script>

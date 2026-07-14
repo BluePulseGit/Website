@@ -114,9 +114,15 @@
 
   /* ——— CONTACT BODY ——— */
   .body {
-    padding: 140px 72px;
+    padding: 116px 72px 60px;
     background: var(--ocean);
     position: relative;
+    min-height: 100vh;
+    display: flex; align-items: center;
+  }
+  .body .page-kicker {
+    font-size: 10.5px; letter-spacing: .5em; text-transform: uppercase;
+    color: var(--glow); font-weight: 500; margin-bottom: 18px;
   }
   .body::before {
     content: ''; position: absolute; inset: 0;
@@ -133,16 +139,16 @@
   /* FORM */
   .form-col h2 {
     font-family: var(--display); font-weight: 300;
-    font-size: clamp(32px, 3.6vw, 48px); letter-spacing: -0.02em;
-    line-height: 1.1; color: var(--foam); margin-bottom: 16px;
+    font-size: clamp(28px, 3vw, 40px); letter-spacing: -0.02em;
+    line-height: 1.08; color: var(--foam); margin-bottom: 12px;
   }
   .form-col h2 em { font-style: italic; color: var(--glow); }
   .form-col .blurb {
     font-family: var(--display); font-style: italic; font-weight: 300;
-    font-size: 17px; line-height: 1.55; color: var(--stone);
-    max-width: 520px; margin-bottom: 56px;
+    font-size: 16px; line-height: 1.5; color: var(--stone);
+    max-width: 520px; margin-bottom: 28px;
   }
-  form .row { margin-bottom: 36px; }
+  form .row { margin-bottom: 20px; }
   form label {
     display: block; font-size: 10px; letter-spacing: .4em; text-transform: uppercase;
     color: var(--stone); font-weight: 500; margin-bottom: 12px;
@@ -154,7 +160,7 @@
     font-size: 16px; outline: none; font-family: var(--ui);
     transition: border-color .5s;
   }
-  form textarea { min-height: 140px; resize: vertical; line-height: 1.55; padding-top: 18px; }
+  form textarea { min-height: 92px; resize: vertical; line-height: 1.5; padding-top: 14px; }
   form select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, var(--stone) 50%), linear-gradient(135deg, var(--stone) 50%, transparent 50%); background-position: right 0.5em top 50%, right 0em top 50%; background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; cursor: pointer; }
   form option { background: var(--abyss); color: var(--foam); }
   form input::placeholder, form textarea::placeholder { color: var(--stone); opacity: .55; }
@@ -181,9 +187,9 @@
   form .success.on { opacity: 1; }
 
   /* CONTACT CARDS */
-  .info-col { display: flex; flex-direction: column; gap: 16px; }
+  .info-col { display: flex; flex-direction: column; gap: 12px; }
   .info-card {
-    padding: 32px; border: 1px solid var(--hair);
+    padding: 20px 24px; border: 1px solid var(--hair);
     background: rgba(10,26,53,0.3);
     transition: border-color .6s, background .6s;
   }
@@ -191,10 +197,10 @@
   .info-card .k {
     font-size: 10px; letter-spacing: .5em; color: var(--glow); font-weight: 500; text-transform: uppercase;
   }
-  .info-card .t { font-family: var(--display); font-weight: 400; font-size: 22px; color: var(--foam); margin-top: 12px; letter-spacing: -0.01em; }
-  .info-card .d { margin-top: 6px; font-family: var(--display); font-style: italic; font-size: 13px; color: var(--stone); line-height: 1.5; }
+  .info-card .t { font-family: var(--display); font-weight: 400; font-size: 18px; color: var(--foam); margin-top: 8px; letter-spacing: -0.01em; }
+  .info-card .d { margin-top: 5px; font-family: var(--display); font-style: italic; font-size: 12.5px; color: var(--stone); line-height: 1.45; }
   .info-card a {
-    display: inline-block; margin-top: 16px;
+    display: inline-block; margin-top: 12px;
     font-size: 13px; color: var(--foam); text-decoration: none;
     border-bottom: 1px solid var(--hair); padding-bottom: 3px;
     transition: border-color .5s, color .5s;
@@ -273,7 +279,7 @@
     padding-top: 28px; border-top: 1px solid var(--hair);
   }
 
-  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 1.4s cubic-bezier(.2,.7,.2,1), transform 1.4s cubic-bezier(.2,.7,.2,1); }
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
   .reveal.in { opacity: 1; transform: none; }
 
   @media (max-width: 1000px) {
@@ -314,25 +320,13 @@
   </div>
 </nav>
 
-<!-- HERO -->
-<section id="main" class="hero">
-  <div class="bg"></div>
-  <div class="vig"></div>
-  <div class="content">
-    <div class="kicker">Contact</div>
-    <h1>Say <em>something.</em></h1>
-    <p class="sub">Introductions, press, partnerships, or just a hello. We read everything. Good people always get a reply.</p>
-  </div>
-</section>
-
-<div class="rule"></div>
-
-<!-- BODY -->
-<section class="body">
+<!-- CONTACT — single screen, no scroll -->
+<section id="main" class="body">
   <div class="split">
     <div class="form-col reveal">
+      <div class="page-kicker">Contact</div>
       <h2>Tell us what <em>you&rsquo;re working on.</em></h2>
-      <p class="blurb">A short note is fine. A logline, a deck, a question &mdash; whatever&rsquo;s on your mind. We&rsquo;ll get back to you.</p>
+      <p class="blurb">Introductions, press, partnerships, or just a hello. A short note is fine &mdash; a logline, a question, whatever&rsquo;s on your mind. Good people always get a reply.</p>
       <form id="contactForm">
         <div class="row two">
           <div>
@@ -377,40 +371,19 @@
       <div class="info-card">
         <div class="k">Introductions</div>
         <div class="t">We want to meet people</div>
-        <div class="d">We can&rsquo;t legally accept unsolicited scripts or pitches &mdash; but we can absolutely meet the people behind them. Introduce yourself. Tell us who you are, what you&rsquo;re working on, what keeps you up at night. If it&rsquo;s a fit, we&rsquo;ll set up a call.</div>
+        <div class="d">We can&rsquo;t legally accept unsolicited scripts or pitches &mdash; but we can meet the people behind them. Introduce yourself; if it&rsquo;s a fit, we&rsquo;ll set up a call.</div>
         <a href="mailto:hello@bluepulsestudios.com">hello@bluepulsestudios.com</a>
       </div>
       <div class="info-card">
-        <div class="k">Press</div>
-        <div class="t">Media &amp; interviews</div>
-        <div class="d">Press kits, embargo inquiries, junkets, and festival coverage.</div>
-        <a href="mailto:press@bluepulsestudios.com">press@bluepulsestudios.com</a>
+        <div class="k">Press &amp; careers</div>
+        <div class="t">Media &amp; hiring</div>
+        <div class="d">Press kits and interviews: <a href="mailto:press@bluepulsestudios.com" style="margin:0;border:0;padding:0;color:var(--foam)">press@bluepulsestudios.com</a>. Open roles: <a href="careers.html" style="margin:0;border:0;padding:0;color:var(--foam)">careers &rarr;</a></div>
       </div>
       <div class="info-card">
-        <div class="k">Careers</div>
-        <div class="t">Join the studio</div>
-        <div class="d">We hire slowly. If we&rsquo;re not posting, send anyway &mdash; we keep good notes.</div>
-        <a href="careers.html">Open roles &amp; how to reach us &rarr;</a>
+        <div class="k">Offices &mdash; by appointment</div>
+        <div class="t">Los Angeles &middot; Pittsburgh</div>
+        <div class="d">Production &amp; development in LA; writing &amp; post in Pittsburgh, PA.</div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- OFFICES -->
-<section class="offices">
-  <div class="off-head reveal"><span class="num">02</span><span class="label">Offices</span></div>
-  <div class="off-grid reveal">
-    <div class="office la">
-      <div class="k">Headquarters</div>
-      <h3>Los Angeles</h3>
-      <div class="addr">Production, post, and development<br/>Los Angeles, California</div>
-      <div class="phone">By appointment</div>
-    </div>
-    <div class="office alt">
-      <div class="k">Headquarters</div>
-      <h3>Pittsburgh</h3>
-      <div class="addr">Writing, editing, and quiet work<br/>Pittsburgh, Pennsylvania</div>
-      <div class="phone">By appointment</div>
     </div>
   </div>
 </section>
