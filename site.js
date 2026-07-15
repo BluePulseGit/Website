@@ -891,7 +891,7 @@ window.bpsSubscribe = function (formOrEmail, ev) {
   function put(o) { localStorage.setItem(KEY, JSON.stringify(o)); }
   function editable() {
     return Array.prototype.slice.call(document.querySelectorAll(SEL)).filter(function (el) {
-      if (el.closest('nav, .nav, .meta-bar, script, style, .legal, #bpsCopyBar')) return false;
+      if (el.closest('nav, .nav, .meta-bar, script, style, .legal, #bpsCopyBar, .hero, .feat-list, .feat-slides')) return false;
       if (el.querySelector(SEL)) return false;              // only leaf text blocks
       return el.textContent.trim().length > 0;
     });
