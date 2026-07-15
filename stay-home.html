@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="site.css">
 <script src="products.js"></script>
 <style>
-  :root { --abyss: #02040A; --ocean: #060F1F; --depth: #0A1A35; --tide: #0F2A52; --pulse: #1D5FB8; --glow: #6BB4E8; --foam: #CFD9E4; --stone: #8B929C; --hair: #132341; --display: 'Fraunces', serif; --ui: 'Inter', sans-serif; }
+  :root { --abyss: #0d0b08; --ocean: #14110c; --depth: #1c1813; --tide: #241d12; --pulse: #C25E12; --glow: #E27B24; --accent: #E27B24; --foam: #E8E2D6; --stone: #9A9184; --hair: #2a241b; --display: 'Fraunces', serif; --ui: 'Inter', sans-serif; }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; overflow-x: clip; }
   body { background: var(--abyss); color: var(--foam); font-family: var(--ui); -webkit-font-smoothing: antialiased; }
@@ -109,6 +109,13 @@
   .merch-card .k { font-size: 9px; letter-spacing: .4em; text-transform: uppercase; color: var(--glow); margin-bottom: 6px; font-weight: 500; }
   .merch-card .n { font-family: var(--display); font-weight: 400; font-size: 17px; color: var(--foam); letter-spacing: -0.01em; }
   .merch-card .p { margin-top: 6px; font-size: 13px; color: var(--foam); font-weight: 500; }
+
+  /* Press */
+  .press-band { padding: 104px 72px; border-top: 1px solid var(--hair); background: var(--abyss); }
+  .press-band h2 { font-family:var(--display); font-weight:300; font-size:clamp(30px,4vw,52px); letter-spacing:-.02em; color:var(--foam); margin:8px 0 28px; }
+  .press-band h2 em { font-style:italic; color:var(--accent); }
+  .press-contact { max-width:640px; font-size:15px; line-height:1.7; color:var(--stone); }
+  .press-contact a { color:var(--accent); text-decoration:none; border-bottom:1px solid var(--accent); }
 
   footer { padding: 96px 48px 56px; background: var(--abyss); color: var(--stone); border-top: 1px solid var(--hair); }
   footer .top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 64px; margin-bottom: 72px; }
@@ -262,6 +269,15 @@
   <div class="head"><span class="num">04</span><span class="label">From the world</span></div>
   <p class="lede">Numbered, limited-run pieces tied to the film. Once they&rsquo;re gone, they&rsquo;re gone.</p>
   <div class="merch-grid" id="merchGrid"></div>
+</section>
+
+<div class="rule"></div>
+
+<!-- PRESS -->
+<section class="press-band">
+  <div class="head"><span class="num">05</span><span class="label">Press</span></div>
+  <h2>Press &amp; <em>coverage.</em></h2>
+  <p class="press-contact">Reviews, festival coverage, and interviews for <em>Stay Home</em> will collect here. For press kits, screeners, and interview requests, contact <a href="mailto:press@bluepulsestudios.com">press@bluepulsestudios.com</a>.</p>
 </section>
 
 <footer>
