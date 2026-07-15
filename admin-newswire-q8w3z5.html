@@ -120,6 +120,7 @@
     <button id="socialBtn" title="Set your social media links">Social Links</button>
     <button id="pitchBtn" title="Password-protected pitch decks for industry contacts">Pitch Decks</button>
     <button id="hfBtn" title="Inject custom code into the site header &amp; footer">Header/Footer</button>
+    <button id="footerBtn" title="Edit the sitewide footer — columns, links, alignment">Footer</button>
     <button id="pageSeoBtn">Page SEO</button>
     <button id="rssBtn" title="Download feed.xml built from current posts">Export RSS</button>
     <button id="resetBtn" title="Restore the original demo posts">Reset Demo Data</button>
@@ -347,6 +348,28 @@
       </div>
       <textarea id="hfExport" readonly style="display:none;margin-top:20px;width:100%;min-height:130px;font-family:monospace;font-size:11.5px;color:var(--foam);background:var(--depth);border:1px solid var(--hair);padding:14px"></textarea>
     </form>
+
+    <div id="footerPanel" style="display:none;max-width:860px">
+      <h2 style="font-family:var(--display);font-weight:300;font-size:28px;margin-bottom:8px">Footer</h2>
+      <p style="font-family:var(--display);font-style:italic;font-size:13px;color:var(--stone);margin-bottom:26px">The footer is identical on every page &mdash; edit it here. Use <strong style="color:var(--foam)">Alignment</strong> to shift everything left, middle, or right, and the <strong style="color:var(--foam)">&#9650;/&#9660;</strong> buttons to rearrange columns. Saves to this browser for preview &mdash; use &ldquo;Copy for launch&rdquo; to publish for everyone.</p>
+      <div class="fld"><label for="ftAlign">Alignment</label><select id="ftAlign"><option value="left">Left</option><option value="center">Middle</option><option value="right">Right</option></select></div>
+      <div class="fld"><label for="ftBlurb">Studio blurb</label><textarea id="ftBlurb" style="min-height:66px"></textarea></div>
+      <div class="fld"><label for="ftSignup">Newsletter copy</label><textarea id="ftSignup" style="min-height:56px"></textarea></div>
+      <label style="display:block;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--glow);font-weight:600;margin:6px 0 12px">Columns</label>
+      <div id="ftCols"></div>
+      <button type="button" class="btn ghost" id="ftAddCol" style="margin-bottom:24px">+ Add column</button>
+      <div style="height:1px;background:var(--hair);margin:6px 0 24px"></div>
+      <div class="fld"><label for="ftCopyright">Bottom &mdash; copyright</label><input id="ftCopyright" type="text"></div>
+      <div class="fld"><label for="ftLocation">Bottom &mdash; location</label><input id="ftLocation" type="text"></div>
+      <div class="fld"><label for="ftLegal">Bottom &mdash; legal links <span style="color:var(--stone);text-transform:none;letter-spacing:0">(one per line: Label | url)</span></label><textarea id="ftLegal" style="min-height:70px;font-family:monospace;font-size:12.5px"></textarea></div>
+      <div class="bar">
+        <button type="button" class="btn primary" id="ftSave">Save</button>
+        <button type="button" class="btn ghost" id="ftCopy">Copy for launch</button>
+        <button type="button" class="btn danger" id="ftReset">Reset to default</button>
+        <span class="status" id="ftStatus"></span>
+      </div>
+      <textarea id="ftExport" readonly style="display:none;margin-top:20px;width:100%;min-height:150px;font-family:monospace;font-size:11.5px;color:var(--foam);background:var(--depth);border:1px solid var(--hair);padding:14px"></textarea>
+    </div>
   </main>
 </div>
 
@@ -368,7 +391,7 @@
   let currentImage = '';
 
   /* highlight the active topbar tab in blue */
-  const NAVBTNS = ['copyBtn', 'socialBtn', 'pitchBtn', 'hfBtn', 'pageSeoBtn'];
+  const NAVBTNS = ['copyBtn', 'socialBtn', 'pitchBtn', 'hfBtn', 'footerBtn', 'pageSeoBtn'];
   function setActiveNav(id) { NAVBTNS.forEach(b => { const el = $(b); if (el) el.classList.toggle('active', b === id); }); }
 
   /* ——— login ——— */
@@ -566,7 +589,7 @@
   });
   $('mPage').addEventListener('change', metaLoadPage);
   function hideExtraPanels() {
-    ['copyPanel', 'socialForm', 'pitchPanel', 'hfPanel'].forEach(id => { const e = $(id); if (e) e.style.display = 'none'; });
+    ['copyPanel', 'socialForm', 'pitchPanel', 'hfPanel', 'footerPanel'].forEach(id => { const e = $(id); if (e) e.style.display = 'none'; });
   }
   $('pageSeoBtn').addEventListener('click', () => {
     const showing = $('metaForm').style.display !== 'none';
@@ -595,7 +618,7 @@
       const showing = $('copyPanel').style.display !== 'none';
       $('metaForm').style.display = 'none';
       $('socialForm').style.display = 'none';
-      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; }
+      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; const _ft = $('footerPanel'); if (_ft) _ft.style.display = 'none'; }
       $('edForm').classList.remove('on');
       $('copyPanel').style.display = showing ? 'none' : 'block';
       $('edPlaceholder').style.display = showing ? 'block' : 'none';
@@ -645,7 +668,7 @@
       const showing = $('socialForm').style.display !== 'none';
       $('metaForm').style.display = 'none';
       $('copyPanel').style.display = 'none';
-      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; }
+      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; const _ft = $('footerPanel'); if (_ft) _ft.style.display = 'none'; }
       $('edForm').classList.remove('on');
       $('socialForm').style.display = showing ? 'none' : 'block';
       $('edPlaceholder').style.display = showing ? 'block' : 'none';
@@ -841,6 +864,7 @@ ${items}
       $('copyPanel').style.display = 'none';
       $('socialForm').style.display = 'none';
       $('hfPanel').style.display = 'none';
+      { const _ft = $('footerPanel'); if (_ft) _ft.style.display = 'none'; }
       $('edForm').classList.remove('on');
       P('pitchPanel').style.display = showing ? 'none' : 'block';
       $('edPlaceholder').style.display = showing ? 'block' : 'none';
@@ -858,7 +882,7 @@ ${items}
       $('metaForm').style.display = 'none';
       $('copyPanel').style.display = 'none';
       $('socialForm').style.display = 'none';
-      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; }
+      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; const _ft = $('footerPanel'); if (_ft) _ft.style.display = 'none'; }
       $('edForm').classList.remove('on');
       $('hfPanel').style.display = showing ? 'none' : 'block';
       $('edPlaceholder').style.display = showing ? 'block' : 'none';
@@ -880,6 +904,111 @@ ${items}
       if (!confirm('Clear header & footer code?')) return;
       try { localStorage.removeItem(HK); localStorage.removeItem(FK); } catch (_) {}
       load(); $('hfStatus').textContent = 'Cleared.';
+    });
+  })();
+
+  /* ——— Footer editor (structured, config-driven) ——— */
+  (function () {
+    var KEY = 'bpsFooter';
+    var DEF = {
+      align: 'left',
+      blurb: 'An independent studio for horror and genre film, television, books, and games, based in Los Angeles and Pittsburgh.',
+      signup: 'Get our emails, transmissions, podcasts, interviews with creators, and more — delivered straight to you.',
+      columns: [
+        { heading: 'Projects', links: [ { label: 'Films', href: 'films.html' }, { label: 'Television', href: 'moth-country.html' }, { label: 'Books', href: 'books.html' } ] },
+        { heading: 'Shop', links: [ { label: 'All', href: 'shop.html' }, { label: 'Cart', href: 'cart.html' } ] },
+        { heading: 'Studio', links: [ { label: 'About Us', href: 'about.html' }, { label: 'Press', href: 'press.html' }, { label: 'Newswire', href: 'journal.html' }, { label: 'Contact', href: 'contact.html' } ] }
+      ],
+      bottom: { copyright: '© 2026 Blue Pulse Studios', location: 'Los Angeles · Pittsburgh', legal: [ { label: 'Privacy', href: 'privacy.html' }, { label: 'Terms', href: 'terms.html' }, { label: 'Shipping & Returns', href: 'shipping-returns.html' } ] }
+    };
+    var cols = [];
+    function linksToText(arr) { return (arr || []).map(function (l) { return l.label + ' | ' + l.href; }).join('\n'); }
+    function textToLinks(t) { return String(t || '').split('\n').map(function (line) { var p = line.split('|'); if (!p[0] || !p[0].trim()) return null; return { label: p[0].trim(), href: (p[1] || '').trim() }; }).filter(Boolean); }
+    function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function renderCols() {
+      $('ftCols').innerHTML = cols.map(function (c, i) {
+        return '<div class="ftcol" data-i="' + i + '" style="border:1px solid var(--hair);padding:16px;margin-bottom:14px;background:var(--depth)">' +
+          '<div style="display:flex;gap:10px;align-items:center;margin-bottom:10px">' +
+            '<input class="ftc-h" type="text" value="' + esc(c.heading) + '" placeholder="Column heading" style="flex:1">' +
+            '<button type="button" class="btn ghost ftc-up" data-i="' + i + '" title="Move left" style="padding:6px 10px">&#9650;</button>' +
+            '<button type="button" class="btn ghost ftc-dn" data-i="' + i + '" title="Move right" style="padding:6px 10px">&#9660;</button>' +
+            '<button type="button" class="btn danger ftc-rm" data-i="' + i + '" style="padding:6px 12px">Remove</button>' +
+          '</div>' +
+          '<textarea class="ftc-l" placeholder="Label | url (one per line)" style="min-height:80px;font-family:monospace;font-size:12.5px">' + esc(linksToText(c.links)) + '</textarea>' +
+        '</div>';
+      }).join('');
+    }
+    function syncColsFromDom() {
+      var nodes = $('ftCols').querySelectorAll('.ftcol');
+      cols = Array.prototype.map.call(nodes, function (n) {
+        return { heading: n.querySelector('.ftc-h').value.trim(), links: textToLinks(n.querySelector('.ftc-l').value) };
+      });
+    }
+    function fill(cfg) {
+      $('ftAlign').value = cfg.align || 'left';
+      $('ftBlurb').value = cfg.blurb || '';
+      $('ftSignup').value = cfg.signup || '';
+      cols = JSON.parse(JSON.stringify(cfg.columns || []));
+      renderCols();
+      var b = cfg.bottom || {};
+      $('ftCopyright').value = b.copyright || '';
+      $('ftLocation').value = b.location || '';
+      $('ftLegal').value = linksToText(b.legal);
+      $('ftExport').style.display = 'none';
+      $('ftStatus').textContent = '';
+    }
+    function load() {
+      var cfg = DEF;
+      try { var ls = JSON.parse(localStorage.getItem(KEY) || 'null'); if (ls && ls.columns) cfg = ls; } catch (_) {}
+      fill(cfg);
+    }
+    function collect() {
+      syncColsFromDom();
+      return {
+        align: $('ftAlign').value,
+        blurb: $('ftBlurb').value.trim(),
+        signup: $('ftSignup').value.trim(),
+        columns: cols,
+        bottom: { copyright: $('ftCopyright').value.trim(), location: $('ftLocation').value.trim(), legal: textToLinks($('ftLegal').value) }
+      };
+    }
+    $('footerBtn').addEventListener('click', () => {
+      const showing = $('footerPanel').style.display !== 'none';
+      $('metaForm').style.display = 'none';
+      $('copyPanel').style.display = 'none';
+      $('socialForm').style.display = 'none';
+      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; }
+      $('edForm').classList.remove('on');
+      $('footerPanel').style.display = showing ? 'none' : 'block';
+      $('edPlaceholder').style.display = showing ? 'block' : 'none';
+      if (!showing) load();
+      setActiveNav(showing ? null : 'footerBtn');
+    });
+    $('ftCols').addEventListener('click', (e) => {
+      var up = e.target.closest('.ftc-up'), dn = e.target.closest('.ftc-dn'), rm = e.target.closest('.ftc-rm');
+      if (!up && !dn && !rm) return;
+      syncColsFromDom();
+      var i = +(up || dn || rm).getAttribute('data-i');
+      if (up && i > 0) { var t = cols[i - 1]; cols[i - 1] = cols[i]; cols[i] = t; }
+      else if (dn && i < cols.length - 1) { var t2 = cols[i + 1]; cols[i + 1] = cols[i]; cols[i] = t2; }
+      else if (rm) { cols.splice(i, 1); }
+      renderCols();
+    });
+    $('ftAddCol').addEventListener('click', () => { syncColsFromDom(); cols.push({ heading: 'New column', links: [] }); renderCols(); });
+    $('ftSave').addEventListener('click', () => {
+      try { localStorage.setItem(KEY, JSON.stringify(collect())); } catch (_) {}
+      $('ftStatus').textContent = 'Saved — live in this browser. Reload any page to see it. Use "Copy for launch" to publish for everyone.';
+    });
+    $('ftCopy').addEventListener('click', () => {
+      $('ftExport').value = 'window.BPS_FOOTER = ' + JSON.stringify(collect(), null, 2) + ';';
+      $('ftExport').style.display = 'block'; $('ftExport').select();
+      try { document.execCommand('copy'); } catch (_) {}
+      $('ftStatus').textContent = 'Copied — hand this to whoever manages the repo (it replaces the footer config in site.js) to publish for everyone.';
+    });
+    $('ftReset').addEventListener('click', () => {
+      if (!confirm('Reset the footer to the default?')) return;
+      try { localStorage.removeItem(KEY); } catch (_) {}
+      fill(DEF); $('ftStatus').textContent = 'Reset to default.';
     });
   })();
 

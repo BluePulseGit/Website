@@ -479,6 +479,29 @@ window.bpsSubscribe = function (formOrEmail, ev) {
     try { Object.assign(m, JSON.parse(localStorage.getItem('bpsSocialLinks') || '{}')); } catch (_) {}
     return m;
   }
+  /* Footer content is config-driven — edit it in the admin Footer tab. Order:
+     localStorage bpsFooter (admin preview) → window.BPS_FOOTER (published) → default. */
+  var DEFAULT_FOOTER = {
+    align: 'left',
+    blurb: 'An independent studio for horror and genre film, television, books, and games, based in Los Angeles and Pittsburgh.',
+    signup: 'Get our emails, transmissions, podcasts, interviews with creators, and more — delivered straight to you.',
+    columns: [
+      { heading: 'Projects', links: [ { label: 'Films', href: 'films.html' }, { label: 'Television', href: 'moth-country.html' }, { label: 'Books', href: 'books.html' } ] },
+      { heading: 'Shop', links: [ { label: 'All', href: 'shop.html' }, { label: 'Cart', href: 'cart.html' } ] },
+      { heading: 'Studio', links: [ { label: 'About Us', href: 'about.html' }, { label: 'Press', href: 'press.html' }, { label: 'Newswire', href: 'journal.html' }, { label: 'Contact', href: 'contact.html' } ] }
+    ],
+    bottom: {
+      copyright: '© 2026 Blue Pulse Studios',
+      location: 'Los Angeles · Pittsburgh',
+      legal: [ { label: 'Privacy', href: 'privacy.html' }, { label: 'Terms', href: 'terms.html' }, { label: 'Shipping & Returns', href: 'shipping-returns.html' } ]
+    }
+  };
+  function footerCfg() {
+    try { var ls = JSON.parse(localStorage.getItem('bpsFooter') || 'null'); if (ls && ls.columns) return ls; } catch (_) {}
+    try { if (window.BPS_FOOTER && window.BPS_FOOTER.columns) return window.BPS_FOOTER; } catch (_) {}
+    return DEFAULT_FOOTER;
+  }
+  function fesc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
   document.addEventListener('DOMContentLoaded', function () {
     if (document.getElementById('bpsFooterBand')) return;
     var footer = document.querySelector('footer');
@@ -489,7 +512,15 @@ window.bpsSubscribe = function (formOrEmail, ev) {
       /* ONE canonical footer, rendered from here so it's identical on every page */
       'footer{padding:0!important;margin:0!important;background:#02040A!important;color:#8B929C!important;border-top:1px solid #132341!important;text-align:left!important}' +
       'footer .bps-foot{max-width:1240px;margin:0 auto;padding:88px 48px 52px;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif}' +
-      'footer .bps-foot .bps-foot-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:60px;margin-bottom:44px}' +
+      'footer .bps-foot .bps-foot-top{display:flex;flex-wrap:wrap;gap:44px 60px;margin-bottom:44px;align-items:flex-start}' +
+      'footer .bps-foot .brand-col{flex:2 1 300px}' +
+      'footer .bps-foot .fcol{flex:1 1 130px}' +
+      'footer .bps-foot.a-center .bps-foot-top{justify-content:center;text-align:center}' +
+      'footer .bps-foot.a-center .about,footer .bps-foot.a-center #bpsFooterBand{margin-left:auto;margin-right:auto}' +
+      'footer .bps-foot.a-center #bpsFooterBand .bps-fb-form,footer .bps-foot.a-center #bpsFooterBand .bps-fb-socials{justify-content:center}' +
+      'footer .bps-foot.a-right .bps-foot-top{justify-content:flex-end;text-align:right}' +
+      'footer .bps-foot.a-right .about,footer .bps-foot.a-right #bpsFooterBand{margin-left:auto}' +
+      'footer .bps-foot.a-right #bpsFooterBand .bps-fb-form,footer .bps-foot.a-right #bpsFooterBand .bps-fb-socials{justify-content:flex-end}' +
       'footer .bps-foot .mark{color:#CFD9E4;font-weight:600;font-size:13px;letter-spacing:.3em;margin-bottom:16px}' +
       "footer .bps-foot .about{font-family:Fraunces,Georgia,serif;font-style:italic;font-size:14px;line-height:1.55;color:#8B929C;max-width:340px;margin:0}" +
       'footer .bps-foot h4{font-weight:500;font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:#CFD9E4;margin:0 0 18px}' +
@@ -509,24 +540,31 @@ window.bpsSubscribe = function (formOrEmail, ev) {
       '#bpsFooterBand .bps-fb-socials a{color:#8B929C;display:inline-flex;transition:color .3s,transform .3s}' +
       '#bpsFooterBand .bps-fb-socials a:hover{color:#CFD9E4;transform:translateY(-2px)}' +
       '#bpsFooterBand .bps-fb-socials svg{width:18px;height:18px}' +
-      '@media(max-width:820px){footer .bps-foot{padding:64px 24px 42px}footer .bps-foot .bps-foot-top{grid-template-columns:1fr 1fr;gap:34px}}';
+      '@media(max-width:820px){footer .bps-foot{padding:64px 24px 42px}footer .bps-foot .bps-foot-top{gap:30px 34px}}';
     document.head.appendChild(st);
 
+    var cfg = footerCfg();
+    var colsHtml = (cfg.columns || []).map(function (c) {
+      return '<div class="fcol"><h4>' + fesc(c.heading) + '</h4>' +
+        (c.links || []).map(function (l) { return '<a class="link" href="' + fesc(l.href) + '">' + fesc(l.label) + '</a>'; }).join('') +
+        '</div>';
+    }).join('');
+    var bt = cfg.bottom || {};
+    var legalHtml = (bt.legal || []).map(function (l) { return '<a href="' + fesc(l.href) + '">' + fesc(l.label) + '</a>'; }).join('');
+    var al = (cfg.align === 'center' || cfg.align === 'right') ? cfg.align : 'left';
     footer.innerHTML =
-      '<div class="bps-foot">' +
+      '<div class="bps-foot a-' + al + '">' +
         '<div class="bps-foot-top">' +
           '<div class="brand-col">' +
             '<div class="mark notranslate" translate="no">BLUE PULSE STUDIOS</div>' +
-            '<p class="about">An independent studio for horror and genre film, television, books, and games, based in Los Angeles and Pittsburgh.</p>' +
+            '<p class="about">' + fesc(cfg.blurb) + '</p>' +
           '</div>' +
-          '<div><h4>Projects</h4><a class="link" href="films.html">Films</a><a class="link" href="moth-country.html">Television</a><a class="link" href="books.html">Books</a></div>' +
-          '<div><h4>Shop</h4><a class="link" href="shop.html">All</a><a class="link" href="cart.html">Cart</a></div>' +
-          '<div><h4>Studio</h4><a class="link" href="about.html">About Us</a><a class="link" href="press.html">Press</a><a class="link" href="journal.html">Newswire</a><a class="link" href="contact.html">Contact</a></div>' +
+          colsHtml +
         '</div>' +
         '<div class="bps-foot-bottom">' +
-          '<div>&copy; 2026 Blue Pulse Studios</div>' +
-          '<div class="legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="shipping-returns.html">Shipping &amp; Returns</a></div>' +
-          '<div>Los Angeles &middot; Pittsburgh</div>' +
+          '<div>' + fesc(bt.copyright) + '</div>' +
+          '<div class="legal">' + legalHtml + '</div>' +
+          '<div>' + fesc(bt.location) + '</div>' +
         '</div>' +
       '</div>';
 
@@ -536,7 +574,7 @@ window.bpsSubscribe = function (formOrEmail, ev) {
     var band = document.createElement('div');
     band.id = 'bpsFooterBand';
     band.innerHTML =
-      '<div class="bps-fb-copy">Get our emails, transmissions, podcasts, interviews with creators, and more &mdash; delivered straight to you.</div>' +
+      '<div class="bps-fb-copy">' + fesc(cfg.signup) + '</div>' +
       '<form class="bps-fb-form" id="bpsFooterSignup"><input type="email" name="email" placeholder="you@email.com" required aria-label="Email address"><button type="submit">Subscribe &rarr;</button></form>' +
       (iconRow ? '<div class="bps-fb-socials">' + iconRow + '</div>' : '');
     footer.querySelector('.brand-col').appendChild(band);
