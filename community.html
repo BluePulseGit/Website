@@ -259,6 +259,7 @@
     background: radial-gradient(circle at 50% 38%, rgba(29,95,184,0.28), var(--ocean));
   }
   .soc .icon { width: 30px; height: 30px; fill: var(--foam); opacity: 0.82; transition: opacity .5s, transform .5s; }
+  .soc .icon.vrc-mask { background: var(--foam); -webkit-mask: url(assets/vrchat-icon.png) center/contain no-repeat; mask: url(assets/vrchat-icon.png) center/contain no-repeat; }
   .soc:hover .icon { opacity: 1; transform: translateY(-1px); }
   .soc .meta { margin-top: 12px; }
   .soc .name { font-family: var(--ui); font-weight: 500; font-size: 12.5px; letter-spacing: .04em; color: var(--foam); }
@@ -475,7 +476,7 @@
     </a>
 
     <a class="soc" href="#" target="_blank" rel="noopener">
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h3.2l3.1 8.3L13.5 6h3.2l-5 13H8.9L4 6zm14 13v-13h2v13h-2z"/></svg>
+      <span class="icon vrc-mask" aria-hidden="true"></span>
       <div class="meta">
         <div class="name">VRChat Group</div>
         <div class="handle">Blue Pulse Studios</div>

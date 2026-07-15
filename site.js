@@ -469,7 +469,7 @@ window.bpsSubscribe = function (formOrEmail, ev) {
     reddit: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12a2.1 2.1 0 0 0-3.6-1.5 10.3 10.3 0 0 0-5.3-1.7l.9-4.2 3 .7a1.5 1.5 0 1 0 .2-1l-3.4-.8a.5.5 0 0 0-.6.4l-1 4.7a10.4 10.4 0 0 0-5.4 1.7A2.1 2.1 0 1 0 3.6 14v.6c0 3.1 3.8 5.6 8.4 5.6s8.4-2.5 8.4-5.6V14A2.1 2.1 0 0 0 22 12zM8 13.5A1.4 1.4 0 1 1 9.4 15 1.4 1.4 0 0 1 8 13.5zm7.6 3.9a5.3 5.3 0 0 1-3.6 1.1 5.3 5.3 0 0 1-3.6-1.1.4.4 0 0 1 .6-.6 4.6 4.6 0 0 0 3 .9 4.6 4.6 0 0 0 3-.9.4.4 0 1 1 .6.6zm-.9-2.5A1.4 1.4 0 1 1 16 13a1.4 1.4 0 0 1-1.3 1.9z"/></svg>',
     bluesky: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 10.8C10.9 8.6 7.9 4.7 5.1 3.1 3.8 2.3 2 2 2 4.2c0 1.3.8 5.6 1.2 6.3.6 1.2 1.8 1.5 3 1.3-2 .3-3.7 1-1.4 3.6 2.5 2.6 3.5-.7 4-2.4l.2-1 .3 1c.5 1.7 1.5 5 4 2.4 2.3-2.6.6-3.3-1.4-3.6 1.2.2 2.4-.1 3-1.3.4-.7 1.2-5 1.2-6.3 0-2.2-1.8-1.9-3.1-1.1C16.1 4.7 13.1 8.6 12 10.8z"/></svg>',
     tiktok: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 3c.3 2 1.5 3.6 3.5 3.9v2.6a6.6 6.6 0 0 1-3.5-1v5.7a5.6 5.6 0 1 1-5.6-5.6c.3 0 .6 0 .9.1v2.7a2.9 2.9 0 1 0 2 2.8V3h2.7z"/></svg>',
-    vrchat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" aria-hidden="true"><path d="M4 4.5h16a1.8 1.8 0 0 1 1.8 1.8v8a1.8 1.8 0 0 1-1.8 1.8h-5.6L10 21v-4.9H4a1.8 1.8 0 0 1-1.8-1.8v-8A1.8 1.8 0 0 1 4 4.5z"/><path d="M6.3 8.4l1.6 4 1.6-4M12.6 8.4v4M15.2 12.4l1.4-4 1.4 4M15.6 11h2" stroke-width="1.3"/></svg>',
+    vrchat: '<span class="bps-vrc" aria-hidden="true"></span>',
     discord: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.2.4a18.3 18.3 0 0 1 4.3 1.4 16.6 16.6 0 0 0-14 0A18.3 18.3 0 0 1 9.8 3.4L9.6 3a19.8 19.8 0 0 0-4.9 1.4A20.7 20.7 0 0 0 1.3 18a19.9 19.9 0 0 0 6 3l.5-.7a13 13 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12.4 0l.5.4a13 13 0 0 1-2 1l.5.7a19.9 19.9 0 0 0 6-3 20.7 20.7 0 0 0-3.4-13.6zM8.5 14.7c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm7 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></svg>'
   };
   var LABELS = { youtube: 'YouTube', x: 'X', instagram: 'Instagram', reddit: 'Reddit', bluesky: 'Bluesky', tiktok: 'TikTok', vrchat: 'VRChat', discord: 'Discord' };
@@ -482,9 +482,23 @@ window.bpsSubscribe = function (formOrEmail, ev) {
   document.addEventListener('DOMContentLoaded', function () {
     if (document.getElementById('bpsFooterBand')) return;
     var footer = document.querySelector('footer');
+    if (!footer) { footer = document.createElement('footer'); document.body.appendChild(footer); }
+
     var st = document.createElement('style');
     st.textContent =
-      /* signup + socials sit BELOW the brand summary, identical on every page */
+      /* ONE canonical footer, rendered from here so it's identical on every page */
+      'footer{padding:0!important;margin:0!important;background:#02040A!important;color:#8B929C!important;border-top:1px solid #132341!important;text-align:left!important}' +
+      'footer .bps-foot{max-width:1240px;margin:0 auto;padding:88px 48px 52px;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif}' +
+      'footer .bps-foot .bps-foot-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:60px;margin-bottom:44px}' +
+      'footer .bps-foot .mark{color:#CFD9E4;font-weight:600;font-size:13px;letter-spacing:.3em;margin-bottom:16px}' +
+      "footer .bps-foot .about{font-family:Fraunces,Georgia,serif;font-style:italic;font-size:14px;line-height:1.55;color:#8B929C;max-width:340px;margin:0}" +
+      'footer .bps-foot h4{font-weight:500;font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:#CFD9E4;margin:0 0 18px}' +
+      'footer .bps-foot a.link{display:block;color:#8B929C;text-decoration:none;font-size:13px;margin-bottom:10px;transition:color .4s}' +
+      'footer .bps-foot a.link:hover{color:#CFD9E4}' +
+      'footer .bps-foot .bps-foot-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px 24px;font-weight:500;font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:#8B929C;padding-top:26px;border-top:1px solid #132341}' +
+      'footer .bps-foot .bps-foot-bottom .legal a{color:inherit;text-decoration:none;margin-right:22px}' +
+      'footer .bps-foot .bps-foot-bottom .legal a:hover{color:#CFD9E4}' +
+      '.bps-vrc{width:18px;height:18px;display:inline-block;background:currentColor;-webkit-mask:url(assets/vrchat-icon.png) center/contain no-repeat;mask:url(assets/vrchat-icon.png) center/contain no-repeat}' +
       '#bpsFooterBand{margin-top:26px;max-width:380px}' +
       "#bpsFooterBand .bps-fb-copy{font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:14px;line-height:1.5;color:#CFD9E4;margin-bottom:16px}" +
       '#bpsFooterBand .bps-fb-form{display:flex;border-bottom:2px solid #6BB4E8;margin-bottom:22px}' +
@@ -494,8 +508,28 @@ window.bpsSubscribe = function (formOrEmail, ev) {
       '#bpsFooterBand .bps-fb-socials{display:flex;gap:16px;align-items:center;flex-wrap:wrap}' +
       '#bpsFooterBand .bps-fb-socials a{color:#8B929C;display:inline-flex;transition:color .3s,transform .3s}' +
       '#bpsFooterBand .bps-fb-socials a:hover{color:#CFD9E4;transform:translateY(-2px)}' +
-      '#bpsFooterBand .bps-fb-socials svg{width:18px;height:18px}';
+      '#bpsFooterBand .bps-fb-socials svg{width:18px;height:18px}' +
+      '@media(max-width:820px){footer .bps-foot{padding:64px 24px 42px}footer .bps-foot .bps-foot-top{grid-template-columns:1fr 1fr;gap:34px}}';
     document.head.appendChild(st);
+
+    footer.innerHTML =
+      '<div class="bps-foot">' +
+        '<div class="bps-foot-top">' +
+          '<div class="brand-col">' +
+            '<div class="mark notranslate" translate="no">BLUE PULSE STUDIOS</div>' +
+            '<p class="about">An independent studio for horror and genre film, television, books, and games, based in Los Angeles and Pittsburgh.</p>' +
+          '</div>' +
+          '<div><h4>Projects</h4><a class="link" href="films.html">Films</a><a class="link" href="moth-country.html">Television</a><a class="link" href="books.html">Books</a></div>' +
+          '<div><h4>Shop</h4><a class="link" href="shop.html">All</a><a class="link" href="cart.html">Cart</a></div>' +
+          '<div><h4>Studio</h4><a class="link" href="about.html">About Us</a><a class="link" href="press.html">Press</a><a class="link" href="journal.html">Newswire</a><a class="link" href="contact.html">Contact</a></div>' +
+        '</div>' +
+        '<div class="bps-foot-bottom">' +
+          '<div>&copy; 2026 Blue Pulse Studios</div>' +
+          '<div class="legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="shipping-returns.html">Shipping &amp; Returns</a></div>' +
+          '<div>Los Angeles &middot; Pittsburgh</div>' +
+        '</div>' +
+      '</div>';
+
     var links = socials();
     var iconRow = ORDER.filter(function (k) { var u = links[k]; return typeof u === 'string' && /^https?:\/\//i.test(u); })
       .map(function (k) { return '<a href="' + links[k].trim() + '" target="_blank" rel="noopener noreferrer" aria-label="' + LABELS[k] + '" title="' + LABELS[k] + '">' + ICONS[k] + '</a>'; }).join('');
@@ -505,10 +539,8 @@ window.bpsSubscribe = function (formOrEmail, ev) {
       '<div class="bps-fb-copy">Get our emails, transmissions, podcasts, interviews with creators, and more &mdash; delivered straight to you.</div>' +
       '<form class="bps-fb-form" id="bpsFooterSignup"><input type="email" name="email" placeholder="you@email.com" required aria-label="Email address"><button type="submit">Subscribe &rarr;</button></form>' +
       (iconRow ? '<div class="bps-fb-socials">' + iconRow + '</div>' : '');
-    var brandCol = footer ? footer.querySelector('.brand-col') : null;
-    if (brandCol) brandCol.appendChild(band);
-    else if (footer) footer.insertBefore(band, footer.firstChild);
-    else document.body.appendChild(band);
+    footer.querySelector('.brand-col').appendChild(band);
+
     var form = document.getElementById('bpsFooterSignup');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
