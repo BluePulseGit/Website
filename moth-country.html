@@ -39,12 +39,14 @@
      exactly on top of the characters painted into the key art. ——— */
   .mc-stage { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
               width: max(100%, calc(100vh * 16 / 9)); aspect-ratio: 16 / 9; z-index: 0; pointer-events: none; }
-  .mc-stage .mc-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+  .mc-stage .mc-bg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0;
+                     background: url('assets/moth-country-key.jpg') center/cover no-repeat; }
   .mc-stage .mc-logo { position: absolute; left: 50%; top: 9%; transform: translateX(-50%);
                        width: 74%; z-index: 1; will-change: transform; filter: drop-shadow(0 12px 46px rgba(150,90,220,0.45)); }
   .mc-stage .mc-logo img { width: 100%; height: auto; display: block; }
   /* exact placement of the cutout inside the 1920x1080 key art */
-  .mc-stage .mc-chars { position: absolute; left: 29.219%; top: 27.685%; width: 40.365%; height: auto; z-index: 2; }
+  .mc-stage .mc-chars { position: absolute; left: 29.219%; top: 27.685%; width: 40.365%; aspect-ratio: 775 / 633; z-index: 2;
+                        background: url('assets/moth-country-characters.png') center/contain no-repeat; }
   /* Soft scrim: darkens the left column for the copy and fades the bottom into
      the page, without washing out the key art or the characters. */
   .hero .vig { position: absolute; inset: 0; pointer-events: none; z-index: 1;
@@ -155,9 +157,9 @@
 
 <header class="hero" id="main">
   <div class="mc-stage">
-    <img class="mc-bg" src="assets/moth-country-key.jpg" alt="" aria-hidden="true" />
+    <div class="mc-bg" aria-hidden="true"></div>
     <div class="mc-logo" id="mcLogo"><img src="assets/moth-country-title.png" alt="Moth Country" /></div>
-    <img class="mc-chars" src="assets/moth-country-characters.png" alt="" aria-hidden="true" />
+    <div class="mc-chars" aria-hidden="true"></div>
   </div>
   <div class="vig"></div>
   <div class="content">
