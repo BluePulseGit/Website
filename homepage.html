@@ -141,13 +141,21 @@
   .feat-slide.is-active { opacity:1; }
   .feat-slide[data-key="bps"] { background:#05070c; }
   .feat-slide[data-key="stay-home"] { background-image: radial-gradient(circle at 72% 30%, rgba(214,116,38,0.34), transparent 52%), linear-gradient(135deg,#2b2620,#3a3026 42%,#17140f); }
-  .feat-slide[data-key="moth-country"] { background-image: linear-gradient(to bottom, rgba(10,8,22,0.30), rgba(8,6,20,0.55)), url('assets/moth-country-key.jpg'); }
+  .feat-slide[data-key="moth-country"] { background: #0a0818; }
+  /* Moth Country: key art → title (parallax) → character cutout locked to the art */
+  .mc-stage { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:max(100%, calc(100vh * 16 / 9)); aspect-ratio:16/9; pointer-events:none; }
+  .mc-stage .mc-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .mc-stage .mc-logo { position:absolute; left:50%; top:9%; transform:translateX(-50%); width:74%; will-change:transform; filter:drop-shadow(0 12px 46px rgba(150,90,220,.45)); }
+  .mc-stage .mc-logo img { width:100%; height:auto; display:block; }
+  .mc-stage .mc-chars { position:absolute; left:29.219%; top:27.685%; width:40.365%; height:auto; }
   .feat-slide[data-key="the-swell"] { background-image: radial-gradient(circle at 40% 62%, rgba(28,124,94,0.36), transparent 55%), linear-gradient(135deg,#08201a,#0e2f24 46%,#04130e); }
   /* each slide carries its own (still) logo */
-  .feat-slide .flogo { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:min(430px,62vw); max-height:44%; z-index:3; pointer-events:none; opacity:0; transition:opacity .8s ease; }
+  .feat-slide .flogo { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:min(880px,80vw); max-height:62%; z-index:3; pointer-events:none; opacity:0; transition:opacity .8s ease; }
   .feat-slide .flogo img { width:100%; height:auto; max-height:100%; object-fit:contain; display:block; filter:drop-shadow(0 6px 34px rgba(0,0,0,0.6)); }
   .feat-slide.is-active .flogo { opacity:1; }
-  .feat-slide[data-key="bps"] .flogo { width:min(360px,58vw); }
+  .feat-slide[data-key="bps"] .flogo { width:min(420px,62vw); }
+  .feat-slide[data-key="stay-home"] .flogo { width:min(700px,74vw); }
+  .feat-slide[data-key="the-swell"] .flogo { width:min(900px,84vw); }
   .feat-list { position:absolute; left:48px; bottom:60px; z-index:4; list-style:none; margin:0; padding:0; }
   .feat-list button { background:none; border:0; padding:2px 0; cursor:pointer; font-family:var(--display); font-weight:300; font-size:clamp(28px,3.8vw,54px); line-height:1.06; letter-spacing:-.02em; color:rgba(255,255,255,0.4); display:inline-flex; align-items:baseline; gap:12px; transition:color .4s; text-shadow:0 2px 16px rgba(0,0,0,0.5); }
   .feat-list button:hover { color:rgba(255,255,255,0.82); }
@@ -767,7 +775,11 @@
       <div class="flogo"><img src="assets/stay-home-logo.webp" alt="Stay Home" /></div>
     </div>
     <div class="feat-slide" data-key="moth-country">
-      <div class="flogo"><img src="assets/moth-country-title.png" alt="Moth Country" /></div>
+      <div class="mc-stage">
+        <img class="mc-bg" src="assets/moth-country-key.jpg" alt="" aria-hidden="true" />
+        <div class="mc-logo" id="mcHomeLogo"><img src="assets/moth-country-title.png" alt="Moth Country" /></div>
+        <img class="mc-chars" src="assets/moth-country-characters.png" alt="" aria-hidden="true" />
+      </div>
     </div>
     <div class="feat-slide" data-key="the-swell">
       <div class="flogo"><img src="assets/the-swell-logo.png" alt="The Swell" /></div>
@@ -998,7 +1010,10 @@
     mx += (tmx - mx) * 0.07;
     my += (tmy - my) * 0.07;
     if (bg) bg.style.transform = `translate3d(${(-mx*22).toFixed(2)}px, ${(-my*16 + sy*0.18).toFixed(2)}px, 0) scale(1.05)`;
-    /* logo stays still — no cursor parallax */
+    /* BPS logo stays still — no cursor parallax.
+       Moth Country: only the title drifts; the key art + character cutout stay locked. */
+    const mcL = document.getElementById('mcHomeLogo');
+    if (mcL) mcL.style.transform = `translateX(-50%) translate3d(${(mx*26).toFixed(1)}px, ${(my*16).toFixed(1)}px, 0)`;
     requestAnimationFrame(raf);
   }
   raf();

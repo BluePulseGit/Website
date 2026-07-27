@@ -121,6 +121,7 @@
     <button id="pitchBtn" title="Password-protected pitch decks for industry contacts">Pitch Decks</button>
     <button id="hfBtn" title="Inject custom code into the site header &amp; footer">Header/Footer</button>
     <button id="footerBtn" title="Edit the sitewide footer — columns, links, alignment">Footer</button>
+    <button id="visBtn" title="Hide pages from the public site">Page Visibility</button>
     <button id="pageSeoBtn">Page SEO</button>
     <button id="rssBtn" title="Download feed.xml built from current posts">Export RSS</button>
     <button id="resetBtn" title="Restore the original demo posts">Reset Demo Data</button>
@@ -370,6 +371,18 @@
       </div>
       <textarea id="ftExport" readonly style="display:none;margin-top:20px;width:100%;min-height:150px;font-family:monospace;font-size:11.5px;color:var(--foam);background:var(--depth);border:1px solid var(--hair);padding:14px"></textarea>
     </div>
+
+    <div id="visPanel" style="display:none;max-width:760px">
+      <h2 style="font-family:var(--display);font-weight:300;font-size:28px;margin-bottom:8px">Page visibility</h2>
+      <p style="font-family:var(--display);font-style:italic;font-size:13px;color:var(--stone);margin-bottom:26px">Hidden pages are removed from the menus, told not to appear in search results, and show a &ldquo;coming soon&rdquo; notice if someone opens the link directly. Saves to this browser for preview &mdash; use &ldquo;Copy for launch&rdquo; to apply it for everyone.</p>
+      <div id="visList" style="border:1px solid var(--hair);background:var(--depth)"></div>
+      <div class="bar" style="margin-top:22px">
+        <button type="button" class="btn primary" id="visSave">Save</button>
+        <button type="button" class="btn ghost" id="visCopy">Copy for launch</button>
+        <span class="status" id="visStatus"></span>
+      </div>
+      <textarea id="visExport" readonly style="display:none;margin-top:20px;width:100%;min-height:90px;font-family:monospace;font-size:11.5px;color:var(--foam);background:var(--depth);border:1px solid var(--hair);padding:14px"></textarea>
+    </div>
   </main>
 </div>
 
@@ -391,7 +404,7 @@
   let currentImage = '';
 
   /* highlight the active topbar tab in blue */
-  const NAVBTNS = ['copyBtn', 'socialBtn', 'pitchBtn', 'hfBtn', 'footerBtn', 'pageSeoBtn'];
+  const NAVBTNS = ['copyBtn', 'socialBtn', 'pitchBtn', 'hfBtn', 'footerBtn', 'visBtn', 'pageSeoBtn'];
   function setActiveNav(id) { NAVBTNS.forEach(b => { const el = $(b); if (el) el.classList.toggle('active', b === id); }); }
 
   /* ——— login ——— */
@@ -589,7 +602,7 @@
   });
   $('mPage').addEventListener('change', metaLoadPage);
   function hideExtraPanels() {
-    ['copyPanel', 'socialForm', 'pitchPanel', 'hfPanel', 'footerPanel'].forEach(id => { const e = $(id); if (e) e.style.display = 'none'; });
+    ['copyPanel', 'socialForm', 'pitchPanel', 'hfPanel', 'footerPanel', 'visPanel'].forEach(id => { const e = $(id); if (e) e.style.display = 'none'; });
   }
   $('pageSeoBtn').addEventListener('click', () => {
     const showing = $('metaForm').style.display !== 'none';
@@ -618,7 +631,7 @@
       const showing = $('copyPanel').style.display !== 'none';
       $('metaForm').style.display = 'none';
       $('socialForm').style.display = 'none';
-      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; const _ft = $('footerPanel'); if (_ft) _ft.style.display = 'none'; }
+      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; const _ft = $('footerPanel'); if (_ft) _ft.style.display = 'none'; const _vs = $('visPanel'); if (_vs) _vs.style.display = 'none'; }
       $('edForm').classList.remove('on');
       $('copyPanel').style.display = showing ? 'none' : 'block';
       $('edPlaceholder').style.display = showing ? 'block' : 'none';
@@ -668,7 +681,7 @@
       const showing = $('socialForm').style.display !== 'none';
       $('metaForm').style.display = 'none';
       $('copyPanel').style.display = 'none';
-      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; const _ft = $('footerPanel'); if (_ft) _ft.style.display = 'none'; }
+      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; const _ft = $('footerPanel'); if (_ft) _ft.style.display = 'none'; const _vs = $('visPanel'); if (_vs) _vs.style.display = 'none'; }
       $('edForm').classList.remove('on');
       $('socialForm').style.display = showing ? 'none' : 'block';
       $('edPlaceholder').style.display = showing ? 'block' : 'none';
@@ -882,7 +895,7 @@ ${items}
       $('metaForm').style.display = 'none';
       $('copyPanel').style.display = 'none';
       $('socialForm').style.display = 'none';
-      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; const _ft = $('footerPanel'); if (_ft) _ft.style.display = 'none'; }
+      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; const _ft = $('footerPanel'); if (_ft) _ft.style.display = 'none'; const _vs = $('visPanel'); if (_vs) _vs.style.display = 'none'; }
       $('edForm').classList.remove('on');
       $('hfPanel').style.display = showing ? 'none' : 'block';
       $('edPlaceholder').style.display = showing ? 'block' : 'none';
@@ -1009,6 +1022,80 @@ ${items}
       if (!confirm('Reset the footer to the default?')) return;
       try { localStorage.removeItem(KEY); } catch (_) {}
       fill(DEF); $('ftStatus').textContent = 'Reset to default.';
+    });
+  })();
+
+  /* ——— Page visibility ——— */
+  (function () {
+    var KEY = 'bpsHiddenPages';
+    var PAGES = [
+      { f: 'films.html', n: 'Films' },
+      { f: 'television.html', n: 'Television' },
+      { f: 'books.html', n: 'Books' },
+      { f: 'stay-home.html', n: 'Stay Home' },
+      { f: 'the-swell.html', n: 'The Swell' },
+      { f: 'moth-country.html', n: 'Moth Country' },
+      { f: 'shop.html', n: 'Shop' },
+      { f: 'about.html', n: 'About Us' },
+      { f: 'press.html', n: 'Press' },
+      { f: 'journal.html', n: 'Newswire' },
+      { f: 'community.html', n: 'Community' },
+      { f: 'contact.html', n: 'Contact' },
+      { f: 'careers.html', n: 'Careers' },
+      { f: 'drops.html', n: 'Drops' },
+      { f: 'studio.html', n: 'Studio' }
+    ];
+    function hidden() {
+      try { var a = JSON.parse(localStorage.getItem(KEY) || '[]'); return Array.isArray(a) ? a : []; } catch (_) { return []; }
+    }
+    function render() {
+      var h = hidden();
+      $('visList').innerHTML = PAGES.map(function (p) {
+        var on = h.indexOf(p.f) >= 0;
+        return '<label style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 18px;border-bottom:1px solid var(--hair);cursor:pointer">' +
+          '<span><span style="color:var(--foam);font-size:14px">' + p.n + '</span>' +
+          '<span style="color:var(--stone);font-size:11.5px;margin-left:10px">' + p.f + '</span></span>' +
+          '<span style="display:flex;align-items:center;gap:10px">' +
+          '<span class="visTag" style="font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;font-weight:600;color:' + (on ? '#C98A4F' : '#4F9E6A') + '">' + (on ? 'Hidden' : 'Live') + '</span>' +
+          '<input type="checkbox" data-f="' + p.f + '"' + (on ? ' checked' : '') + ' style="width:17px;height:17px;accent-color:#6BB4E8;cursor:pointer"></span></label>';
+      }).join('');
+    }
+    function collect() {
+      return Array.prototype.filter.call($('visList').querySelectorAll('input[type=checkbox]'), function (c) { return c.checked; })
+        .map(function (c) { return c.getAttribute('data-f'); });
+    }
+    $('visBtn').addEventListener('click', () => {
+      const showing = $('visPanel').style.display !== 'none';
+      $('metaForm').style.display = 'none';
+      $('copyPanel').style.display = 'none';
+      $('socialForm').style.display = 'none';
+      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; const _ft = $('footerPanel'); if (_ft) _ft.style.display = 'none'; }
+      $('edForm').classList.remove('on');
+      $('visPanel').style.display = showing ? 'none' : 'block';
+      $('edPlaceholder').style.display = showing ? 'block' : 'none';
+      if (!showing) { render(); $('visStatus').textContent = ''; $('visExport').style.display = 'none'; }
+      setActiveNav(showing ? null : 'visBtn');
+    });
+    $('visList').addEventListener('change', function () { render0(); });
+    function render0() {
+      var picked = collect();
+      Array.prototype.forEach.call($('visList').querySelectorAll('input[type=checkbox]'), function (c) {
+        var tag = c.parentNode.querySelector('.visTag');
+        var on = c.checked;
+        tag.textContent = on ? 'Hidden' : 'Live';
+        tag.style.color = on ? '#C98A4F' : '#4F9E6A';
+      });
+      return picked;
+    }
+    $('visSave').addEventListener('click', () => {
+      try { localStorage.setItem(KEY, JSON.stringify(collect())); } catch (_) {}
+      $('visStatus').textContent = 'Saved — live in this browser. Reload any page to see it. Use "Copy for launch" to apply for everyone.';
+    });
+    $('visCopy').addEventListener('click', () => {
+      $('visExport').value = 'window.BPS_HIDDEN_PAGES = ' + JSON.stringify(collect()) + ';';
+      $('visExport').style.display = 'block'; $('visExport').select();
+      try { document.execCommand('copy'); } catch (_) {}
+      $('visStatus').textContent = 'Copied — hand this to whoever manages the repo (it goes in site.js) to apply for all visitors.';
     });
   })();
 

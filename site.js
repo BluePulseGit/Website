@@ -18,6 +18,15 @@ window.BPS_CONFIG = {
     url: 'https://docs.google.com/forms/d/e/1FAIpQLSebZPJdrO4G_EMzjJ7bv9MLmfdw4-4Hb5qqOPJq0ml4j2Av5g/formResponse',
     entry: 'entry.102606424'
   },
+  /* Contact messages → Google Form → "Contact Messages" sheet, with email
+     notifications on, so every message emails production@bluepulsestudios.com. */
+  contactForm: {
+    url: 'https://docs.google.com/forms/d/e/1FAIpQLSejJW7RjUpfBITdCfb1A5iE9e_cSzKw6ODYFPZhBJOc5s_NLA/formResponse',
+    name: 'entry.696436405',
+    email: 'entry.291236150',
+    topic: 'entry.261309725',
+    message: 'entry.1902630884'
+  },
   analyticsDomain: '',
   /* YouTube video IDs — set these and the trailer buttons go live */
   trailers: {
@@ -355,44 +364,216 @@ window.bpsSubscribe = function (formOrEmail, ev) {
   };
 })();
 
-/* ——— PROJECTS nav dropdown — turns the existing "Films" nav link into a
-   Projects menu (Films / Television / Books; Games & Docs to come) on every
-   page, so the nav stays in one place (here) instead of every HTML file. ——— */
+/* ——— SHARED: social icons + links. Used by the nav, the mobile menu and the
+   footer so every surface shows the same set (no per-page socials.js needed). */
+window.BPS_SOCIAL = (function () {
+  var ICONS = {
+    youtube: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23 12s0-3.3-.4-4.9a2.6 2.6 0 0 0-1.8-1.8C19.1 5 12 5 12 5s-7.1 0-8.8.3A2.6 2.6 0 0 0 1.4 7.1C1 8.7 1 12 1 12s0 3.3.4 4.9a2.6 2.6 0 0 0 1.8 1.8C4.9 19 12 19 12 19s7.1 0 8.8-.3a2.6 2.6 0 0 0 1.8-1.8C23 15.3 23 12 23 12zM9.8 15.3V8.7l5.7 3.3-5.7 3.3z"/></svg>',
+    x: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.9 2H22l-7.1 8.1L23 22h-6.6l-5.2-6.8L5.3 22H2.2l7.6-8.7L1.5 2h6.7l4.7 6.2L18.9 2zm-1.2 18h1.8L7.4 3.9H5.5L17.7 20z"/></svg>',
+    instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>',
+    reddit: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12a2.1 2.1 0 0 0-3.6-1.5 10.3 10.3 0 0 0-5.3-1.7l.9-4.2 3 .7a1.5 1.5 0 1 0 .2-1l-3.4-.8a.5.5 0 0 0-.6.4l-1 4.7a10.4 10.4 0 0 0-5.4 1.7A2.1 2.1 0 1 0 3.6 14v.6c0 3.1 3.8 5.6 8.4 5.6s8.4-2.5 8.4-5.6V14A2.1 2.1 0 0 0 22 12zM8 13.5A1.4 1.4 0 1 1 9.4 15 1.4 1.4 0 0 1 8 13.5zm7.6 3.9a5.3 5.3 0 0 1-3.6 1.1 5.3 5.3 0 0 1-3.6-1.1.4.4 0 0 1 .6-.6 4.6 4.6 0 0 0 3 .9 4.6 4.6 0 0 0 3-.9.4.4 0 1 1 .6.6zm-.9-2.5A1.4 1.4 0 1 1 16 13a1.4 1.4 0 0 1-1.3 1.9z"/></svg>',
+    bluesky: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 10.8C10.9 8.6 7.9 4.7 5.1 3.1 3.8 2.3 2 2 2 4.2c0 1.3.8 5.6 1.2 6.3.6 1.2 1.8 1.5 3 1.3-2 .3-3.7 1-1.4 3.6 2.5 2.6 3.5-.7 4-2.4l.2-1 .3 1c.5 1.7 1.5 5 4 2.4 2.3-2.6.6-3.3-1.4-3.6 1.2.2 2.4-.1 3-1.3.4-.7 1.2-5 1.2-6.3 0-2.2-1.8-1.9-3.1-1.1C16.1 4.7 13.1 8.6 12 10.8z"/></svg>',
+    tiktok: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 3c.3 2 1.5 3.6 3.5 3.9v2.6a6.6 6.6 0 0 1-3.5-1v5.7a5.6 5.6 0 1 1-5.6-5.6c.3 0 .6 0 .9.1v2.7a2.9 2.9 0 1 0 2 2.8V3h2.7z"/></svg>',
+    vrchat: '<span class="bps-vrc" aria-hidden="true"></span>',
+    discord: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.2.4a18.3 18.3 0 0 1 4.3 1.4 16.6 16.6 0 0 0-14 0A18.3 18.3 0 0 1 9.8 3.4L9.6 3a19.8 19.8 0 0 0-4.9 1.4A20.7 20.7 0 0 0 1.3 18a19.9 19.9 0 0 0 6 3l.5-.7a13 13 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12.4 0l.5.4a13 13 0 0 1-2 1l.5.7a19.9 19.9 0 0 0 6-3 20.7 20.7 0 0 0-3.4-13.6zM8.5 14.7c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm7 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></svg>'
+  };
+  var LABELS = { youtube: 'YouTube', x: 'X', instagram: 'Instagram', reddit: 'Reddit', bluesky: 'Bluesky', tiktok: 'TikTok', vrchat: 'VRChat', discord: 'Discord' };
+  var ORDER = ['youtube', 'instagram', 'x', 'tiktok', 'bluesky', 'reddit', 'discord', 'vrchat'];
+  /* Baked-in defaults so every page has icons even without socials.js */
+  var DEFAULTS = {
+    youtube: 'https://www.youtube.com/@BluePulseStudios',
+    x: 'https://x.com/BluePulseFilms',
+    instagram: 'https://www.instagram.com/bluepulsestudios',
+    reddit: 'https://www.reddit.com/r/BluePulseStudios',
+    bluesky: 'https://bsky.app/profile/bluepulsestudios.bsky.social',
+    tiktok: 'https://www.tiktok.com/@bluepulsefilms',
+    vrchat: 'https://vrc.group/HELLFR.8091',
+    discord: 'https://discord.gg/mYrKDjGUQ2'
+  };
+  function links() {
+    var m = {}; Object.assign(m, DEFAULTS);
+    try { Object.assign(m, window.BPS_SOCIALS || {}); } catch (_) {}
+    try { Object.assign(m, JSON.parse(localStorage.getItem('bpsSocialLinks') || '{}')); } catch (_) {}
+    return m;
+  }
+  function row(cls) {
+    var L = links();
+    return ORDER.filter(function (k) { var u = L[k]; return typeof u === 'string' && /^https?:\/\//i.test(u); })
+      .map(function (k) {
+        return '<a href="' + L[k].trim() + '" target="_blank" rel="noopener noreferrer" aria-label="' + LABELS[k] + '" title="' + LABELS[k] + '">' + ICONS[k] + '</a>';
+      }).join('');
+  }
+  return { ICONS: ICONS, LABELS: LABELS, ORDER: ORDER, links: links, row: row };
+})();
+
+/* ——— PAGE VISIBILITY — pages hidden from the admin are noindexed, dropped from
+   the nav/footer, and show a "not available" notice if opened directly. ——— */
+/* Pages hidden from the public site. Edit in the admin "Page Visibility" tab
+   (preview), then paste its export here to apply for everyone. */
+window.BPS_HIDDEN_PAGES = ['books.html'];
+window.BPS_HIDDEN = (function () {
+  function list() {
+    var a = [];
+    try { if (Array.isArray(window.BPS_HIDDEN_PAGES)) a = a.concat(window.BPS_HIDDEN_PAGES); } catch (_) {}
+    try { var ls = JSON.parse(localStorage.getItem('bpsHiddenPages') || 'null'); if (Array.isArray(ls)) a = ls; } catch (_) {}
+    return a.map(function (s) { return String(s).toLowerCase(); });
+  }
+  function isHidden(href) {
+    if (!href) return false;
+    var file = String(href).split('/').pop().split('#')[0].split('?')[0].toLowerCase();
+    if (!file) return false;
+    return list().indexOf(file) >= 0;
+  }
+  return { list: list, isHidden: isHidden };
+})();
 (function () {
+  var here = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  if (!here.endsWith('.html')) here += '.html';
+  if (!window.BPS_HIDDEN.isHidden(here)) return;
+  var m = document.createElement('meta'); m.name = 'robots'; m.content = 'noindex,nofollow';
+  document.head.appendChild(m);
   document.addEventListener('DOMContentLoaded', function () {
-    var linksWrap = document.querySelector('.nav .links');
-    if (!linksWrap) return;
-    var filmsLink = Array.prototype.filter.call(linksWrap.querySelectorAll('a'), function (a) {
-      return a.textContent.trim().toLowerCase() === 'films';
-    })[0];
-    if (!filmsLink || filmsLink.closest('.bps-proj')) return;
-    if (!document.getElementById('bpsProjCss')) {
-      var st = document.createElement('style'); st.id = 'bpsProjCss';
-      st.textContent =
-        '.bps-proj{position:relative;display:inline-block;margin-left:28px}' +
-        '.bps-proj>a{margin-left:0}' +
-        '.bps-proj .bps-proj-panel{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(6px);min-width:176px;background:rgba(2,4,10,.97);border:1px solid #132341;padding:8px 0;opacity:0;visibility:hidden;transition:opacity .3s,transform .3s;z-index:200}' +
-        '.bps-proj:hover .bps-proj-panel,.bps-proj:focus-within .bps-proj-panel{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}' +
-        '.bps-proj .bps-proj-panel a{display:block;margin:0;padding:11px 22px;color:#8B929C;font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;white-space:nowrap;transition:color .3s,background .3s}' +
-        '.bps-proj .bps-proj-panel a:hover{color:#CFD9E4;background:rgba(29,95,184,.12)}' +
-        '@media (max-width:700px){.bps-proj{margin-left:14px}}';
-      document.head.appendChild(st);
+    var main = document.querySelector('main, section, .hero') && document.body;
+    if (!main) return;
+    Array.prototype.forEach.call(document.querySelectorAll('body > *'), function (el) {
+      if (el.tagName === 'NAV' || el.tagName === 'FOOTER' || el.tagName === 'SCRIPT' || el.tagName === 'STYLE') return;
+      el.style.display = 'none';
+    });
+    var box = document.createElement('div');
+    box.style.cssText = 'min-height:74vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:160px 24px 90px;font-family:Inter,sans-serif';
+    box.innerHTML = '<div><div style="font-size:10.5px;letter-spacing:.5em;text-transform:uppercase;color:#6BB4E8;font-weight:500;margin-bottom:20px">Coming soon</div>' +
+      '<h1 style="font-family:Fraunces,Georgia,serif;font-weight:300;font-size:clamp(32px,5vw,60px);color:#CFD9E4;margin:0 0 16px">This page isn&rsquo;t live yet.</h1>' +
+      '<p style="font-family:Fraunces,Georgia,serif;font-style:italic;color:#8B929C;font-size:16px;margin:0 0 30px">Check back soon &mdash; or follow along in the community.</p>' +
+      '<a href="homepage.html" style="display:inline-block;border:1px solid #CFD9E4;color:#CFD9E4;text-decoration:none;padding:16px 30px;font-size:10.5px;letter-spacing:.4em;text-transform:uppercase">Back to the site &rarr;</a></div>';
+    document.body.insertBefore(box, document.querySelector('footer'));
+  });
+})();
+
+/* ——— CANONICAL NAV — one nav for the whole site (desktop + mobile), rendered
+   here so order, dropdowns and the mobile menu stay identical everywhere. ——— */
+(function () {
+  var ITEMS = [
+    { label: 'Projects', href: 'films.html', children: [
+      { label: 'Films', href: 'films.html' },
+      { label: 'Television', href: 'television.html' },
+      { label: 'Books', href: 'books.html' }
+    ] },
+    { label: 'Studio', href: 'studio.html', children: [
+      { label: 'About Us', href: 'about.html' },
+      { label: 'Press', href: 'press.html' },
+      { label: 'Newswire', href: 'journal.html' }
+    ] },
+    { label: 'Shop', href: 'shop.html' },
+    { label: 'Community', href: 'community.html' },
+    { label: 'Contact', href: 'contact.html' }
+  ];
+  var CARET = '<svg class="bps-caret" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 1.5 5 5 9 1.5"/></svg>';
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    var nav = document.querySelector('.nav');
+    var links = nav && nav.querySelector('.links');
+    if (!nav || !links || nav.querySelector('.bps-burger')) return;
+
+    var here = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+    var hidden = window.BPS_HIDDEN;
+
+    var st = document.createElement('style');
+    st.textContent =
+      /* shared / desktop */
+      '.nav .links{display:flex;align-items:center}' +
+      '.nav .links a,.nav .links .bps-top{text-shadow:0 1px 3px rgba(0,0,0,.55),0 0 14px rgba(0,0,0,.35)}' +
+      '.bps-nav-item{position:relative;display:inline-block;margin-left:28px}' +
+      '.bps-nav-item > a{margin-left:0 !important;display:inline-flex;align-items:center;gap:6px}' +
+      '.bps-caret{width:9px;height:6px;flex:none;opacity:.8;transition:transform .3s}' +
+      '.bps-nav-item:hover .bps-caret,.bps-nav-item:focus-within .bps-caret{transform:rotate(180deg)}' +
+      '.bps-sub{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(6px);min-width:186px;background:rgba(2,4,10,.97);border:1px solid #132341;padding:8px 0;opacity:0;visibility:hidden;transition:opacity .3s,transform .3s;z-index:200}' +
+      '.bps-nav-item:hover .bps-sub,.bps-nav-item:focus-within .bps-sub{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}' +
+      '.bps-sub a{display:block;margin:0 !important;padding:11px 22px;color:#8B929C;font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;white-space:nowrap;transition:color .3s,background .3s;text-shadow:none}' +
+      '.bps-sub a:hover{color:#CFD9E4;background:rgba(29,95,184,.12)}' +
+      '.bps-mob-only{display:none}' +
+      '.bps-burger{display:none;background:none;border:0;color:#CFD9E4;cursor:pointer;padding:8px;margin-left:18px;z-index:130}' +
+      '.bps-burger svg{width:26px;height:26px;display:block}' +
+      '#bpsNavScrim{position:fixed;inset:0;background:rgba(2,4,10,.6);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .3s;z-index:110}' +
+      '#bpsNavScrim.on{opacity:1;visibility:visible}' +
+      /* mobile */
+      '@media (max-width:860px){' +
+        '.nav .bps-burger{display:block}' +
+        '.nav .links{position:fixed !important;top:0;right:0;height:100dvh;width:min(86vw,340px);background:#02040A;border-left:1px solid #132341;display:flex !important;flex-direction:column !important;align-items:stretch !important;justify-content:flex-start;gap:0;padding:76px 24px 32px;transform:translateX(101%);transition:transform .34s cubic-bezier(.2,.7,.2,1);overflow-y:auto;z-index:120}' +
+        '.nav .links.bps-open{transform:none}' +
+        '.bps-nav-item{display:block;margin:0 !important;width:100%;border-bottom:1px solid #101d33}' +
+        '.bps-nav-item > a,.nav .links > a{display:flex !important;align-items:center;justify-content:space-between;width:100%;margin:0 !important;padding:16px 2px !important;font-size:12.5px !important;letter-spacing:.24em;color:#CFD9E4 !important}' +
+        '.nav .links > a{border-bottom:1px solid #101d33}' +
+        '.bps-caret{width:12px;height:8px;transition:transform .3s}' +
+        '.bps-nav-item.bps-exp .bps-caret{transform:rotate(180deg)}' +
+        '.bps-sub{position:static !important;transform:none !important;opacity:1 !important;visibility:visible !important;background:none !important;border:0 !important;padding:0 !important;min-width:0 !important;max-height:0;overflow:hidden;transition:max-height .35s ease}' +
+        '.bps-nav-item.bps-exp .bps-sub{max-height:340px;padding:0 0 10px !important}' +
+        '.bps-sub a{padding:11px 0 11px 16px !important;font-size:10px;color:#8B929C !important}' +
+        '.bps-mob-only{display:block}' +
+        '#bpsNavClose{position:absolute;top:20px;right:20px;background:none;border:0;color:#8B929C;cursor:pointer;padding:6px;line-height:1}' +
+        '#bpsNavClose svg{width:22px;height:22px;display:block}' +
+        '#bpsNavClose:hover{color:#CFD9E4}' +
+        '#bpsNavSocials{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:28px;padding-top:22px;border-top:1px solid #101d33}' +
+        '#bpsNavSocials a{color:#8B929C;display:inline-flex;margin:0 !important;padding:0 !important;transition:color .3s}' +
+        '#bpsNavSocials a:hover{color:#CFD9E4}' +
+        '#bpsNavSocials svg{width:20px;height:20px}' +
+        '#bpsNavCart{margin:18px 0 0 !important}' +
+      '}';
+    document.head.appendChild(st);
+
+    /* build the link list */
+    var html = ITEMS.map(function (it) {
+      var kids = (it.children || []).filter(function (c) { return !hidden.isHidden(c.href); });
+      var on = (here === it.href.toLowerCase()) || kids.some(function (c) { return here === c.href.toLowerCase(); });
+      if (!kids.length) {
+        if (hidden.isHidden(it.href)) return '';
+        return '<a href="' + esc(it.href) + '"' + (on ? ' class="on"' : '') + '>' + esc(it.label) + '</a>';
+      }
+      return '<span class="bps-nav-item">' +
+        '<a href="' + esc(it.href) + '"' + (on ? ' class="on"' : '') + '>' + esc(it.label) + CARET + '</a>' +
+        '<div class="bps-sub" role="menu">' + kids.map(function (c) {
+          return '<a href="' + esc(c.href) + '" role="menuitem">' + esc(c.label) + '</a>';
+        }).join('') + '</div>' +
+      '</span>';
+    }).join('');
+
+    links.innerHTML =
+      '<button type="button" id="bpsNavClose" class="bps-mob-only" aria-label="Close menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg></button>' +
+      html +
+      '<div id="bpsNavSocials" class="bps-mob-only">' + window.BPS_SOCIAL.row() + '</div>';
+
+    var burger = document.createElement('button');
+    burger.className = 'bps-burger'; burger.type = 'button';
+    burger.setAttribute('aria-label', 'Menu'); burger.setAttribute('aria-expanded', 'false');
+    burger.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+    nav.appendChild(burger);
+
+    var scrim = document.createElement('div');
+    scrim.id = 'bpsNavScrim';
+    document.body.appendChild(scrim);
+
+    function setOpen(open) {
+      links.classList.toggle('bps-open', open);
+      scrim.classList.toggle('on', open);
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      document.documentElement.style.overflow = open ? 'hidden' : '';
     }
-    var wrap = document.createElement('span');
-    wrap.className = 'bps-proj';
-    var trigger = document.createElement('a');
-    trigger.href = 'films.html';
-    trigger.textContent = 'Projects';
-    if (filmsLink.classList.contains('on')) trigger.classList.add('on');
-    var panel = document.createElement('div');
-    panel.className = 'bps-proj-panel';
-    panel.setAttribute('role', 'menu');
-    panel.innerHTML =
-      '<a href="films.html" role="menuitem">Films</a>' +
-      '<a href="moth-country.html" role="menuitem">Television</a>' +
-      '<a href="books.html" role="menuitem">Books</a>';
-    wrap.appendChild(trigger); wrap.appendChild(panel);
-    filmsLink.parentNode.replaceChild(wrap, filmsLink);
+    burger.addEventListener('click', function () { setOpen(!links.classList.contains('bps-open')); });
+    document.getElementById('bpsNavClose').addEventListener('click', function () { setOpen(false); });
+    scrim.addEventListener('click', function () { setOpen(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+
+    /* mobile: tapping a parent toggles its submenu instead of navigating */
+    links.addEventListener('click', function (e) {
+      var isMobile = window.matchMedia('(max-width:860px)').matches;
+      var parentLink = e.target.closest('.bps-nav-item > a');
+      if (isMobile && parentLink) {
+        e.preventDefault();
+        parentLink.parentNode.classList.toggle('bps-exp');
+        return;
+      }
+      if (e.target.closest('a')) setOpen(false);
+    });
   });
 })();
 
@@ -462,23 +643,8 @@ window.bpsSubscribe = function (formOrEmail, ev) {
 /* ——— FOOTER BAND — mailing-list signup + minimalist social icons, injected
    into every page's footer so they stay consistent from one place (here). ——— */
 (function () {
-  var ICONS = {
-    youtube: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23 12s0-3.3-.4-4.9a2.6 2.6 0 0 0-1.8-1.8C19.1 5 12 5 12 5s-7.1 0-8.8.3A2.6 2.6 0 0 0 1.4 7.1C1 8.7 1 12 1 12s0 3.3.4 4.9a2.6 2.6 0 0 0 1.8 1.8C4.9 19 12 19 12 19s7.1 0 8.8-.3a2.6 2.6 0 0 0 1.8-1.8C23 15.3 23 12 23 12zM9.8 15.3V8.7l5.7 3.3-5.7 3.3z"/></svg>',
-    x: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.9 2H22l-7.1 8.1L23 22h-6.6l-5.2-6.8L5.3 22H2.2l7.6-8.7L1.5 2h6.7l4.7 6.2L18.9 2zm-1.2 18h1.8L7.4 3.9H5.5L17.7 20z"/></svg>',
-    instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>',
-    reddit: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 12a2.1 2.1 0 0 0-3.6-1.5 10.3 10.3 0 0 0-5.3-1.7l.9-4.2 3 .7a1.5 1.5 0 1 0 .2-1l-3.4-.8a.5.5 0 0 0-.6.4l-1 4.7a10.4 10.4 0 0 0-5.4 1.7A2.1 2.1 0 1 0 3.6 14v.6c0 3.1 3.8 5.6 8.4 5.6s8.4-2.5 8.4-5.6V14A2.1 2.1 0 0 0 22 12zM8 13.5A1.4 1.4 0 1 1 9.4 15 1.4 1.4 0 0 1 8 13.5zm7.6 3.9a5.3 5.3 0 0 1-3.6 1.1 5.3 5.3 0 0 1-3.6-1.1.4.4 0 0 1 .6-.6 4.6 4.6 0 0 0 3 .9 4.6 4.6 0 0 0 3-.9.4.4 0 1 1 .6.6zm-.9-2.5A1.4 1.4 0 1 1 16 13a1.4 1.4 0 0 1-1.3 1.9z"/></svg>',
-    bluesky: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 10.8C10.9 8.6 7.9 4.7 5.1 3.1 3.8 2.3 2 2 2 4.2c0 1.3.8 5.6 1.2 6.3.6 1.2 1.8 1.5 3 1.3-2 .3-3.7 1-1.4 3.6 2.5 2.6 3.5-.7 4-2.4l.2-1 .3 1c.5 1.7 1.5 5 4 2.4 2.3-2.6.6-3.3-1.4-3.6 1.2.2 2.4-.1 3-1.3.4-.7 1.2-5 1.2-6.3 0-2.2-1.8-1.9-3.1-1.1C16.1 4.7 13.1 8.6 12 10.8z"/></svg>',
-    tiktok: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.5 3c.3 2 1.5 3.6 3.5 3.9v2.6a6.6 6.6 0 0 1-3.5-1v5.7a5.6 5.6 0 1 1-5.6-5.6c.3 0 .6 0 .9.1v2.7a2.9 2.9 0 1 0 2 2.8V3h2.7z"/></svg>',
-    vrchat: '<span class="bps-vrc" aria-hidden="true"></span>',
-    discord: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.2.4a18.3 18.3 0 0 1 4.3 1.4 16.6 16.6 0 0 0-14 0A18.3 18.3 0 0 1 9.8 3.4L9.6 3a19.8 19.8 0 0 0-4.9 1.4A20.7 20.7 0 0 0 1.3 18a19.9 19.9 0 0 0 6 3l.5-.7a13 13 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12.4 0l.5.4a13 13 0 0 1-2 1l.5.7a19.9 19.9 0 0 0 6-3 20.7 20.7 0 0 0-3.4-13.6zM8.5 14.7c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2zm7 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2z"/></svg>'
-  };
-  var LABELS = { youtube: 'YouTube', x: 'X', instagram: 'Instagram', reddit: 'Reddit', bluesky: 'Bluesky', tiktok: 'TikTok', vrchat: 'VRChat', discord: 'Discord' };
-  var ORDER = ['youtube', 'instagram', 'x', 'tiktok', 'bluesky', 'reddit', 'discord', 'vrchat'];
-  function socials() {
-    var m = {}; try { Object.assign(m, window.BPS_SOCIALS || {}); } catch (_) {}
-    try { Object.assign(m, JSON.parse(localStorage.getItem('bpsSocialLinks') || '{}')); } catch (_) {}
-    return m;
-  }
+  var ICONS = window.BPS_SOCIAL.ICONS, LABELS = window.BPS_SOCIAL.LABELS, ORDER = window.BPS_SOCIAL.ORDER;
+  function socials() { return window.BPS_SOCIAL.links(); }
   /* Footer content is config-driven — edit it in the admin Footer tab. Order:
      localStorage bpsFooter (admin preview) → window.BPS_FOOTER (published) → default. */
   var DEFAULT_FOOTER = {
@@ -510,8 +676,11 @@ window.bpsSubscribe = function (formOrEmail, ev) {
     var st = document.createElement('style');
     st.textContent =
       /* ONE canonical footer, rendered from here so it's identical on every page */
-      'footer{padding:0!important;margin:0!important;background:#02040A!important;color:#8B929C!important;border-top:1px solid #132341!important;text-align:left!important}' +
-      'footer .bps-foot{max-width:1240px;margin:0 auto;padding:88px 48px 52px;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif}' +
+      /* hard reset so per-page footer rules (uppercase, letter-spacing, tiny
+         font-size) can't leak in and make the footer look different per page */
+      'footer{padding:0!important;margin:0!important;background:#02040A!important;color:#8B929C!important;border-top:1px solid #132341!important;text-align:left!important;font-size:14px!important;letter-spacing:normal!important;text-transform:none!important;font-style:normal!important;font-weight:400!important;line-height:1.5!important}' +
+      'footer .bps-foot,footer .bps-foot *{letter-spacing:normal;text-transform:none;font-style:normal}' +
+      'footer .bps-foot{max-width:1240px;margin:0 auto;padding:88px 48px 52px;font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;font-size:14px}' +
       'footer .bps-foot .bps-foot-top{display:flex;flex-wrap:wrap;gap:44px 60px;margin-bottom:44px;align-items:flex-start}' +
       'footer .bps-foot .brand-col{flex:2 1 300px}' +
       'footer .bps-foot .fcol{flex:1 1 130px}' +
@@ -706,17 +875,7 @@ window.bpsSubscribe = function (formOrEmail, ev) {
   }
 })();
 
-/* ——— STUDIO MENU — add the "About Us" (leadership) page to the Studio dropdown
-   on every page that has the dropdown, from this one place. ——— */
-(function () {
-  document.addEventListener('DOMContentLoaded', function () {
-    var panel = document.querySelector('.studio-panel');
-    if (!panel || panel.querySelector('a[href="about.html"]')) return;
-    var a = document.createElement('a');
-    a.href = 'about.html'; a.setAttribute('role', 'menuitem'); a.textContent = 'About Us';
-    panel.insertBefore(a, panel.firstChild);
-  });
-})();
+/* (Studio dropdown is now part of the canonical nav above.) */
 
 /* ——— SCROLL V-ARROW — a V-shaped down button, bottom-center, that smooth-scrolls
    to the next section (non-scroll navigation). Glows blue on hover, blue pulse on
@@ -775,33 +934,134 @@ window.bpsSubscribe = function (formOrEmail, ev) {
   });
 })();
 
-/* ——— MOBILE NAV — collapse the nav links into a slide-in hamburger menu below
-   ~760px (handles the injected Projects dropdown + cart too). ——— */
+/* ——— POSTER CAROUSEL — a minimal, cinematic slate. Markup:
+   <div class="bps-carousel" data-items='[{"title","year","note","href","img"}]'></div>
+   The centre poster is enlarged and lit; the others fall back and dim. ——— */
 (function () {
   document.addEventListener('DOMContentLoaded', function () {
-    var nav = document.querySelector('.nav'); var links = nav && nav.querySelector('.links');
-    if (!nav || !links || nav.querySelector('.bps-burger')) return;
+    var mounts = document.querySelectorAll('.bps-carousel');
+    if (!mounts.length) return;
     var css = document.createElement('style');
     css.textContent =
-      '.bps-burger{display:none;background:none;border:0;color:var(--foam,#CFD9E4);cursor:pointer;padding:6px;margin-left:auto}' +
-      '.bps-burger svg{width:26px;height:26px;display:block}' +
-      '@media (max-width:760px){' +
-      '.nav .bps-burger{display:block}' +
-      '.nav .links{position:fixed !important;top:0;right:0;height:100vh;width:min(80vw,320px);background:#02040A;border-left:1px solid #132341;display:flex !important;flex-direction:column !important;align-items:flex-start;justify-content:flex-start;gap:4px;padding:90px 28px 28px;transform:translateX(100%);transition:transform .35s cubic-bezier(.2,.7,.2,1);overflow-y:auto;z-index:120}' +
-      '.nav .links.bps-open{transform:none}' +
-      '.nav .links a{margin:0 !important;padding:12px 0;font-size:12px !important;width:100%}' +
-      '.nav .links .studio-menu,.nav .links .bps-proj{margin:0 !important;display:block;width:100%}' +
-      '.nav .links .studio-panel,.nav .links .bps-proj-panel{position:static !important;transform:none !important;opacity:1 !important;visibility:visible !important;background:none !important;border:0 !important;padding:2px 0 6px 16px !important;min-width:0 !important}' +
-      '#bpsNavCart{margin:14px 0 0 !important}' +
-      '}';
+      '.bps-carousel{position:relative;width:100%;padding:18px 0 8px}' +
+      '.bpc-stage{position:relative;height:min(62vh,560px);display:flex;align-items:center;justify-content:center;perspective:1600px}' +
+      '.bpc-item{position:absolute;top:50%;left:50%;width:min(300px,58vw);aspect-ratio:2/3;margin:0;text-decoration:none;color:inherit;' +
+        'transition:transform .75s cubic-bezier(.22,.7,.2,1),opacity .75s,filter .75s;will-change:transform;cursor:pointer}' +
+      '.bpc-item .bpc-art{position:absolute;inset:0;overflow:hidden;background:linear-gradient(150deg,#0d1a2e,#050a14);border:1px solid #132341;box-shadow:0 30px 70px rgba(0,0,0,.6)}' +
+      '.bpc-item .bpc-art img{width:100%;height:100%;object-fit:cover;display:block}' +
+      '.bpc-item .bpc-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:22px;' +
+        "font-family:Fraunces,Georgia,serif;font-style:italic;font-size:15px;color:#6BB4E8;opacity:.75}" +
+      '.bpc-item.is-active{z-index:5}' +
+      '.bpc-item:not(.is-active){filter:saturate(.55) brightness(.5)}' +
+      '.bpc-item:not(.is-active):hover{filter:saturate(.8) brightness(.72)}' +
+      '.bpc-meta{margin-top:26px;text-align:center;min-height:92px}' +
+      '.bpc-meta .t{font-family:Fraunces,Georgia,serif;font-weight:300;font-size:clamp(28px,4vw,46px);letter-spacing:-.02em;color:#CFD9E4;line-height:1.05}' +
+      '.bpc-meta .y{margin-top:10px;font-family:Inter,sans-serif;font-size:10px;letter-spacing:.42em;text-transform:uppercase;color:#6BB4E8;font-weight:600}' +
+      '.bpc-meta .n{margin-top:12px;font-family:Fraunces,Georgia,serif;font-style:italic;font-size:15px;color:#8B929C}' +
+      '.bpc-meta .go{display:inline-block;margin-top:18px;font-family:Inter,sans-serif;font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:#CFD9E4;text-decoration:none;border-bottom:1px solid #6BB4E8;padding-bottom:5px}' +
+      '.bpc-nav{position:absolute;top:min(31vh,280px);width:100%;display:flex;justify-content:space-between;pointer-events:none;z-index:9}' +
+      '.bpc-nav button{pointer-events:auto;background:rgba(2,4,10,.5);border:1px solid #132341;color:#CFD9E4;width:46px;height:46px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .3s,background .3s}' +
+      '.bpc-nav button:hover{border-color:#6BB4E8;background:rgba(29,95,184,.2)}' +
+      '.bpc-nav svg{width:18px;height:18px}' +
+      '.bpc-dots{display:flex;gap:9px;justify-content:center;margin-top:22px}' +
+      '.bpc-dots button{width:7px;height:7px;border-radius:50%;border:0;padding:0;background:#243352;cursor:pointer;transition:background .3s,transform .3s}' +
+      '.bpc-dots button.on{background:#6BB4E8;transform:scale(1.4)}' +
+      '@media(max-width:700px){.bpc-stage{height:min(54vh,430px)}.bpc-item{width:min(230px,62vw)}.bpc-nav{top:min(26vh,210px)}}';
     document.head.appendChild(css);
-    var burger = document.createElement('button');
-    burger.className = 'bps-burger'; burger.type = 'button'; burger.setAttribute('aria-label', 'Menu'); burger.setAttribute('aria-expanded', 'false');
-    burger.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
-    nav.appendChild(burger);
-    burger.addEventListener('click', function () { var open = links.classList.toggle('bps-open'); burger.setAttribute('aria-expanded', open ? 'true' : 'false'); });
-    links.addEventListener('click', function (e) { if (e.target.tagName === 'A') { links.classList.remove('bps-open'); burger.setAttribute('aria-expanded', 'false'); } });
+
+    mounts.forEach(function (mount) {
+      var items = [];
+      try { items = JSON.parse(mount.getAttribute('data-items') || '[]'); } catch (_) {}
+      items = items.filter(function (it) { return !window.BPS_HIDDEN.isHidden(it.href); });
+      if (!items.length) { mount.style.display = 'none'; return; }
+
+      var stage = document.createElement('div'); stage.className = 'bpc-stage';
+      var meta = document.createElement('div'); meta.className = 'bpc-meta';
+      var dots = document.createElement('div'); dots.className = 'bpc-dots';
+      var nav = document.createElement('div'); nav.className = 'bpc-nav';
+      nav.innerHTML =
+        '<button type="button" data-d="-1" aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 5 8 12 15 19"/></svg></button>' +
+        '<button type="button" data-d="1" aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 5 16 12 9 19"/></svg></button>';
+
+      var els = items.map(function (it, i) {
+        var a = document.createElement('a');
+        a.className = 'bpc-item';
+        a.href = it.href || '#';
+        a.setAttribute('data-i', i);
+        a.innerHTML = '<div class="bpc-art">' +
+          (it.img ? '<img src="' + it.img + '" alt="' + (it.title || '') + '" loading="lazy">'
+                  : '<div class="bpc-ph">' + (it.title || '') + '<br>artwork coming soon</div>') +
+          '</div>';
+        stage.appendChild(a);
+        return a;
+      });
+
+      items.forEach(function (_, i) {
+        var b = document.createElement('button'); b.type = 'button';
+        b.setAttribute('aria-label', 'Go to item ' + (i + 1));
+        b.addEventListener('click', function () { go(i); });
+        dots.appendChild(b);
+      });
+
+      mount.appendChild(stage); mount.appendChild(nav); mount.appendChild(meta); mount.appendChild(dots);
+
+      var cur = 0;
+      function layout() {
+        els.forEach(function (el, i) {
+          var d = i - cur;
+          var n = items.length;
+          if (d > n / 2) d -= n; if (d < -n / 2) d += n;   // shortest way round
+          var abs = Math.abs(d);
+          var x = d * 58, sc = d === 0 ? 1 : 0.72 - (abs - 1) * 0.06, rot = d === 0 ? 0 : (d > 0 ? -16 : 16);
+          el.style.transform = 'translate(-50%,-50%) translateX(' + x + '%) scale(' + Math.max(sc, 0.4) + ') rotateY(' + rot + 'deg)';
+          el.style.opacity = abs > 2 ? 0 : 1;
+          el.style.zIndex = String(20 - abs);
+          el.classList.toggle('is-active', d === 0);
+          el.style.pointerEvents = abs > 2 ? 'none' : 'auto';
+        });
+        var it = items[cur];
+        meta.innerHTML = '<div class="t">' + (it.title || '') + '</div>' +
+          (it.year ? '<div class="y">' + it.year + '</div>' : '') +
+          (it.note ? '<div class="n">' + it.note + '</div>' : '') +
+          (it.href ? '<a class="go" href="' + it.href + '">Enter &rarr;</a>' : '');
+        Array.prototype.forEach.call(dots.children, function (b, i) { b.classList.toggle('on', i === cur); });
+      }
+      function go(i) { cur = (i + items.length) % items.length; layout(); }
+
+      nav.addEventListener('click', function (e) {
+        var b = e.target.closest('button'); if (!b) return;
+        go(cur + (+b.getAttribute('data-d')));
+      });
+      els.forEach(function (el, i) {
+        el.addEventListener('click', function (e) { if (i !== cur) { e.preventDefault(); go(i); } });
+      });
+      /* swipe */
+      var sx = null;
+      stage.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; }, { passive: true });
+      stage.addEventListener('touchend', function (e) {
+        if (sx === null) return;
+        var dx = e.changedTouches[0].clientX - sx;
+        if (Math.abs(dx) > 40) go(cur + (dx < 0 ? 1 : -1));
+        sx = null;
+      });
+      layout();
+    });
   });
+})();
+
+/* ——— MOBILE HERO — full-bleed hero art gets cropped hard on phones; scale it
+   to fit and shorten the hero so nothing important is cut off. ——— */
+(function () {
+  var st = document.createElement('style');
+  st.textContent =
+    '@media (max-width:860px){' +
+      '.hero{min-height:78vh !important}' +
+      '.hero .bg-img,.feat-slide{background-size:contain !important;background-position:center 42% !important;background-repeat:no-repeat !important;background-color:#05070c}' +
+      '.hero .title-logo,.hero .swell-logo{width:min(92%,520px) !important}' +
+      '.feat-slide .flogo{width:min(82vw,420px) !important;max-height:38% !important}' +
+      '.hero{padding-left:24px !important;padding-right:24px !important}' +
+    '}';
+  document.addEventListener('DOMContentLoaded', function () { document.head.appendChild(st); });
 })();
 
 /* ——— LANGUAGE — auto-translate switcher (Google Translate). A globe control

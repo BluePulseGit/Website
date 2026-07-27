@@ -434,37 +434,52 @@
     else nav.style.background = 'linear-gradient(to bottom, rgba(2,4,10,0.5), transparent)';
   }, { passive: true });
 
-  /* Contact form — POSTs to BPS_CONFIG.formEndpoint when configured
-     (see site.js / ADMIN-ACCESS.md); demo-confirms otherwise. */
+  /* Contact form — posts to the Blue Pulse contact Google Form, which emails
+     production@bluepulsestudios.com and logs to the Contact Messages sheet.
+     On success the form is replaced by a confirmation message. */
   document.getElementById('contactForm').addEventListener('submit', async function (e) {
     e.preventDefault();
     const f = this, btn = f.querySelector('.submit');
+    const cfg = (window.BPS_CONFIG || {}).contactForm;
     const ep = (window.BPS_CONFIG || {}).formEndpoint;
     btn.disabled = true;
-    let ok = true;
-    if (ep) {
-      btn.textContent = 'Sending…';
+    btn.textContent = 'Sending…';
+
+    const data = {
+      name: f.querySelector('#name').value,
+      email: f.querySelector('#email').value,
+      topic: f.querySelector('#type').value,
+      message: f.querySelector('#msg').value
+    };
+
+    let ok = false;
+    if (cfg && cfg.url) {
+      const body = new URLSearchParams();
+      body.append(cfg.name, data.name);
+      body.append(cfg.email, data.email);
+      body.append(cfg.topic, data.topic);
+      body.append(cfg.message, data.message);
+      try { await fetch(cfg.url, { method: 'POST', mode: 'no-cors', body: body }); ok = true; } catch (_) { ok = false; }
+    } else if (ep) {
       try {
-        const r = await fetch(ep, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({
-            name: f.querySelector('#name').value,
-            email: f.querySelector('#email').value,
-            topic: f.querySelector('#type').value,
-            message: f.querySelector('#msg').value
-          })
-        });
+        const r = await fetch(ep, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(data) });
         ok = r.ok;
       } catch (_) { ok = false; }
     }
+
     if (ok) {
-      f.querySelector('.success').classList.add('on');
-      btn.textContent = 'Sent ✓';
+      const col = f.closest('.form-col');
+      col.innerHTML =
+        '<div class="page-kicker">Contact</div>' +
+        '<h2>Your message <em>has been sent!</em></h2>' +
+        '<p class="blurb">Thanks for reaching out &mdash; we read everything, and good people always get a reply. ' +
+        'If it&rsquo;s urgent you can also email <a href="mailto:production@bluepulsestudios.com" style="color:var(--glow);text-decoration:none;border-bottom:1px solid var(--glow)">production@bluepulsestudios.com</a>.</p>';
+      col.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (window.bpsTransmission) window.bpsTransmission('Message sent.');
     } else {
       btn.disabled = false;
       btn.textContent = 'Send →';
-      alert('Could not send just now — email us directly at production@bluepulsestudios.com');
+      alert('Could not send just now — please email us directly at production@bluepulsestudios.com');
     }
   });
 </script>
