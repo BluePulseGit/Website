@@ -39,12 +39,12 @@
      exactly on top of the characters painted into the key art. ——— */
   .mc-stage { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
               width: max(100%, calc(100vh * 16 / 9)); aspect-ratio: 16 / 9; z-index: -3; pointer-events: none; }
-  .mc-stage .mc-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .mc-stage .mc-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
   .mc-stage .mc-logo { position: absolute; left: 50%; top: 9%; transform: translateX(-50%);
-                       width: 74%; will-change: transform; filter: drop-shadow(0 12px 46px rgba(150,90,220,0.45)); }
+                       width: 74%; z-index: 1; will-change: transform; filter: drop-shadow(0 12px 46px rgba(150,90,220,0.45)); }
   .mc-stage .mc-logo img { width: 100%; height: auto; display: block; }
   /* exact placement of the cutout inside the 1920x1080 key art */
-  .mc-stage .mc-chars { position: absolute; left: 29.219%; top: 27.685%; width: 40.365%; height: auto; }
+  .mc-stage .mc-chars { position: absolute; left: 29.219%; top: 27.685%; width: 40.365%; height: auto; z-index: 2; }
   .hero .vig { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(2,4,10,0.5) 0%, transparent 30%, transparent 52%, rgba(2,4,10,0.96) 100%); pointer-events: none; z-index: -1; }
   @media (max-width: 860px) { .mc-stage { width: max(150%, calc(100vh * 16 / 9)); } }
   .hero .content { position: relative; max-width: 1200px; }
