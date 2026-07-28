@@ -945,7 +945,7 @@ window.BPS_HIDDEN = (function () {
     css.textContent =
       /* the carousel is the feature on these pages — give it the room */
       '.bps-carousel{position:relative;width:100%;padding:6px 0 8px}' +
-      '.bpc-stage{position:relative;height:min(74vh,680px);display:flex;align-items:center;justify-content:center;perspective:1600px}' +
+      '.bpc-stage{position:relative;height:min(52vh,470px);display:flex;align-items:center;justify-content:center;perspective:1600px}' +
       /* compact, unobtrusive page header above a carousel */
       '.proj-head{max-width:1200px;margin:0 auto;padding:118px 48px 0;text-align:center}' +
       '.proj-head .eyebrow{font-size:9.5px;letter-spacing:.5em;text-transform:uppercase;color:#6BB4E8;font-weight:600;margin-bottom:10px}' +
