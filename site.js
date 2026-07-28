@@ -943,8 +943,19 @@ window.BPS_HIDDEN = (function () {
     if (!mounts.length) return;
     var css = document.createElement('style');
     css.textContent =
-      '.bps-carousel{position:relative;width:100%;padding:18px 0 8px}' +
-      '.bpc-stage{position:relative;height:min(62vh,560px);display:flex;align-items:center;justify-content:center;perspective:1600px}' +
+      /* the carousel is the feature on these pages — give it the room */
+      '.bps-carousel{position:relative;width:100%;padding:6px 0 8px}' +
+      '.bpc-stage{position:relative;height:min(74vh,680px);display:flex;align-items:center;justify-content:center;perspective:1600px}' +
+      /* compact, unobtrusive page header above a carousel */
+      '.proj-head{max-width:1200px;margin:0 auto;padding:118px 48px 0;text-align:center}' +
+      '.proj-head .eyebrow{font-size:9.5px;letter-spacing:.5em;text-transform:uppercase;color:#6BB4E8;font-weight:600;margin-bottom:10px}' +
+      ".proj-head h1{font-family:Fraunces,Georgia,serif;font-weight:300;font-size:clamp(24px,2.6vw,38px);letter-spacing:-.01em;color:#CFD9E4;line-height:1.05;margin:0}" +
+      ".proj-head p{margin:10px auto 0;font-family:Fraunces,Georgia,serif;font-style:italic;font-size:14px;line-height:1.5;color:#8B929C;max-width:520px}" +
+      '.proj-tabs{display:flex;gap:26px;justify-content:center;margin:18px 0 0;flex-wrap:wrap}' +
+      '.proj-tabs a{font-family:Inter,sans-serif;font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:#8B929C;text-decoration:none;padding-bottom:6px;border-bottom:1px solid transparent;transition:color .35s,border-color .35s}' +
+      '.proj-tabs a:hover{color:#CFD9E4}' +
+      '.proj-tabs a.on{color:#CFD9E4;border-bottom-color:#6BB4E8}' +
+      '@media(max-width:700px){.proj-head{padding:96px 24px 0}}' +
       '.bpc-item{position:absolute;top:50%;left:50%;width:min(300px,58vw);aspect-ratio:2/3;margin:0;text-decoration:none;color:inherit;' +
         'transition:transform .75s cubic-bezier(.22,.7,.2,1),opacity .75s,filter .75s;will-change:transform;cursor:pointer}' +
       '.bpc-item .bpc-art{position:absolute;inset:0;overflow:hidden;background:linear-gradient(150deg,#0d1a2e,#050a14);border:1px solid #132341;box-shadow:0 30px 70px rgba(0,0,0,.6)}' +
@@ -1046,6 +1057,130 @@ window.BPS_HIDDEN = (function () {
       });
       layout();
     });
+  });
+})();
+
+/* ——— BANNERS — layered hero art (background / logo / foreground), positionable
+   and parallax-able from the admin "Banners" tab. Any element with
+   data-bps-banner="<key>" gets its layers rendered and kept in sync. ——— */
+window.BPS_BANNERS_DEFAULT = {
+  'moth-country': {
+    parallax: true,
+    layers: [
+      { name: 'Key art',    img: 'assets/moth-country-key.jpg',        mode: 'cover', x: 0,      y: 0,      scale: 100,  parallax: 0,  fade: true },
+      { name: 'Logo',       img: 'assets/moth-country-title.png',      mode: 'logo',  x: 0,      y: -32,    scale: 74,   parallax: 26, fade: false },
+      { name: 'Characters', img: 'assets/moth-country-characters.png', mode: 'place', x: 29.219, y: 27.685, scale: 40.365, parallax: 0, fade: false, ar: '775/633' }
+    ]
+  }
+};
+window.BPS_BANNERS = (function () {
+  function all() {
+    var d = {};
+    try { Object.assign(d, window.BPS_BANNERS_DEFAULT || {}); } catch (_) {}
+    try { Object.assign(d, window.BPS_BANNERS_PUBLISHED || {}); } catch (_) {}
+    try {
+      var ls = JSON.parse(localStorage.getItem('bpsBanners') || 'null');
+      if (ls && typeof ls === 'object') Object.assign(d, ls);
+    } catch (_) {}
+    return d;
+  }
+  function get(key) { return all()[key] || null; }
+  function save(key, cfg) {
+    var cur = {};
+    try { cur = JSON.parse(localStorage.getItem('bpsBanners') || '{}') || {}; } catch (_) {}
+    cur[key] = cfg;
+    try { localStorage.setItem('bpsBanners', JSON.stringify(cur)); return true; } catch (_) { return false; }
+  }
+  function clear(key) {
+    try {
+      var cur = JSON.parse(localStorage.getItem('bpsBanners') || '{}') || {};
+      delete cur[key]; localStorage.setItem('bpsBanners', JSON.stringify(cur));
+    } catch (_) {}
+  }
+  /* Build (or rebuild) the layer stack inside a mount element. */
+  function render(mount) {
+    var key = mount.getAttribute('data-bps-banner');
+    var cfg = get(key);
+    if (!cfg) return;
+    mount.innerHTML = '';
+    mount.classList.add('bps-banner');
+    (cfg.layers || []).forEach(function (L, i) {
+      var el = document.createElement('div');
+      el.className = 'bpsb-layer bpsb-' + (L.mode || 'cover');
+      el.setAttribute('data-i', i);
+      el.style.zIndex = String(i);
+      el.style.backgroundImage = L.img ? "url('" + L.img + "')" : 'none';
+      if (L.mode === 'cover') {
+        el.style.cssText += ';position:absolute;inset:0;background-size:cover;background-position:' +
+          (50 + (+L.x || 0)) + '% ' + (50 + (+L.y || 0)) + '%;background-repeat:no-repeat';
+        if (L.fade) {
+          var g = 'linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%)';
+          el.style.webkitMaskImage = g; el.style.maskImage = g;
+        }
+      } else if (L.mode === 'logo') {
+        el.style.cssText += ';position:absolute;left:' + (50 + (+L.x || 0)) + '%;top:' + (50 + (+L.y || 0)) +
+          '%;width:' + (+L.scale || 60) + '%;aspect-ratio:' + (L.ar || '1600/541') +
+          ';transform:translate(-50%,-50%);background-size:contain;background-position:center;background-repeat:no-repeat;' +
+          'filter:drop-shadow(0 12px 46px rgba(150,90,220,.45))';
+      } else { /* place — anchored to the artwork by percentage */
+        el.style.cssText += ';position:absolute;left:' + (+L.x || 0) + '%;top:' + (+L.y || 0) +
+          '%;width:' + (+L.scale || 40) + '%;aspect-ratio:' + (L.ar || '1/1') +
+          ';background-size:contain;background-position:center;background-repeat:no-repeat';
+      }
+      el.setAttribute('data-par', String(+L.parallax || 0));
+      mount.appendChild(el);
+    });
+    startParallax(mount, cfg);
+  }
+  function startParallax(mount, cfg) {
+    if (mount._bpsRaf) return;
+    if (!cfg.parallax) return;
+    if (document.documentElement.classList.contains('bps-rm')) return;
+    var tx = 0, ty = 0, cx = 0, cy = 0;
+    window.addEventListener('mousemove', function (e) {
+      tx = (e.clientX / window.innerWidth - 0.5) * 2;
+      ty = (e.clientY / window.innerHeight - 0.5) * 2;
+    }, { passive: true });
+    function raf() {
+      cx += (tx - cx) * 0.06; cy += (ty - cy) * 0.06;
+      Array.prototype.forEach.call(mount.querySelectorAll('.bpsb-layer'), function (el) {
+        var p = +el.getAttribute('data-par') || 0;
+        if (!p) return;
+        var base = el.classList.contains('bpsb-logo') ? 'translate(-50%,-50%) ' : '';
+        el.style.transform = base + 'translate3d(' + (cx * p).toFixed(1) + 'px,' + (cy * p * 0.6).toFixed(1) + 'px,0)';
+      });
+      mount._bpsRaf = requestAnimationFrame(raf);
+    }
+    mount._bpsRaf = requestAnimationFrame(raf);
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    var st = document.createElement('style');
+    st.textContent =
+      '.bps-banner{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:max(106%,calc(100vh*16/9*1.06));aspect-ratio:16/9;z-index:0;pointer-events:none}' +
+      '.bpsb-layer{will-change:transform}';
+    document.head.appendChild(st);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-bps-banner]'), render);
+  });
+  return { all: all, get: get, save: save, clear: clear, render: render };
+})();
+
+/* ——— PROJECT TABS — Films / Television / Books links so the three carousel
+   pages feel like one section. Hidden pages drop out automatically. ——— */
+(function () {
+  var TABS = [
+    { label: 'Films', href: 'films.html' },
+    { label: 'Television', href: 'television.html' },
+    { label: 'Books', href: 'books.html' }
+  ];
+  document.addEventListener('DOMContentLoaded', function () {
+    var mount = document.querySelector('.proj-tabs');
+    if (!mount) return;
+    var here = (location.pathname.split('/').pop() || '').toLowerCase();
+    mount.innerHTML = TABS.filter(function (t) { return !window.BPS_HIDDEN.isHidden(t.href); })
+      .map(function (t) {
+        var on = here === t.href.toLowerCase() ? ' class="on"' : '';
+        return '<a href="' + t.href + '"' + on + '>' + t.label + '</a>';
+      }).join('');
   });
 })();
 

@@ -141,10 +141,13 @@
   .feat-slide.is-active { opacity:1; }
   .feat-slide[data-key="bps"] { background:#05070c; }
   .feat-slide[data-key="stay-home"] { background-image: radial-gradient(circle at 72% 30%, rgba(214,116,38,0.34), transparent 52%), linear-gradient(135deg,#2b2620,#3a3026 42%,#17140f); }
-  .feat-slide[data-key="moth-country"] { background: #0a0818; }
-  /* Moth Country: key art → title (parallax) → character cutout locked to the art */
-  .mc-stage { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:max(100%, calc(100vh * 16 / 9)); aspect-ratio:16/9; pointer-events:none; }
-  .mc-stage .mc-bg { position:absolute; inset:0; width:100%; height:100%; z-index:0; background:url('assets/moth-country-key.jpg') center/cover no-repeat; }
+  .feat-slide[data-key="moth-country"] { background: #090e1c; }
+  /* Moth Country: key art → title (parallax) → character cutout locked to the art.
+     Slight overscan + feathered edges so the art never shows a hard seam. */
+  .mc-stage { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:max(106%, calc(100vh * 16 / 9 * 1.06)); aspect-ratio:16/9; pointer-events:none; }
+  .mc-stage .mc-bg { position:absolute; inset:0; width:100%; height:100%; z-index:0; background:url('assets/moth-country-key.jpg') center/cover no-repeat;
+                     -webkit-mask-image:linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+                     mask-image:linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%); }
   .mc-stage .mc-logo { position:absolute; left:50%; top:9%; transform:translateX(-50%); width:74%; z-index:1; will-change:transform; filter:drop-shadow(0 12px 46px rgba(150,90,220,.45)); }
   .mc-stage .mc-logo img { width:100%; height:auto; display:block; }
   .mc-stage .mc-chars { position:absolute; left:29.219%; top:27.685%; width:40.365%; aspect-ratio:775/633; z-index:2; background:url('assets/moth-country-characters.png') center/contain no-repeat; }
@@ -775,11 +778,7 @@
       <div class="flogo"><img src="assets/stay-home-logo.webp" alt="Stay Home" /></div>
     </div>
     <div class="feat-slide" data-key="moth-country">
-      <div class="mc-stage">
-        <div class="mc-bg" aria-hidden="true"></div>
-        <div class="mc-logo" id="mcHomeLogo"><img src="assets/moth-country-title.png" alt="Moth Country" /></div>
-        <div class="mc-chars" aria-hidden="true"></div>
-      </div>
+      <div data-bps-banner="moth-country" aria-hidden="true"></div>
     </div>
     <div class="feat-slide" data-key="the-swell">
       <div class="flogo"><img src="assets/the-swell-logo.png" alt="The Swell" /></div>

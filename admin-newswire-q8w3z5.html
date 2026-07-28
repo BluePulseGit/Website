@@ -122,6 +122,7 @@
     <button id="hfBtn" title="Inject custom code into the site header &amp; footer">Header/Footer</button>
     <button id="footerBtn" title="Edit the sitewide footer — columns, links, alignment">Footer</button>
     <button id="visBtn" title="Hide pages from the public site">Page Visibility</button>
+    <button id="bannerBtn" title="Edit layered banner art — position, scale, parallax">Banners</button>
     <button id="pageSeoBtn">Page SEO</button>
     <button id="rssBtn" title="Download feed.xml built from current posts">Export RSS</button>
     <button id="resetBtn" title="Restore the original demo posts">Reset Demo Data</button>
@@ -383,6 +384,26 @@
       </div>
       <textarea id="visExport" readonly style="display:none;margin-top:20px;width:100%;min-height:90px;font-family:monospace;font-size:11.5px;color:var(--foam);background:var(--depth);border:1px solid var(--hair);padding:14px"></textarea>
     </div>
+
+    <div id="bannerPanel" style="display:none;max-width:940px">
+      <h2 style="font-family:var(--display);font-weight:300;font-size:28px;margin-bottom:8px">Banners</h2>
+      <p style="font-family:var(--display);font-style:italic;font-size:13px;color:var(--stone);margin-bottom:22px">Layered hero art, back to front. Nudge each layer&rsquo;s position and size until it sits perfectly, and switch parallax on or off. The preview updates as you drag &mdash; Save applies it to this browser, &ldquo;Copy for launch&rdquo; publishes it for everyone.</p>
+      <div class="fld" style="max-width:320px"><label for="bnPick">Banner</label><select id="bnPick"></select></div>
+      <label style="display:flex;align-items:center;gap:10px;margin:0 0 18px;font-size:13px;color:var(--foam);cursor:pointer">
+        <input type="checkbox" id="bnParallax" style="width:17px;height:17px;accent-color:#6BB4E8;cursor:pointer"> Animated parallax on this banner
+      </label>
+      <div id="bnPreviewWrap" style="position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border:1px solid var(--hair);background:#090e1c;margin-bottom:20px">
+        <div id="bnPreview" style="position:absolute;inset:0"></div>
+      </div>
+      <div id="bnLayers"></div>
+      <div class="bar" style="margin-top:20px">
+        <button type="button" class="btn primary" id="bnSave">Save</button>
+        <button type="button" class="btn ghost" id="bnCopy">Copy for launch</button>
+        <button type="button" class="btn danger" id="bnReset">Reset to default</button>
+        <span class="status" id="bnStatus"></span>
+      </div>
+      <textarea id="bnExport" readonly style="display:none;margin-top:20px;width:100%;min-height:160px;font-family:monospace;font-size:11.5px;color:var(--foam);background:var(--depth);border:1px solid var(--hair);padding:14px"></textarea>
+    </div>
   </main>
 </div>
 
@@ -404,7 +425,7 @@
   let currentImage = '';
 
   /* highlight the active topbar tab in blue */
-  const NAVBTNS = ['copyBtn', 'socialBtn', 'pitchBtn', 'hfBtn', 'footerBtn', 'visBtn', 'pageSeoBtn'];
+  const NAVBTNS = ['copyBtn', 'socialBtn', 'pitchBtn', 'hfBtn', 'footerBtn', 'visBtn', 'bannerBtn', 'pageSeoBtn'];
   function setActiveNav(id) { NAVBTNS.forEach(b => { const el = $(b); if (el) el.classList.toggle('active', b === id); }); }
 
   /* ——— login ——— */
@@ -602,7 +623,7 @@
   });
   $('mPage').addEventListener('change', metaLoadPage);
   function hideExtraPanels() {
-    ['copyPanel', 'socialForm', 'pitchPanel', 'hfPanel', 'footerPanel', 'visPanel'].forEach(id => { const e = $(id); if (e) e.style.display = 'none'; });
+    ['copyPanel', 'socialForm', 'pitchPanel', 'hfPanel', 'footerPanel', 'visPanel', 'bannerPanel'].forEach(id => { const e = $(id); if (e) e.style.display = 'none'; });
   }
   $('pageSeoBtn').addEventListener('click', () => {
     const showing = $('metaForm').style.display !== 'none';
@@ -631,7 +652,7 @@
       const showing = $('copyPanel').style.display !== 'none';
       $('metaForm').style.display = 'none';
       $('socialForm').style.display = 'none';
-      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; const _ft = $('footerPanel'); if (_ft) _ft.style.display = 'none'; const _vs = $('visPanel'); if (_vs) _vs.style.display = 'none'; }
+      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; const _ft = $('footerPanel'); if (_ft) _ft.style.display = 'none'; const _vs = $('visPanel'); if (_vs) _vs.style.display = 'none'; const _bn = $('bannerPanel'); if (_bn) _bn.style.display = 'none'; }
       $('edForm').classList.remove('on');
       $('copyPanel').style.display = showing ? 'none' : 'block';
       $('edPlaceholder').style.display = showing ? 'block' : 'none';
@@ -681,7 +702,7 @@
       const showing = $('socialForm').style.display !== 'none';
       $('metaForm').style.display = 'none';
       $('copyPanel').style.display = 'none';
-      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; const _ft = $('footerPanel'); if (_ft) _ft.style.display = 'none'; const _vs = $('visPanel'); if (_vs) _vs.style.display = 'none'; }
+      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; const _ft = $('footerPanel'); if (_ft) _ft.style.display = 'none'; const _vs = $('visPanel'); if (_vs) _vs.style.display = 'none'; const _bn = $('bannerPanel'); if (_bn) _bn.style.display = 'none'; }
       $('edForm').classList.remove('on');
       $('socialForm').style.display = showing ? 'none' : 'block';
       $('edPlaceholder').style.display = showing ? 'block' : 'none';
@@ -895,7 +916,7 @@ ${items}
       $('metaForm').style.display = 'none';
       $('copyPanel').style.display = 'none';
       $('socialForm').style.display = 'none';
-      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; const _ft = $('footerPanel'); if (_ft) _ft.style.display = 'none'; const _vs = $('visPanel'); if (_vs) _vs.style.display = 'none'; }
+      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none'; const _ft = $('footerPanel'); if (_ft) _ft.style.display = 'none'; const _vs = $('visPanel'); if (_vs) _vs.style.display = 'none'; const _bn = $('bannerPanel'); if (_bn) _bn.style.display = 'none'; }
       $('edForm').classList.remove('on');
       $('hfPanel').style.display = showing ? 'none' : 'block';
       $('edPlaceholder').style.display = showing ? 'block' : 'none';
@@ -1096,6 +1117,135 @@ ${items}
       $('visExport').style.display = 'block'; $('visExport').select();
       try { document.execCommand('copy'); } catch (_) {}
       $('visStatus').textContent = 'Copied — hand this to whoever manages the repo (it goes in site.js) to apply for all visitors.';
+    });
+  })();
+
+  /* ——— Banners: layered hero art editor ——— */
+  (function () {
+    var KEY = 'bpsBanners';
+    var DEF = {
+      'moth-country': {
+        parallax: true,
+        layers: [
+          { name: 'Key art',    img: 'assets/moth-country-key.jpg',        mode: 'cover', x: 0,      y: 0,      scale: 100,    parallax: 0,  fade: true },
+          { name: 'Logo',       img: 'assets/moth-country-title.png',      mode: 'logo',  x: 0,      y: -32,    scale: 74,     parallax: 26, fade: false, ar: '1600/541' },
+          { name: 'Characters', img: 'assets/moth-country-characters.png', mode: 'place', x: 29.219, y: 27.685, scale: 40.365, parallax: 0,  fade: false, ar: '775/633' }
+        ]
+      }
+    };
+    var cur = null, curKey = null;
+
+    function stored() { try { return JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (_) { return {}; } }
+    function load(k) {
+      var s = stored();
+      cur = JSON.parse(JSON.stringify(s[k] || DEF[k]));
+      curKey = k;
+      $('bnParallax').checked = !!cur.parallax;
+      renderLayers(); preview();
+    }
+    function preview() {
+      var p = $('bnPreview');
+      p.innerHTML = '';
+      (cur.layers || []).forEach(function (L, i) {
+        var el = document.createElement('div');
+        el.style.position = 'absolute';
+        el.style.zIndex = String(i);
+        el.style.backgroundImage = L.img ? "url('" + L.img + "')" : 'none';
+        el.style.backgroundRepeat = 'no-repeat';
+        if (L.mode === 'cover') {
+          el.style.inset = '0'; el.style.backgroundSize = 'cover';
+          el.style.backgroundPosition = (50 + (+L.x || 0)) + '% ' + (50 + (+L.y || 0)) + '%';
+          if (L.fade) { var g = 'linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%)'; el.style.webkitMaskImage = g; el.style.maskImage = g; }
+        } else if (L.mode === 'logo') {
+          el.style.left = (50 + (+L.x || 0)) + '%'; el.style.top = (50 + (+L.y || 0)) + '%';
+          el.style.width = (+L.scale || 60) + '%'; el.style.aspectRatio = (L.ar || '1600/541');
+          el.style.transform = 'translate(-50%,-50%)'; el.style.backgroundSize = 'contain'; el.style.backgroundPosition = 'center';
+        } else {
+          el.style.left = (+L.x || 0) + '%'; el.style.top = (+L.y || 0) + '%';
+          el.style.width = (+L.scale || 40) + '%'; el.style.aspectRatio = (L.ar || '1/1');
+          el.style.backgroundSize = 'contain'; el.style.backgroundPosition = 'center';
+        }
+        p.appendChild(el);
+      });
+    }
+    function row(L, i) {
+      var step = L.mode === 'place' ? '0.05' : '0.5';
+      return '<div class="bnrow" data-i="' + i + '" style="border:1px solid var(--hair);background:var(--depth);padding:14px 16px;margin-bottom:12px">' +
+        '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px">' +
+          '<strong style="color:var(--foam);font-size:13px">' + (i + 1) + '. ' + (L.name || 'Layer') + '</strong>' +
+          '<span style="font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--stone)">' + (L.mode || 'cover') + '</span>' +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">' +
+          '<label style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--stone)">Image URL' +
+            '<input class="bn-img" type="text" value="' + (L.img || '') + '" style="width:100%;margin-top:6px"></label>' +
+          '<label style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--stone)">Left / X (%)' +
+            '<input class="bn-x" type="number" step="' + step + '" value="' + (L.x || 0) + '" style="width:100%;margin-top:6px"></label>' +
+          '<label style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--stone)">Top / Y (%)' +
+            '<input class="bn-y" type="number" step="' + step + '" value="' + (L.y || 0) + '" style="width:100%;margin-top:6px"></label>' +
+          '<label style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--stone)">Size (%)' +
+            '<input class="bn-s" type="number" step="' + step + '" value="' + (L.scale || 100) + '" style="width:100%;margin-top:6px"></label>' +
+          '<label style="font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--stone)">Parallax strength' +
+            '<input class="bn-p" type="number" step="1" value="' + (L.parallax || 0) + '" style="width:100%;margin-top:6px"></label>' +
+        '</div>' +
+        '<label style="display:flex;align-items:center;gap:9px;margin-top:11px;font-size:12px;color:var(--stone);cursor:pointer">' +
+          '<input class="bn-f" type="checkbox"' + (L.fade ? ' checked' : '') + ' style="width:15px;height:15px;accent-color:#6BB4E8"> Blend edges into the background</label>' +
+      '</div>';
+    }
+    function renderLayers() { $('bnLayers').innerHTML = (cur.layers || []).map(row).join(''); }
+    function sync() {
+      Array.prototype.forEach.call($('bnLayers').querySelectorAll('.bnrow'), function (r) {
+        var i = +r.getAttribute('data-i'), L = cur.layers[i];
+        L.img = r.querySelector('.bn-img').value.trim();
+        L.x = parseFloat(r.querySelector('.bn-x').value) || 0;
+        L.y = parseFloat(r.querySelector('.bn-y').value) || 0;
+        L.scale = parseFloat(r.querySelector('.bn-s').value) || 0;
+        L.parallax = parseFloat(r.querySelector('.bn-p').value) || 0;
+        L.fade = r.querySelector('.bn-f').checked;
+      });
+      cur.parallax = $('bnParallax').checked;
+    }
+
+    $('bannerBtn').addEventListener('click', () => {
+      const showing = $('bannerPanel').style.display !== 'none';
+      $('metaForm').style.display = 'none';
+      $('copyPanel').style.display = 'none';
+      $('socialForm').style.display = 'none';
+      { const _pp = $('pitchPanel'); if (_pp) _pp.style.display = 'none'; const _hf = $('hfPanel'); if (_hf) _hf.style.display = 'none';
+        const _ft = $('footerPanel'); if (_ft) _ft.style.display = 'none'; const _vs = $('visPanel'); if (_vs) _vs.style.display = 'none'; }
+      $('edForm').classList.remove('on');
+      $('bannerPanel').style.display = showing ? 'none' : 'block';
+      $('edPlaceholder').style.display = showing ? 'block' : 'none';
+      if (!showing) {
+        var s = stored(), keys = Object.keys(DEF);
+        Object.keys(s).forEach(function (k) { if (keys.indexOf(k) < 0) keys.push(k); });
+        $('bnPick').innerHTML = keys.map(function (k) { return '<option value="' + k + '">' + k + '</option>'; }).join('');
+        load($('bnPick').value || keys[0]);
+        $('bnStatus').textContent = ''; $('bnExport').style.display = 'none';
+      }
+      setActiveNav(showing ? null : 'bannerBtn');
+    });
+    $('bnPick').addEventListener('change', function () { load(this.value); });
+    $('bnParallax').addEventListener('change', function () { sync(); });
+    $('bnLayers').addEventListener('input', function () { sync(); preview(); });
+    $('bnSave').addEventListener('click', () => {
+      sync();
+      var s = stored(); s[curKey] = cur;
+      try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (_) {}
+      $('bnStatus').textContent = 'Saved — live in this browser. Reload the page to see it. Use "Copy for launch" to publish for everyone.';
+    });
+    $('bnCopy').addEventListener('click', () => {
+      sync();
+      var s = stored(); s[curKey] = cur;
+      $('bnExport').value = 'window.BPS_BANNERS_PUBLISHED = ' + JSON.stringify(s, null, 2) + ';';
+      $('bnExport').style.display = 'block'; $('bnExport').select();
+      try { document.execCommand('copy'); } catch (_) {}
+      $('bnStatus').textContent = 'Copied — hand this to whoever manages the repo (it goes in site.js) to publish for all visitors.';
+    });
+    $('bnReset').addEventListener('click', () => {
+      if (!confirm('Reset this banner to the default layout?')) return;
+      var s = stored(); delete s[curKey];
+      try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (_) {}
+      load(curKey); $('bnStatus').textContent = 'Reset to default.';
     });
   })();
 

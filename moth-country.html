@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="description" content="Moth Country — an animated horror-fantasy series from Blue Pulse Studios. Created by Raphael Arkera & Monroe Montgomery, written with Todd Casey (Star vs. the Forces of Evil, The Legend of Vox Machina), animated by Titmouse." />
+<meta name="description" content="Moth Country — an animated sci-fi adventure series from Blue Pulse Studios. Created by Raphael Arkera & Monroe Montgomery, produced by Todd Casey (Star vs. the Forces of Evil, The Legend of Vox Machina), animated by Titmouse." />
 <link rel="icon" href="favicon.ico" sizes="any" />
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
@@ -11,7 +11,7 @@
 <meta name="theme-color" content="#02040A" />
 <meta property="og:type" content="video.tv_show" />
 <meta property="og:title" content="Moth Country — Blue Pulse Studios" />
-<meta property="og:description" content="An animated horror-fantasy series. Created by Raphael Arkera & Monroe Montgomery, written with Todd Casey, animated by Titmouse." />
+<meta property="og:description" content="An animated sci-fi adventure series. Created by Raphael Arkera & Monroe Montgomery, produced by Todd Casey, animated by Titmouse." />
 <meta property="og:image" content="assets/moth-country-key.jpg" />
 <meta property="og:site_name" content="Blue Pulse Studios" />
 <title>Moth Country — Blue Pulse Studios</title>
@@ -33,14 +33,18 @@
   .nav .links a { color: var(--stone); text-decoration: none; margin-left: 28px; transition: color .5s; }
   .nav .links a:hover, .nav .links a.on { color: var(--foam); }
 
-  .hero { position: relative; min-height: 100vh; display: flex; align-items: flex-end; padding: 140px 48px 84px; overflow: hidden; isolation: isolate; }
+  .hero { position: relative; min-height: 100vh; display: flex; align-items: flex-end; padding: 140px 48px 84px; overflow: hidden; isolation: isolate;
+          background: #090e1c; }
   /* ——— 3-layer key art: background → title logo (parallax) → characters (fixed).
      The stage keeps the original 16:9 composition so the character cutout lands
      exactly on top of the characters painted into the key art. ——— */
+  /* slight overscan + feathered edges so the art never shows a hard seam */
   .mc-stage { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-              width: max(100%, calc(100vh * 16 / 9)); aspect-ratio: 16 / 9; z-index: 0; pointer-events: none; }
+              width: max(106%, calc(100vh * 16 / 9 * 1.06)); aspect-ratio: 16 / 9; z-index: 0; pointer-events: none; }
   .mc-stage .mc-bg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0;
-                     background: url('assets/moth-country-key.jpg') center/cover no-repeat; }
+                     background: url('assets/moth-country-key.jpg') center/cover no-repeat;
+                     -webkit-mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+                     mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%); }
   .mc-stage .mc-logo { position: absolute; left: 50%; top: 9%; transform: translateX(-50%);
                        width: 74%; z-index: 1; will-change: transform; filter: drop-shadow(0 12px 46px rgba(150,90,220,0.45)); }
   .mc-stage .mc-logo img { width: 100%; height: auto; display: block; }
@@ -156,11 +160,7 @@
 </nav>
 
 <header class="hero" id="main">
-  <div class="mc-stage">
-    <div class="mc-bg" aria-hidden="true"></div>
-    <div class="mc-logo" id="mcLogo"><img src="assets/moth-country-title.png" alt="Moth Country" /></div>
-    <div class="mc-chars" aria-hidden="true"></div>
-  </div>
+  <div data-bps-banner="moth-country" aria-hidden="true"></div>
   <div class="vig"></div>
   <div class="content">
     <div class="status">In Development</div>
@@ -169,7 +169,7 @@
     <div class="meta-row">
       <span>Animated Series</span>
       <span>Television</span>
-      <span>Horror-Fantasy</span>
+      <span>Sci-Fi Adventure</span>
     </div>
   </div>
 </header>
@@ -183,7 +183,7 @@
     <div>
       <p class="drop">When three kids follow a light into the forest behind their town, they cross into Moth Country &mdash; a violet, nocturnal realm ruled by the Moth, an ancient guardian the size of a house, and the smaller, stranger creatures that keep its secrets.</p>
       <p>What starts as a dare becomes a descent. Moth Country remembers every child who ever wandered in, and lets very few wander back out. Lantern-light and long shadows, wonder and teeth &mdash; it is equal parts folk nightmare and the kind of friendship you only make in the dark.</p>
-      <p>An animated horror-fantasy series about the pull of the woods, the friends who follow you into them, and everything that watches from just past the treeline.</p>
+      <p>An animated sci-fi adventure series about the pull of the woods, the friends who follow you into them, and everything that watches from just past the treeline.</p>
     </div>
   </div>
 </section>
@@ -195,7 +195,7 @@
   <p class="lede">A dream team behind the country: a Blue Pulse original, written with a genre veteran and animated by one of the best in the business.</p>
   <div class="team-grid">
     <div class="team-item"><div class="role">Created by</div><div class="name">Raphael Arkera &amp; Monroe Montgomery<span>The original vision and universe, developed in-house at Blue Pulse Studios.</span></div></div>
-    <div class="team-item"><div class="role">Written with</div><div class="name">Todd Casey<span>Writer &amp; producer &mdash; Star vs. the Forces of Evil, The Legend of Vox Machina.</span></div></div>
+    <div class="team-item"><div class="role">Produced by</div><div class="name">Todd Casey<span>Writer &amp; producer &mdash; Star vs. the Forces of Evil, The Legend of Vox Machina.</span></div></div>
     <div class="team-item"><div class="role">Animation by</div><div class="name">Titmouse<span>The Emmy-winning animation powerhouse behind some of the boldest series on screen.</span></div></div>
   </div>
 </section>
@@ -268,8 +268,8 @@
   ld.type = 'application/ld+json';
   ld.textContent = JSON.stringify({
     '@context': 'https://schema.org', '@type': 'TVSeries',
-    name: 'Moth Country', genre: ['Animation', 'Horror', 'Fantasy'],
-    description: 'An animated horror-fantasy series from Blue Pulse Studios. Created by Raphael Arkera & Monroe Montgomery, written with Todd Casey, animated by Titmouse.',
+    name: 'Moth Country', genre: ['Animation', 'Science Fiction', 'Adventure'],
+    description: 'An animated sci-fi adventure series from Blue Pulse Studios. Created by Raphael Arkera & Monroe Montgomery, produced by Todd Casey, animated by Titmouse.',
     creator: [{ '@type': 'Person', name: 'Raphael Arkera' }, { '@type': 'Person', name: 'Monroe Montgomery' }],
     productionCompany: { '@type': 'Organization', name: 'Blue Pulse Studios' }
   });
