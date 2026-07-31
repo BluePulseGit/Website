@@ -327,22 +327,22 @@
 <div class="page-transition entering" id="pageTransition" aria-hidden="true"></div>
 <nav class="nav">
   <div class="inner">
-    <a class="brand" href="shop.html">
+    <a class="brand" href="shop">
       <span class="line1">BLUE PULSE</span>
       <span class="line2">SHOP</span>
     </a>
     <div class="links">
-      <a href="homepage.html">Home</a>
-      <a href="shop.html" class="on">Shop</a>
+      <a href="homepage">Home</a>
+      <a href="shop" class="on">Shop</a>
       <span class="studio-menu">
-        <a class="studio-trigger" href="studio.html">Studio</a>
+        <a class="studio-trigger" href="studio">Studio</a>
         <div class="studio-panel" role="menu">
-          <a href="press.html" role="menuitem">Press</a>
-          <a href="journal.html" role="menuitem">Newswire</a>
+          <a href="press" role="menuitem">Press</a>
+          <a href="journal" role="menuitem">Newswire</a>
         </div>
       </span>
-      <a href="community.html">Community</a>
-      <a href="contact.html">Contact</a>
+      <a href="community">Community</a>
+      <a href="contact">Contact</a>
     </div>
     <div class="right">
       <a href="#" class="icon-link" aria-label="Search">Search</a>
@@ -353,9 +353,9 @@
 </nav>
 
 <div class="crumbs">
-  <a href="shop.html">Shop</a>
+  <a href="shop">Shop</a>
   <span class="sep">/</span>
-  <a href="shop.html" id="crumbCat">Category</a>
+  <a href="shop" id="crumbCat">Category</a>
   <span class="sep">/</span>
   <span class="current" id="crumbName">Product</span>
 </div>
@@ -408,7 +408,7 @@
 <section class="related">
   <div class="head">
     <h3>You might also like</h3>
-    <a href="shop.html">See everything &rarr;</a>
+    <a href="shop">See everything &rarr;</a>
   </div>
   <div class="grid" id="relatedGrid"></div>
 </section>
@@ -431,26 +431,26 @@
     </div>
     <div>
       <h4>Films</h4>
-      <a href="homepage.html#slate">Stay Home</a>
-      <a href="homepage.html#slate">The Painting</a>
+      <a href="homepage#slate">Stay Home</a>
+      <a href="homepage#slate">The Painting</a>
     </div>
     <div>
       <h4>Shop</h4>
-      <a href="shop.html">All</a>
-      <a href="shop.html?filter=apparel">Apparel</a>
-      <a href="shop.html?filter=figurines">Figurines</a>
-      <a href="shop.html?filter=limited">Limited</a>
+      <a href="shop">All</a>
+      <a href="shop?filter=apparel">Apparel</a>
+      <a href="shop?filter=figurines">Figurines</a>
+      <a href="shop?filter=limited">Limited</a>
     </div>
     <div>
       <h4>Studio</h4>
-      <a href="studio.html">About</a>
-      <a href="community.html">Community</a>
-      <a href="contact.html">Contact</a>
+      <a href="studio">About</a>
+      <a href="community">Community</a>
+      <a href="contact">Contact</a>
     </div>
   </div>
   <div class="bottom">
     <div>&copy; 2026 Blue Pulse Studios</div>
-    <div class="legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="shipping-returns.html">Shipping &amp; Returns</a></div>
+    <div class="legal"><a href="privacy">Privacy</a><a href="terms">Terms</a><a href="shipping-returns">Shipping &amp; Returns</a></div>
     <div>Los Angeles &middot; Pittsburgh</div>
   </div>
 </footer>
@@ -485,7 +485,7 @@
   const p = window.PRODUCTS[id];
 
   if (!p) {
-    document.body.innerHTML = '<div style="padding:120px 40px;font-family:\'Fraunces\',serif;color:#0F0F0F;background:#FAFAFA;min-height:100vh;"><h1 style="font-size:42px;font-weight:300;">Product not found.</h1><p style="margin-top:24px;"><a href="shop.html" style="color:#0F0F0F;">Back to shop →</a></p></div>';
+    document.body.innerHTML = '<div style="padding:120px 40px;font-family:\'Fraunces\',serif;color:#0F0F0F;background:#FAFAFA;min-height:100vh;"><h1 style="font-size:42px;font-weight:300;">Product not found.</h1><p style="margin-top:24px;"><a href="shop" style="color:#0F0F0F;">Back to shop →</a></p></div>';
   } else {
     document.title = p.name + ' · Blue Pulse Studios Shop';
     window.renderNavCartCount();

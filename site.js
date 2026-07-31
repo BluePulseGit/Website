@@ -99,7 +99,7 @@ window.bpsSubscribe = function (formOrEmail, ev) {
 (function () {
   try {
     const all = JSON.parse(localStorage.getItem('bpsPageMeta') || '{}');
-    const page = (location.pathname.split('/').pop() || 'index.html');
+    const page = (location.pathname.split('/').pop() || 'index');
     const m = all[page];
     if (!m) return;
     function setMeta(attr, key, val) {
@@ -162,7 +162,7 @@ window.bpsSubscribe = function (formOrEmail, ev) {
     const thumb = p.image
       ? '<img src="' + p.image + '" alt="" loading="lazy" style="max-width:88%;max-height:88%;object-fit:contain">'
       : '<span style="font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:#B0B0B0">Coming<br>Soon</span>';
-    return '<a href="product.html?id=' + p.id + '" style="display:flex;gap:18px;align-items:center;padding:12px 4px;border-bottom:1px solid #E5E5E5;text-decoration:none">'
+    return '<a href="product?id=' + p.id + '" style="display:flex;gap:18px;align-items:center;padding:12px 4px;border-bottom:1px solid #E5E5E5;text-decoration:none">'
       + '<span style="flex:none;width:64px;height:80px;background:#F2F2F2;border:1px solid #E5E5E5;display:flex;align-items:center;justify-content:center;text-align:center">' + thumb + '</span>'
       + '<span style="flex:1;min-width:0">'
       + '<span style="display:block;font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:#6B6B6B;font-weight:500">' + p.kicker.split(' · ')[0] + (p.soon ? ' &middot; coming soon' : '') + '</span>'
@@ -294,7 +294,7 @@ window.bpsSubscribe = function (formOrEmail, ev) {
     if (/input|textarea|select/i.test(e.target.tagName || '')) return;
     if (e.key.length !== 1) return;
     buf = (buf + e.key.toLowerCase()).slice(-5);
-    if (buf === 'ashen') window.location.href = 'signal-30hz.html';
+    if (buf === 'ashen') window.location.href = 'signal-30hz';
   });
 })();
 
@@ -410,7 +410,7 @@ window.BPS_SOCIAL = (function () {
    the nav/footer, and show a "not available" notice if opened directly. ——— */
 /* Pages hidden from the public site. Edit in the admin "Page Visibility" tab
    (preview), then paste its export here to apply for everyone. */
-window.BPS_HIDDEN_PAGES = ['books.html'];
+window.BPS_HIDDEN_PAGES = ['books'];
 window.BPS_HIDDEN = (function () {
   function list() {
     var a = [];
@@ -421,14 +421,14 @@ window.BPS_HIDDEN = (function () {
   function isHidden(href) {
     if (!href) return false;
     var file = String(href).split('/').pop().split('#')[0].split('?')[0].toLowerCase();
+    file = file.replace(/\.html$/, '');
     if (!file) return false;
-    return list().indexOf(file) >= 0;
+    return list().some(function (h) { return String(h).toLowerCase().replace(/\.html$/, '') === file; });
   }
   return { list: list, isHidden: isHidden };
 })();
 (function () {
-  var here = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
-  if (!here.endsWith('.html')) here += '.html';
+  var here = (location.pathname.split('/').pop() || 'index').toLowerCase();
   if (!window.BPS_HIDDEN.isHidden(here)) return;
   var m = document.createElement('meta'); m.name = 'robots'; m.content = 'noindex,nofollow';
   document.head.appendChild(m);
@@ -444,7 +444,7 @@ window.BPS_HIDDEN = (function () {
     box.innerHTML = '<div><div style="font-size:10.5px;letter-spacing:.5em;text-transform:uppercase;color:#6BB4E8;font-weight:500;margin-bottom:20px">Coming soon</div>' +
       '<h1 style="font-family:Fraunces,Georgia,serif;font-weight:300;font-size:clamp(32px,5vw,60px);color:#CFD9E4;margin:0 0 16px">This page isn&rsquo;t live yet.</h1>' +
       '<p style="font-family:Fraunces,Georgia,serif;font-style:italic;color:#8B929C;font-size:16px;margin:0 0 30px">Check back soon &mdash; or follow along in the community.</p>' +
-      '<a href="homepage.html" style="display:inline-block;border:1px solid #CFD9E4;color:#CFD9E4;text-decoration:none;padding:16px 30px;font-size:10.5px;letter-spacing:.4em;text-transform:uppercase">Back to the site &rarr;</a></div>';
+      '<a href="homepage" style="display:inline-block;border:1px solid #CFD9E4;color:#CFD9E4;text-decoration:none;padding:16px 30px;font-size:10.5px;letter-spacing:.4em;text-transform:uppercase">Back to the site &rarr;</a></div>';
     document.body.insertBefore(box, document.querySelector('footer'));
   });
 })();
@@ -453,19 +453,19 @@ window.BPS_HIDDEN = (function () {
    here so order, dropdowns and the mobile menu stay identical everywhere. ——— */
 (function () {
   var ITEMS = [
-    { label: 'Projects', href: 'films.html', children: [
-      { label: 'Films', href: 'films.html' },
-      { label: 'Television', href: 'television.html' },
-      { label: 'Books', href: 'books.html' }
+    { label: 'Projects', href: 'films', children: [
+      { label: 'Films', href: 'films' },
+      { label: 'Television', href: 'television' },
+      { label: 'Books', href: 'books' }
     ] },
-    { label: 'Studio', href: 'studio.html', children: [
-      { label: 'About Us', href: 'about.html' },
-      { label: 'Press', href: 'press.html' },
-      { label: 'Newswire', href: 'journal.html' }
+    { label: 'Studio', href: 'studio', children: [
+      { label: 'About Us', href: 'about' },
+      { label: 'Press', href: 'press' },
+      { label: 'Newswire', href: 'journal' }
     ] },
-    { label: 'Shop', href: 'shop.html' },
-    { label: 'Community', href: 'community.html' },
-    { label: 'Contact', href: 'contact.html' }
+    { label: 'Shop', href: 'shop' },
+    { label: 'Community', href: 'community' },
+    { label: 'Contact', href: 'contact' }
   ];
   var CARET = '<svg class="bps-caret" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 1.5 5 5 9 1.5"/></svg>';
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
@@ -474,8 +474,11 @@ window.BPS_HIDDEN = (function () {
     var nav = document.querySelector('.nav');
     var links = nav && nav.querySelector('.links');
     if (!nav || !links || nav.querySelector('.bps-burger')) return;
+    /* the wordmark always goes home — on every page, including the Shop */
+    var brand = nav.querySelector('.brand');
+    if (brand) brand.setAttribute('href', 'homepage');
 
-    var here = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+    var here = (location.pathname.split('/').pop() || 'index').toLowerCase().replace(/\.html$/, '');
     var hidden = window.BPS_HIDDEN;
 
     var st = document.createElement('style');
@@ -524,7 +527,8 @@ window.BPS_HIDDEN = (function () {
     /* build the link list */
     var html = ITEMS.map(function (it) {
       var kids = (it.children || []).filter(function (c) { return !hidden.isHidden(c.href); });
-      var on = (here === it.href.toLowerCase()) || kids.some(function (c) { return here === c.href.toLowerCase(); });
+      var nk = function (h) { return String(h).toLowerCase().replace(/\.html$/, ''); };
+      var on = (here === nk(it.href)) || kids.some(function (c) { return here === nk(c.href); });
       if (!kids.length) {
         if (hidden.isHidden(it.href)) return '';
         return '<a href="' + esc(it.href) + '"' + (on ? ' class="on"' : '') + '>' + esc(it.label) + '</a>';
@@ -546,7 +550,7 @@ window.BPS_HIDDEN = (function () {
     burger.className = 'bps-burger'; burger.type = 'button';
     burger.setAttribute('aria-label', 'Menu'); burger.setAttribute('aria-expanded', 'false');
     burger.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
-    nav.appendChild(burger);
+    (nav.querySelector('.inner') || nav).appendChild(burger);
 
     var scrim = document.createElement('div');
     scrim.id = 'bpsNavScrim';
@@ -598,7 +602,7 @@ window.BPS_HIDDEN = (function () {
       document.head.appendChild(st);
     }
     var a = document.createElement('a');
-    a.id = 'bpsNavCart'; a.href = 'cart.html'; a.setAttribute('aria-label', 'Cart' + (count ? ' (' + count + ' items)' : ''));
+    a.id = 'bpsNavCart'; a.href = 'cart'; a.setAttribute('aria-label', 'Cart' + (count ? ' (' + count + ' items)' : ''));
     a.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span class="n">' + (count ? count : '') + '</span>';
     links.appendChild(a);
   });
@@ -628,7 +632,7 @@ window.BPS_HIDDEN = (function () {
     var bar = document.createElement('div');
     bar.id = 'bpsCookie'; bar.setAttribute('role', 'dialog'); bar.setAttribute('aria-label', 'Cookie consent');
     bar.innerHTML =
-      '<p>We use cookies to run the site and, with your OK, to understand how it&rsquo;s used. Choose what you&rsquo;re comfortable with. <a href="privacy.html">Privacy policy</a>.</p>' +
+      '<p>We use cookies to run the site and, with your OK, to understand how it&rsquo;s used. Choose what you&rsquo;re comfortable with. <a href="privacy">Privacy policy</a>.</p>' +
       '<div class="btns"><button data-c="deny">Deny</button><button data-c="essential">Allow essential only</button><button class="primary" data-c="all">Allow</button></div>';
     document.body.appendChild(bar);
     bar.addEventListener('click', function (e) {
@@ -652,14 +656,14 @@ window.BPS_HIDDEN = (function () {
     blurb: 'An independent studio for horror and genre film, television, books, and games, based in Los Angeles and Pittsburgh.',
     signup: 'Get our emails, transmissions, podcasts, interviews with creators, and more — delivered straight to you.',
     columns: [
-      { heading: 'Projects', links: [ { label: 'Films', href: 'films.html' }, { label: 'Television', href: 'moth-country.html' }, { label: 'Books', href: 'books.html' } ] },
-      { heading: 'Shop', links: [ { label: 'All', href: 'shop.html' }, { label: 'Cart', href: 'cart.html' } ] },
-      { heading: 'Studio', links: [ { label: 'About Us', href: 'about.html' }, { label: 'Press', href: 'press.html' }, { label: 'Newswire', href: 'journal.html' }, { label: 'Contact', href: 'contact.html' } ] }
+      { heading: 'Projects', links: [ { label: 'Films', href: 'films' }, { label: 'Television', href: 'moth-country' }, { label: 'Books', href: 'books' } ] },
+      { heading: 'Shop', links: [ { label: 'All', href: 'shop' }, { label: 'Cart', href: 'cart' } ] },
+      { heading: 'Studio', links: [ { label: 'About Us', href: 'about' }, { label: 'Press', href: 'press' }, { label: 'Newswire', href: 'journal' }, { label: 'Contact', href: 'contact' } ] }
     ],
     bottom: {
       copyright: '© 2026 Blue Pulse Studios',
       location: 'Los Angeles · Pittsburgh',
-      legal: [ { label: 'Privacy', href: 'privacy.html' }, { label: 'Terms', href: 'terms.html' }, { label: 'Shipping & Returns', href: 'shipping-returns.html' } ]
+      legal: [ { label: 'FAQ', href: 'faq' }, { label: 'Privacy', href: 'privacy' }, { label: 'Terms', href: 'terms' }, { label: 'Shipping & Returns', href: 'shipping-returns' } ]
     }
   };
   function footerCfg() {
@@ -1034,7 +1038,7 @@ window.BPS_HIDDEN = (function () {
         meta.innerHTML = '<div class="t">' + (it.title || '') + '</div>' +
           (it.year ? '<div class="y">' + it.year + '</div>' : '') +
           (it.note ? '<div class="n">' + it.note + '</div>' : '') +
-          (it.href ? '<a class="go" href="' + it.href + '">Enter &rarr;</a>' : '');
+          (it.href ? '<a class="go" href="' + it.href + '">View Project &rarr;</a>' : '');
         Array.prototype.forEach.call(dots.children, function (b, i) { b.classList.toggle('on', i === cur); });
       }
       function go(i) { cur = (i + items.length) % items.length; layout(); }
@@ -1168,17 +1172,17 @@ window.BPS_BANNERS = (function () {
    pages feel like one section. Hidden pages drop out automatically. ——— */
 (function () {
   var TABS = [
-    { label: 'Films', href: 'films.html' },
-    { label: 'Television', href: 'television.html' },
-    { label: 'Books', href: 'books.html' }
+    { label: 'Films', href: 'films' },
+    { label: 'Television', href: 'television' },
+    { label: 'Books', href: 'books' }
   ];
   document.addEventListener('DOMContentLoaded', function () {
     var mount = document.querySelector('.proj-tabs');
     if (!mount) return;
-    var here = (location.pathname.split('/').pop() || '').toLowerCase();
+    var here = (location.pathname.split('/').pop() || '').toLowerCase().replace(/\.html$/, '');
     mount.innerHTML = TABS.filter(function (t) { return !window.BPS_HIDDEN.isHidden(t.href); })
       .map(function (t) {
-        var on = here === t.href.toLowerCase() ? ' class="on"' : '';
+        var on = here === t.href.toLowerCase().replace(/\.html$/, '') ? ' class="on"' : '';
         return '<a href="' + t.href + '"' + on + '>' + t.label + '</a>';
       }).join('');
   });
@@ -1350,7 +1354,7 @@ window.BPS_BANNERS = (function () {
    one-click links), or the admin "Copy Editor" tab. ——— */
 (function () {
   const KEY = 'bpsCopyOverrides';
-  const page = (location.pathname.split('/').pop() || 'index.html');
+  const page = (location.pathname.split('/').pop() || 'index');
   const SEL = 'h1,h2,h3,h4,p,li,blockquote,.lede,.sub,.tagline,.blurb,.logline,.kicker,.eyebrow,.drop';
   function store() { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (_) { return {}; } }
   function put(o) { localStorage.setItem(KEY, JSON.stringify(o)); }
@@ -1407,7 +1411,7 @@ window.BPS_BANNERS = (function () {
    per page (bpsImageOverrides) and are re-applied on every load. ——— */
 (function () {
   var KEY = 'bpsImageOverrides';
-  var page = (location.pathname.split('/').pop() || 'index.html');
+  var page = (location.pathname.split('/').pop() || 'index');
   function store() { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (_) { return {}; } }
   function put(o) { try { localStorage.setItem(KEY, JSON.stringify(o)); return true; } catch (_) { return false; } }
   function gallery() { try { return JSON.parse(localStorage.getItem('bpsGallery') || '[]'); } catch (_) { return []; } }
