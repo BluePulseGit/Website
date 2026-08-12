@@ -204,13 +204,13 @@
   .exclusive {
     background: #0F0F0F;
     color: #FAFAFA;
-    padding: 60px 40px 80px;
+    padding: 34px 40px 40px;
     border-bottom: 1px solid var(--hair);
   }
   body.filtered .exclusive { display: none; }
   .excl-header {
     display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 60px; padding-bottom: 24px;
+    margin-bottom: 26px; padding-bottom: 16px;
     border-bottom: 1px solid rgba(255,255,255,0.12);
   }
   .excl-label { display: flex; align-items: center; gap: 16px; }
@@ -231,30 +231,30 @@
   }
   .carousel { position: relative; }
   .slide {
-    display: grid; grid-template-columns: 1fr 1.1fr;
-    gap: 80px; align-items: center;
-    min-height: 480px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 56px; align-items: center;
+    min-height: 0;
   }
   .slide-copy .kicker {
     font-size: 10.5px; letter-spacing: .5em; text-transform: uppercase;
-    color: rgba(255,255,255,0.55); font-weight: 500; margin-bottom: 22px;
+    color: rgba(255,255,255,0.55); font-weight: 500; margin-bottom: 14px;
   }
   .slide-copy h1 {
     font-family: var(--display); font-weight: 300;
-    font-size: clamp(44px, 5.2vw, 74px);
+    font-size: clamp(34px, 3.6vw, 52px);
     letter-spacing: -0.022em; line-height: 1.02;
     color: #FAFAFA;
   }
   .slide-copy h1 em { font-style: italic; color: rgba(255,255,255,0.8); }
   .slide-copy p {
-    margin-top: 28px;
+    margin-top: 18px;
     font-family: var(--display); font-style: italic; font-weight: 300;
-    font-size: 18px; line-height: 1.55; color: rgba(255,255,255,0.62);
-    max-width: 500px;
+    font-size: 15.5px; line-height: 1.5; color: rgba(255,255,255,0.62);
+    max-width: 460px;
   }
   .slide-cta {
     display: inline-flex; align-items: center; gap: 14px;
-    margin-top: 40px;
+    margin-top: 26px;
     font-size: 11px; letter-spacing: .45em; text-transform: uppercase;
     color: #FAFAFA; text-decoration: none; font-weight: 500;
     padding-bottom: 8px;
@@ -263,7 +263,7 @@
   }
   .slide-cta:hover { padding-bottom: 14px; letter-spacing: .52em; }
   .slide-visual {
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 5 / 4;
     background: rgba(250,250,250,0.03);
     border: 1px solid rgba(255,255,255,0.08);
     display: flex; align-items: center; justify-content: center;
@@ -279,8 +279,10 @@
   }
   .excl-nav {
     display: flex; justify-content: center; align-items: center; gap: 32px;
-    margin-top: 60px;
+    margin-top: 24px;
   }
+  /* a single featured piece needs no carousel chrome */
+  .excl-nav.solo { display: none; }
   .excl-nav button {
     background: transparent; border: 0; cursor: pointer;
     color: rgba(255,255,255,0.55); font-size: 20px;
@@ -297,8 +299,8 @@
   .grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 56px 40px;
-    padding: 80px 40px 120px;
+    gap: 40px 32px;
+    padding: 44px 40px 100px;
   }
   .card { text-decoration: none; color: inherit; display: flex; flex-direction: column; cursor: pointer; }
   .card .img {
@@ -564,20 +566,9 @@
     </div>
     <div class="excl-count">01 / 01</div>
   </div>
-  <div class="carousel" id="carousel">
-    <div class="slide">
-      <div class="slide-copy">
-        <div class="kicker">Stay Home &middot; Drop 01</div>
-        <h1>The Ashen Man <em>Hoodie.</em></h1>
-        <p>A heavyweight, washed-black pullover pulled from the world of Stay Home. Screen-printed front and back, numbered run of 500. Once the numbers hit zero, we&rsquo;re not reprinting.</p>
-        <a class="slide-cta" href="product?id=ashen-hoodie">Shop this piece &rarr;</a>
-      </div>
-      <a class="slide-visual" href="product?id=ashen-hoodie">
-        <img src="assets/ashen-man-hoodie-clean-V2.webp" alt="The Ashen Man Hoodie" />
-      </a>
-    </div>
-  </div>
-  <div class="excl-nav">
+  <!-- populated from the product set in admin → Shop (BPS_FEATURED) -->
+  <div class="carousel" id="carousel"></div>
+  <div class="excl-nav solo">
     <button class="prev" aria-label="Previous" disabled>&larr;</button>
     <div class="dots"><span class="dot on"></span></div>
     <button class="next" aria-label="Next" disabled>&rarr;</button>
@@ -777,9 +768,83 @@
 
   /* cart button → navigate to cart page */
   document.getElementById('navCartBtn').addEventListener('click', () => {
-    location.href = 'cart.html';
+    location.href = 'cart';
   });
 </script>
 <script src="site.js"></script>
+<script>
+  /* ——— FEATURED PIECE — whichever product is set in admin → Shop leads the
+     store. Falls back to the first live (non-placeholder) card if that id has
+     gone away, so this band is never empty. ——— */
+  (function () {
+    const rail = document.getElementById('carousel');
+    if (!rail || !window.PRODUCTS) return;
+
+    const live = id => window.PRODUCTS[id] && !window.PRODUCTS[id].comingSoon;
+    let id = window.BPS_FEATURED ? window.BPS_FEATURED.get() : 'bps-tee';
+    if (!live(id)) id = (window.PRODUCT_ORDER || Object.keys(window.PRODUCTS)).find(live);
+    if (!id) { document.getElementById('exclusive').style.display = 'none'; return; }
+
+    const p = window.PRODUCTS[id];
+    const url = 'product?id=' + encodeURIComponent(id);
+    const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+    /* one short line reads better in the band than the full product copy */
+    const blurb = p.tagline || (p.description || '').split('. ').slice(0, 2).join('. ');
+
+    rail.innerHTML =
+      '<div class="slide">' +
+        '<div class="slide-copy">' +
+          '<div class="kicker">' + esc(p.kicker || p.categoryLabel || '') + '</div>' +
+          '<h1>' + esc(p.name) + '</h1>' +
+          '<p>' + esc(blurb) + '</p>' +
+          '<a class="slide-cta" href="' + url + '">Shop this piece &rarr;</a>' +
+        '</div>' +
+        '<a class="slide-visual" href="' + url + '">' +
+          '<img src="' + esc(p.image) + '" alt="' + esc(p.name) + '" />' +
+        '</a>' +
+      '</div>';
+
+    const title = document.querySelector('.excl-label .title');
+    if (title) title.textContent = 'Blue Pulse Studios · Featured';
+    const count = document.querySelector('.excl-count');
+    if (count) count.textContent = '';
+  })();
+
+  /* ——— The store is honest about its size. With placeholder mode on, the
+     category counts and the grid width follow whatever is actually for sale. ——— */
+  (function () {
+    const grid = document.getElementById('grid');
+    if (!grid) return;
+    const shown = c => getComputedStyle(c).display !== 'none';
+    const cards = Array.from(grid.querySelectorAll('.card')).filter(shown);
+
+    /* category tallies in the All menu */
+    document.querySelectorAll('#allMenu a[data-filter]').forEach(a => {
+      const f = a.getAttribute('data-filter');
+      const n = f === 'all'
+        ? cards.length
+        : cards.filter(c => (c.getAttribute('data-category') || '').split(/\s+/).includes(f)).length;
+      const sup = a.querySelector('sup');
+      if (sup) sup.textContent = n;
+      a.style.display = n ? '' : 'none';
+      const sub = a.closest('.submenu');
+      if (sub && !sub.querySelector('a[data-filter]:not([style*="none"])')) sub.style.display = 'none';
+    });
+
+    /* a short rail shouldn't stretch across four columns */
+    if (cards.length && cards.length < 4) {
+      grid.style.gridTemplateColumns = 'repeat(' + cards.length + ', minmax(0,1fr))';
+      grid.style.maxWidth = (cards.length * 300) + 'px';
+      grid.style.margin = '0 auto';
+    }
+    if (!document.querySelector('.shop-more-note')) {
+      const note = document.createElement('p');
+      note.className = 'shop-more-note';
+      note.style.cssText = 'text-align:center;padding:0 40px 90px;margin:0;font-family:var(--display);font-style:italic;font-size:15px;color:var(--stone)';
+      note.innerHTML = 'More pieces are on the way — <a href="community" style="color:var(--ink);border-bottom:1px solid var(--ash);text-decoration:none">join the community</a> to hear about drops first.';
+      grid.after(note);
+    }
+  })();
+</script>
 </body>
 </html>

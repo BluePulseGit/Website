@@ -1,0 +1,971 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow, noarchive" />
+<meta name="theme-color" content="#000000" />
+<title>F.S.H.R. ARCHIVE // RESTRICTED</title>
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#000000; --bg2:#050505; --panel:#070707; --panel2:#0b0b0b;
+  --ink:#e8e8e8; --ink2:#c4c4c4; --dim:#8a8a8a; --faint:#565656; --ghost:#333333;
+  --line:#2e2e2e; --line2:#1a1a1a;
+  --mono:'Roboto Mono',ui-monospace,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg); color:var(--ink2); font-family:var(--mono);
+  font-size:13px; font-weight:300; line-height:1.5; letter-spacing:.06em;
+  -webkit-font-smoothing:antialiased; overflow:hidden;
+}
+body::after{
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:9000;
+  background:repeating-linear-gradient(to bottom,rgba(255,255,255,0) 0 2px,rgba(255,255,255,.014) 2px 3px);
+}
+body::before{
+  content:''; position:fixed; inset:0; pointer-events:none; z-index:9001;
+  background:radial-gradient(ellipse at 50% 45%,rgba(0,0,0,0) 52%,rgba(0,0,0,.72) 100%);
+}
+::selection{background:#e8e8e8;color:#000}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;letter-spacing:inherit}
+a{color:inherit}
+
+/* ── frame corner brackets ── */
+.crnr{position:fixed;width:26px;height:26px;border:1px solid var(--line);pointer-events:none;z-index:60}
+.crnr.tl{top:9px;left:9px;border-right:0;border-bottom:0}
+.crnr.tr{top:9px;right:9px;border-left:0;border-bottom:0}
+.crnr.bl{bottom:9px;left:9px;border-right:0;border-top:0}
+.crnr.br{bottom:9px;right:9px;border-left:0;border-top:0}
+
+/* ── GATE / BOOT ── */
+#gate,#boot{position:fixed;inset:0;z-index:8000;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
+.term{width:min(700px,94vw)}
+.term .bar{border:1px solid var(--line);background:var(--panel);padding:8px 14px;font-size:10.5px;letter-spacing:.24em;color:var(--dim);display:flex;justify-content:space-between}
+.term .body{border:1px solid var(--line);border-top:0;background:var(--bg2);padding:30px 24px 32px}
+.term h1{font-size:clamp(32px,7vw,58px);font-weight:200;letter-spacing:.2em;color:#fff;line-height:1;margin-bottom:14px}
+.term .sub{display:inline-block;border:1px solid var(--line);padding:5px 12px;font-size:10.5px;letter-spacing:.28em;color:var(--ink);margin-bottom:26px}
+.term p{font-size:12px;color:var(--dim);margin-bottom:20px;line-height:1.95;letter-spacing:.08em}
+.pwrow{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding-bottom:11px}
+.pwrow label{font-size:11px;letter-spacing:.22em;color:var(--ink);white-space:nowrap}
+.pwfield{position:relative;flex:1;display:flex;cursor:text}
+.pwrow input{flex:1;width:100%;background:transparent;border:0;outline:none;color:#fff;font-family:var(--mono);font-size:14px;letter-spacing:.3em}
+/* a block caret parked at the start of the field, so it's obvious where to type */
+.pwcaret{position:absolute;left:0;top:50%;transform:translateY(-50%);width:9px;height:17px;background:#fff;pointer-events:none}
+.pwcaret.off{display:none}
+.pwrow button{border:1px solid var(--line);padding:7px 17px;font-size:10.5px;letter-spacing:.24em;color:var(--ink);transition:background .18s,color .18s,border-color .18s}
+.pwrow button:hover{background:#e8e8e8;color:#000;border-color:#e8e8e8}
+#gateErr{margin-top:17px;font-size:11px;letter-spacing:.18em;color:#fff;min-height:18px}
+.blink{animation:blink 1.05s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+
+#boot{align-items:flex-start;justify-content:flex-start;padding:7vh 7vw;display:none}
+#bootLog{font-size:13px;line-height:1.95;white-space:pre-wrap;max-width:920px;letter-spacing:.07em}
+#bootLog .ok{color:#fff}
+#bootLog .dim{color:var(--dim)}
+#bootLog .warn{color:var(--ink)}
+#bootLog .hit{color:#fff}
+.cursor{display:inline-block;width:8px;height:14px;background:#fff;vertical-align:-2px;margin-left:2px}
+
+/* ── SHELL ── */
+#app{display:none;height:100%;flex-direction:column;padding:22px 26px 20px}
+#app.on{display:flex}
+
+header.top{
+  border-bottom:1px solid var(--line);
+  display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:24px;
+  padding:0 0 16px;
+}
+.lockup .l0{font-size:11.5px;letter-spacing:.34em;color:var(--ink);margin-bottom:10px}
+.lockup h1{font-size:clamp(34px,5vw,62px);font-weight:200;letter-spacing:.14em;color:#fff;line-height:.92}
+.lockup .badge{display:inline-block;border:1px solid var(--line);padding:6px 14px;font-size:12.5px;letter-spacing:.24em;color:var(--ink);margin-top:12px}
+.lockup .ver{font-size:10.5px;letter-spacing:.14em;color:var(--faint);margin-left:10px}
+.seal{width:112px;height:112px;display:block;margin:0 auto;opacity:.92}
+
+.session{font-size:11px;letter-spacing:.12em;display:grid;grid-template-columns:auto auto;gap:8px 12px;align-items:center;justify-items:end}
+.session .k{color:var(--dim);letter-spacing:.16em;justify-self:start}
+.session .v{color:var(--ink)}
+.session .box{border:1px solid var(--line);padding:1px 9px;letter-spacing:.16em;color:#fff}
+.session .rd{display:inline-block;width:96px;height:12px;background:#3a3a3a}
+.session .dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#e8e8e8;vertical-align:-1px;margin-left:8px}
+
+.shell{flex:1;display:grid;grid-template-columns:250px 1fr;gap:26px;min-height:0;padding-top:16px}
+nav.side{overflow-y:auto;padding-bottom:16px}
+.side .head{border:1px solid var(--line);padding:9px 13px;font-size:12.5px;letter-spacing:.2em;color:#fff;display:flex;gap:9px}
+.side .menu{padding:10px 0 20px}
+.side .menu button{display:block;width:100%;text-align:left;padding:7px 13px;font-size:12.5px;letter-spacing:.15em;color:var(--dim);transition:color .18s,padding-left .18s}
+.side .menu button::before{content:'> ';color:var(--faint)}
+.side .menu button:hover{color:#fff;padding-left:19px}
+.side .menu button.on{color:#fff}
+.side .card{border:1px solid var(--line);padding:13px 14px;margin-bottom:16px}
+.side .card h4{font-size:11.5px;letter-spacing:.18em;color:var(--ink);font-weight:400;margin-bottom:10px}
+.side .card h4::before{content:'> ';color:var(--faint)}
+.side .card p{font-size:11px;line-height:1.75;color:var(--dim);letter-spacing:.05em}
+.side .breach{border:1px solid var(--line);padding:13px 14px}
+.side .breach h4{font-size:11.5px;letter-spacing:.18em;color:var(--ink);font-weight:400;margin-bottom:8px}
+.side .breach h4::before{content:'> ';color:var(--faint)}
+.side .breach b{font-weight:400;color:#fff;letter-spacing:.16em;font-size:13px}
+.side .dashes{display:flex;gap:6px;margin-top:14px}
+.side .dashes i{display:block;width:19px;height:5px;background:#2b2b2b}
+
+main.stage{overflow-y:auto;min-height:0;padding-right:6px;border-left:1px solid var(--line2);padding-left:26px}
+.crumb{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:22px}
+.crumb .path{font-size:12.5px;letter-spacing:.2em;color:var(--ink);display:flex;align-items:center;gap:12px}
+.crumb .path .dim{color:var(--faint)}
+.crumb .path .rd{display:inline-block;height:11px;background:#292929}
+.tools{display:flex;align-items:center;gap:20px;font-size:10.5px;letter-spacing:.2em;color:var(--dim)}
+.seg{display:inline-flex;border:1px solid var(--line)}
+.seg button{padding:4px 12px;font-size:10.5px;letter-spacing:.2em;color:var(--dim)}
+.seg button.on{background:#e8e8e8;color:#000}
+.sel{border:1px solid var(--line);padding:4px 12px;color:var(--ink);display:inline-flex;gap:14px;align-items:center;cursor:pointer}
+
+.briefing{border:1px solid var(--line);padding:16px 18px;margin-bottom:24px;background:var(--panel)}
+.briefing h3{font-size:10.5px;letter-spacing:.3em;color:var(--ink);font-weight:400;margin-bottom:11px}
+.briefing p{font-size:12px;line-height:1.9;color:var(--dim);max-width:96ch;letter-spacing:.05em}
+.briefing p+p{margin-top:9px}
+.briefing b{color:#fff;font-weight:400}
+
+/* ── FOLDERS ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:26px}
+.grid.list{grid-template-columns:1fr;gap:9px}
+.folder{position:relative;min-height:176px;cursor:pointer;color:var(--line);transition:color .2s,transform .2s}
+.folder:hover{color:#8f8f8f;transform:translateY(-2px)}
+.folder.sel{color:#ffffff}
+.fout{position:absolute;inset:0;width:100%;height:100%;display:block}
+.folder .in{position:relative;z-index:2;padding:32px 16px 15px;height:100%;display:flex;flex-direction:column}
+.folder .code{font-size:10.5px;letter-spacing:.2em;color:var(--dim)}
+.folder .dots{position:absolute;top:31px;right:16px;font-size:12px;letter-spacing:.16em;color:var(--faint)}
+.folder h3{font-size:16.5px;font-weight:300;letter-spacing:.14em;color:#fff;text-transform:uppercase;line-height:1.5;margin-top:12px;max-width:80%}
+.folder .wm{position:absolute;right:12px;top:52px;width:78px;height:78px;opacity:.14;z-index:1}
+.folder .cls{margin-top:auto;font-size:10px;letter-spacing:.2em;color:var(--faint)}
+.folder .bkt{position:absolute;z-index:2;width:11px;height:11px;border:1px solid currentColor;opacity:.85}
+.folder .bkt.bl{left:9px;bottom:9px;border-right:0;border-top:0}
+.folder .bkt.br{right:9px;bottom:9px;border-left:0;border-top:0}
+.folder.locked{opacity:.45}
+.folder:hover h3{color:#fff}
+
+.grid.list .folder{min-height:0}
+.grid.list .fout,.grid.list .wm,.grid.list .dots,.grid.list .bkt{display:none}
+.grid.list .folder .in{border:1px solid var(--line);padding:11px 16px;display:grid;grid-template-columns:92px 1fr 150px 100px;align-items:center;gap:18px}
+.grid.list .folder h3{font-size:14px;margin-top:0;max-width:none}
+.grid.list .folder .cls{margin-top:0}
+
+/* ── DOSSIER ── */
+.doss{max-width:1080px}
+.doss .hd{border:1px solid var(--line);padding:18px 20px;margin-bottom:20px;position:relative;background:var(--panel)}
+.doss .hd .code{font-size:10.5px;letter-spacing:.28em;color:var(--dim)}
+.doss .hd h2{font-size:clamp(22px,3vw,34px);font-weight:200;letter-spacing:.14em;color:#fff;text-transform:uppercase;line-height:1.25;margin:9px 0 12px}
+.doss .hd .facts{display:flex;flex-wrap:wrap;gap:9px 26px;font-size:11px;letter-spacing:.14em;color:var(--dim)}
+.doss .hd .facts b{color:#fff;font-weight:400}
+.stamp{position:absolute;right:18px;top:16px;border:1px solid var(--ink);color:var(--ink);font-size:11px;letter-spacing:.24em;padding:4px 12px}
+.entries{display:grid;grid-template-columns:repeat(auto-fill,minmax(246px,1fr));gap:14px;margin-bottom:24px}
+.ent{border:1px solid var(--line);background:var(--panel);padding:14px 16px;cursor:pointer;transition:border-color .2s,transform .2s}
+.ent:hover{border-color:#7a7a7a;transform:translateY(-2px)}
+.ent .k{font-size:10px;letter-spacing:.24em;color:var(--dim)}
+.ent .t{font-size:14px;font-weight:300;letter-spacing:.12em;color:#fff;margin:9px 0 9px;text-transform:uppercase;line-height:1.45}
+.ent .m{font-size:10.5px;letter-spacing:.12em;color:var(--faint)}
+.ent.drop{border-color:#6a6a6a}
+.ent.drop .k{color:#fff}
+
+.memo{border:1px solid var(--line);background:var(--bg2);padding:20px 22px;margin-bottom:16px}
+.memo h4{font-size:10.5px;letter-spacing:.3em;color:var(--dim);font-weight:400;margin-bottom:13px;border-bottom:1px solid var(--line2);padding-bottom:9px}
+.memo .txt{font-size:12.5px;line-height:2;color:var(--ink2);white-space:pre-wrap;min-height:1.6em;letter-spacing:.05em}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:860px){.cols{grid-template-columns:1fr}}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;font-size:11.5px}
+.kv .k{color:var(--dim);letter-spacing:.16em}
+.kv .v{color:var(--ink);letter-spacing:.05em}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);padding:6px 12px;font-size:11px;letter-spacing:.1em;color:var(--ink2)}
+
+.look{display:grid;grid-template-columns:repeat(auto-fill,minmax(196px,1fr));gap:12px}
+.plate{position:relative;aspect-ratio:4/3;border:1px solid var(--line);background:#040404;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.plate .lines{position:absolute;inset:0;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.022) 0 1px,transparent 1px 4px)}
+.plate .noise{position:absolute;inset:0;opacity:.24;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E")}
+.plate .cap{position:relative;z-index:2;text-align:center;font-size:10px;letter-spacing:.24em;color:var(--faint);padding:0 12px;line-height:1.9}
+.plate .cnr{position:absolute;z-index:2;width:12px;height:12px;border:1px solid var(--line);opacity:.9}
+.plate .cnr.tl{top:7px;left:7px;border-right:0;border-bottom:0}
+.plate .cnr.tr{top:7px;right:7px;border-left:0;border-bottom:0}
+.plate .cnr.bl{bottom:7px;left:7px;border-right:0;border-top:0}
+.plate .cnr.br{bottom:7px;right:7px;border-left:0;border-top:0}
+.plate .ref{position:absolute;z-index:2;bottom:6px;left:9px;font-size:9px;letter-spacing:.16em;color:#3d3d3d}
+
+.backbtn{border:1px solid var(--line);padding:6px 15px;font-size:10.5px;letter-spacing:.22em;color:var(--ink);margin-bottom:18px;transition:background .2s,color .2s}
+.backbtn:hover{background:#e8e8e8;color:#000}
+
+.doc{max-width:880px;border:1px solid var(--line);background:var(--bg2);padding:36px 40px}
+.doc .dochd{text-align:center;border-bottom:1px solid var(--line);padding-bottom:20px;margin-bottom:24px}
+.doc .dochd .t{font-size:24px;font-weight:200;letter-spacing:.28em;color:#fff}
+.doc .dochd .s{font-size:10px;letter-spacing:.3em;color:var(--dim);margin-top:9px}
+.doc h5{font-size:11px;letter-spacing:.28em;color:#fff;font-weight:400;margin:26px 0 11px}
+.doc h5::before{content:'> ';color:var(--faint)}
+.doc p{font-size:12px;line-height:2.05;color:var(--dim);margin-bottom:11px;letter-spacing:.05em}
+.doc .redact-inline{background:#2f2f2f;color:transparent;user-select:none;padding:0 3px}
+
+footer.bot{border-top:1px solid var(--line);display:flex;align-items:center;justify-content:center;gap:20px;padding:14px 0 0;margin-top:16px;font-size:11px;letter-spacing:.26em;color:var(--dim);position:relative}
+footer.bot .plus{color:var(--faint);letter-spacing:.5em}
+.sound{position:absolute;right:0;border:1px solid var(--line);padding:3px 11px;font-size:10px;letter-spacing:.18em;color:var(--faint)}
+.sound.on{color:var(--ink)}
+.sysid{position:absolute;left:0;font-size:10px;letter-spacing:.2em;color:var(--faint)}
+
+@media(max-width:980px){
+  #app{padding:14px}
+  .shell{grid-template-columns:1fr;gap:0}
+  nav.side{display:none}
+  main.stage{border-left:0;padding-left:0}
+  header.top{grid-template-columns:1fr auto;gap:14px}
+  .seal{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ GATE ══════════ -->
+<div id="gate">
+  <div class="term">
+    <div class="bar"><span>SECURE TERMINAL // NODE 7</span><span id="gateClock">--:--:--</span></div>
+    <div class="body">
+      <h1>F.S.H.R.</h1>
+      <div class="sub">FEDERAL. SPECIAL. HAZARD. RESPONSE.</div>
+      <p>&gt; RESTRICTED ARCHIVE. AUTHORISED PERSONNEL ONLY.<br>
+         &gt; ALL ACCESS ATTEMPTS ARE LOGGED AND ATTRIBUTED.<br>
+         &gt; ENTER PASSWORD AND AUTHENTICATE TO CONTINUE</p>
+      <form class="pwrow" id="gateForm" autocomplete="off">
+        <label for="pw">PASSWORD:</label>
+        <span class="pwfield" id="pwField">
+          <input id="pw" type="password" autocomplete="off" spellcheck="false" aria-label="Password" />
+          <span class="pwcaret blink" id="pwCaret" aria-hidden="true"></span>
+        </span>
+        <button type="submit">AUTHENTICATE</button>
+      </form>
+      <div id="gateErr" role="status"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ BOOT ══════════ -->
+<div id="boot"><div id="bootLog"></div></div>
+
+<!-- ══════════ APP ══════════ -->
+<div id="app">
+
+  <div class="crnr tl"></div><div class="crnr tr"></div><div class="crnr bl"></div><div class="crnr br"></div>
+
+  <header class="top">
+    <div class="lockup">
+      <div class="l0">FEDERAL SPECIAL HAZARD RESPONSE</div>
+      <h1>F.S.H.R.</h1>
+      <div><span class="badge">ARCHIVE DATABASE</span><span class="ver">v.1.7.3</span></div>
+    </div>
+
+    <div>
+      <svg class="seal" viewBox="0 0 120 120" aria-hidden="true">
+        <defs>
+          <path id="arcTop" d="M60,60 m-47,0 a47,47 0 1,1 94,0" fill="none"/>
+          <path id="arcBot" d="M60,60 m-42,0 a42,42 0 1,0 84,0" fill="none"/>
+        </defs>
+        <circle cx="60" cy="60" r="58" fill="none" stroke="#8a8a8a" stroke-width=".8"/>
+        <circle cx="60" cy="60" r="53" fill="none" stroke="#e8e8e8" stroke-width="1.4"/>
+        <circle cx="60" cy="60" r="34" fill="none" stroke="#8a8a8a" stroke-width=".8"/>
+        <text font-family="Roboto Mono,monospace" font-size="6.6" font-weight="400" fill="#d8d8d8" letter-spacing="1.7">
+          <textPath href="#arcTop" startOffset="50%" text-anchor="middle">FEDERAL SPECIAL HAZARD RESPONSE</textPath>
+        </text>
+        <text font-family="Roboto Mono,monospace" font-size="6" fill="#9a9a9a" letter-spacing="2">
+          <textPath href="#arcBot" startOffset="50%" text-anchor="middle">UNITED STATES OF AMERICA</textPath>
+        </text>
+        <text x="60" y="36" font-family="Roboto Mono,monospace" font-size="6.4" fill="#d8d8d8" text-anchor="middle" letter-spacing="1.6">F.S.H.R.</text>
+        <text x="60" y="74" font-family="Roboto Mono,monospace" font-size="34" font-weight="300" fill="#f0f0f0" text-anchor="middle" letter-spacing="0">E</text>
+        <path d="M60 44 l2.1 4.6 5-.7-3.6 3.6 3.6 3.6-5-.7L60 59.6l-2.1-4.6-5 .7 3.6-3.6-3.6-3.6 5 .7z" fill="#f0f0f0" opacity=".85"/>
+      </svg>
+    </div>
+
+    <div class="session">
+      <span class="k">USER:</span><span class="v"><i class="rd"></i></span>
+      <span class="k">CLEARANCE LEVEL:</span><span class="v box">07</span>
+      <span class="k">STATUS:</span><span class="v box">AUTHORIZED</span>
+      <span class="k">CONNECTION:</span><span class="v">SECURE <i class="dot"></i></span>
+      <span class="k">SESSION TIME:</span><span class="v" id="sess">00:00:00</span>
+    </div>
+  </header>
+
+  <div class="shell">
+    <nav class="side">
+      <div class="head"><span>&gt;</span><span id="sideHead">ARCHIVE INDEX</span></div>
+      <div class="menu" id="menu"></div>
+      <div class="card">
+        <h4>ABOUT F.S.H.R.</h4>
+        <p>The Federal Special Hazard Response is a clandestine division tasked with investigating and documenting anomalous entities and incidents that pose a threat to public safety and national security.</p>
+      </div>
+      <div class="card">
+        <h4>PROTOCOL REMINDER</h4>
+        <p>All information contained within this archive is classified. Unauthorized access is strictly prohibited.</p>
+      </div>
+      <div class="breach"><h4>REPORT ANY BREACH</h4><b>1-800-FSHR-HELP</b>
+        <div class="dashes"><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+    </nav>
+
+    <main class="stage" id="stage"></main>
+  </div>
+
+  <footer class="bot">
+    <span class="sysid">FSHR SYS 1.7.3</span>
+    <span class="plus">+ + +</span>
+    <span>FOR OFFICIAL USE ONLY</span>
+    <span class="plus">+ + +</span>
+    <button class="sound on" id="sndBtn" title="Toggle audio">AUDIO: ON</button>
+  </footer>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   F.S.H.R. ARCHIVE — interactive pitch deck
+   Unlisted page. Change ACCESS_KEY to rotate the link's password.
+   ═══════════════════════════════════════════════════════════ */
+const ACCESS_KEY = 'archivist17';
+const SESSION_FLAG = 'fshrArchiveOpen';
+
+/* ─────────── AUDIO — everything is synthesised, no files ───────────
+   Each cue is built from oscillators and noise so the page ships with
+   zero audio assets. To swap in real recordings later, set
+   SFX.files = { key:'assets/key.mp3', ... } and they win over the synth. */
+const SFX = (function () {
+  let ctx = null, master = null, on = true;
+  const files = {};                       // optional overrides, path per cue
+  function boot() {
+    if (ctx) return ctx;
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    master = ctx.createGain();
+    master.gain.value = 0.5;
+    master.connect(ctx.destination);
+    return ctx;
+  }
+  function noiseBuf(sec) {
+    const n = Math.floor(ctx.sampleRate * sec);
+    const b = ctx.createBuffer(1, n, ctx.sampleRate);
+    const d = b.getChannelData(0);
+    for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+    return b;
+  }
+  /* a short band-passed noise burst — the mechanical part of a keypress */
+  function burst({ freq = 1800, q = 6, dur = 0.035, gain = 0.5, type = 'bandpass' }) {
+    const src = ctx.createBufferSource(); src.buffer = noiseBuf(dur);
+    const f = ctx.createBiquadFilter(); f.type = type; f.frequency.value = freq; f.Q.value = q;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(gain, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + dur);
+    src.connect(f); f.connect(g); g.connect(master); src.start();
+  }
+  function tone({ f0 = 440, f1 = null, dur = 0.1, gain = 0.18, type = 'square', delay = 0 }) {
+    const t = ctx.currentTime + delay;
+    const o = ctx.createOscillator(); o.type = type;
+    o.frequency.setValueAtTime(f0, t);
+    if (f1) o.frequency.exponentialRampToValueAtTime(f1, t + dur);
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(gain, t + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(master); o.start(t); o.stop(t + dur + 0.02);
+  }
+  const cues = {
+    /* typewriter key — pitch jitters so repeats don't sound looped */
+    key()      { burst({ freq: 1500 + Math.random() * 900, q: 5, dur: 0.028, gain: 0.42 });
+                 tone({ f0: 150 + Math.random() * 40, dur: 0.02, gain: 0.05, type: 'square' }); },
+    space()    { burst({ freq: 700, q: 3, dur: 0.05, gain: 0.4 }); },
+    ui()       { tone({ f0: 880, dur: 0.045, gain: 0.1, type: 'square' }); },
+    hover()    { tone({ f0: 1500, dur: 0.02, gain: 0.03, type: 'sine' }); },
+    open()     { burst({ freq: 420, q: 2, dur: 0.13, gain: 0.4 });
+                 tone({ f0: 320, f1: 150, dur: 0.13, gain: 0.1, type: 'sawtooth' }); },
+    back()     { tone({ f0: 500, f1: 300, dur: 0.09, gain: 0.09, type: 'square' }); },
+    granted()  { tone({ f0: 440, dur: 0.1, gain: 0.14 });
+                 tone({ f0: 660, dur: 0.1, gain: 0.14, delay: 0.1 });
+                 tone({ f0: 880, dur: 0.24, gain: 0.16, delay: 0.2 }); },
+    denied()   { tone({ f0: 190, f1: 70, dur: 0.34, gain: 0.2, type: 'sawtooth' }); },
+    /* disk seek — a few scattered clicks under a filtered sweep */
+    whir()     { burst({ freq: 300, q: 1.2, dur: 0.34, gain: 0.16, type: 'lowpass' });
+                 for (let i = 0; i < 4; i++) setTimeout(() => burst({ freq: 2400, q: 9, dur: 0.02, gain: 0.13 }), 45 * i + 20); },
+    locked()   { tone({ f0: 130, dur: 0.12, gain: 0.16, type: 'square' });
+                 tone({ f0: 110, dur: 0.16, gain: 0.14, type: 'square', delay: 0.13 }); }
+  };
+  return {
+    play(name) {
+      if (!on || !cues[name]) return;
+      try {
+        boot();
+        if (ctx.state === 'suspended') ctx.resume();
+        if (files[name]) { const a = new Audio(files[name]); a.volume = 0.5; a.play().catch(() => {}); return; }
+        cues[name]();
+      } catch (_) {}
+    },
+    toggle() { on = !on; if (on) { try { boot(); ctx.resume(); } catch (_) {} } return on; },
+    get enabled() { return on; },
+    files
+  };
+})();
+
+/* ─────────── DATA ───────────
+   Twelve case files = season one. Each carries three RECOVERED VIDEO
+   teasers and closes on the ARKIVE — the cinematic drop. */
+const PLACEHOLDER_SUM = 'Summary pending. This entry is reserved and will be filled in as the episode moves through development.';
+const PLACEHOLDER_CHARS = ['[ CASTING PENDING ]'];
+
+function rv(code, title, summary, format, length, source, chars) {
+  return {
+    code, kind: 'RECOVERED VIDEO', title,
+    summary: summary || PLACEHOLDER_SUM,
+    format: format || 'Found footage. Format to be locked in development.',
+    length: length || 'TBD',
+    source: source || 'TBD',
+    characters: chars || PLACEHOLDER_CHARS
+  };
+}
+function drop(code, title, summary, entity, cls, length, chars) {
+  return {
+    code, kind: 'FILE DROP', title,
+    summary: summary || PLACEHOLDER_SUM,
+    format: 'The main cinematic episode. An FSHR recorded witness statement intercut with dramatised footage, ending with the testimony archived as one of many unexplained cases.',
+    length: length || '8 to 12 minutes',
+    source: 'FSHR INTERNAL // RECORDED STATEMENT',
+    entity: entity || '[ REDACTED ]',
+    entityClass: cls || 'UNCLASSIFIED',
+    characters: chars || PLACEHOLDER_CHARS
+  };
+}
+
+const CASES = [
+  {
+    n: '001', title: 'The Laceum Woman Incident', status: 'CLOSED',
+    entity: 'The Laceum Woman', entityClass: 'Dimensional Being',
+    logline: 'A widow gives a statement about her husband’s disappearance into a late-night detergent commercial.',
+    entries: [
+      rv('001.1', 'Does Anyone Remember This Detergent??',
+        'A casual YouTube video from a teen who found an old bottle of Laceum detergent that belonged to his grandmother. He cannot find any evidence online that the brand ever existed, so he records himself showing it off and trying to figure out where it came from. As the video continues, he becomes increasingly mesmerized by the blue liquid and eventually begins drinking it. His friend behind the camera panics and tries to restrain him as blue liquid starts pouring from his eyes. The Laceum theme begins playing from somewhere in the room as he slowly rises off the floor. The video cuts out.',
+        'Recovered amateur YouTube video. Handheld consumer camera. One location, 2 actors.',
+        '2 to 3 minutes', 'Youtuber’s Camera',
+        ['The Uploader — teen, mid-to-late teens', 'The Friend — behind camera, panicking']),
+      rv('001.2', 'I Found a Laundromat That Shouldn’t Be Here',
+        'An urban explorer discovers an abandoned laundromat hidden inside a building where there should not be enough space for it to exist. The room feels strangely preserved and disconnected from the rest of the abandoned building. Deep inside, an old CRT television still has power and plays a cheerful Laceum detergent commercial. When the explorer returns to the television, the commercial has stopped. The Laceum Woman is standing silently on the screen, staring directly at her.',
+        'Liminal urban exploration footage. Handheld phone or action camera. One actor, one location. Backrooms-inspired with long stretches of quiet exploration.',
+        '15 to 20 minutes', 'Youtuber’s Camera / GoPro',
+        ['The Explorer — solo urbex creator', 'The Laceum Woman — on screen only']),
+      rv('001.3', 'LACEUM ® — Every Day is Washday (1987) [1 HOUR]',
+        'An hour-long loop of a recovered 1987 Laceum detergent commercial. For almost the entire video, nothing changes. Near the end, the Laceum Woman suddenly fails to reset with the commercial. She stops performing and becomes aware of the viewer. She approaches the edge of the image and appears to reach beyond the video frame, interacting with elements of the player before addressing the person watching. The commercial then returns to normal.',
+        'One-hour commercial loop presented as a mundane archival upload. The anomaly occurs only once near the end and uses subtle VFX to make the boundaries of the video appear unreliable.',
+        '1 hour, with roughly 30 to 60 seconds of altered footage', 'VHS Rip Footage',
+        ['The Laceum Woman — period commercial spokesmodel']),
+      drop('ARKIVE 001', 'The Laceum Woman Incident',
+        'A grieving widow gives a recorded statement about the disappearance of her husband, John. She describes how he became obsessed with a mysterious late-night detergent commercial featuring a woman who seemed increasingly aware of him. What begins as strange television behavior escalates into an impossible relationship between John and the woman inside the screen. After destroying the television and believing the incident is over, Miriam discovers John has disappeared. He eventually reappears inside the Laceum commercial itself, smiling beside the Laceum Woman.',
+        'The Laceum Woman', 'Dimensional Being', '8 to 12 minutes',
+        ['Miriam — widow, gives the statement', 'John — husband, seen in dramatised footage', 'The Laceum Woman — entity', 'FSHR Interviewer — off camera'])
+    ]
+  },
+  {
+    n: '002', title: 'The Cloverton Report', status: 'CLOSED',
+    entity: 'Jenny Fingers', entityClass: 'Mutant',
+    logline: 'Two students test a school ritual that promises a perfect manicure — provided nobody looks behind the wall.',
+    entries: [
+      rv('002.1', 'Something Is Wrong With This Part of the School',
+        'A janitor in a school makes a video for the school superintendent behind the lockers that there’s an endless hallway back there. Something isn’t right, it isn’t in the blue prints. The video ends when he hears something in the hallway. Nope, I’m out. I don’t get paid nearly enough for this. He’s also complaining about how despite how many times they paint over it the words keep coming back.',
+        'Single-take handheld report filmed for an internal audience. One actor, one location.',
+        '2 to 5 minutes', 'Janitor’s Phone / Camera',
+        ['The Janitor — sole on-camera subject']),
+      rv('002.2', 'The Jenny Fingers Challenge',
+        'A few girls record on their phones as they try the challenge, showcasing their nails done. They pause when they hear scratching behind the walls.',
+        'Vertical phone footage cut like a social trend video. Three actors, one location.',
+        '3 minutes', 'One of the girl’s Phones',
+        ['Three students — challenge participants']),
+      rv('002.3', 'Student Disappears Inside Cloverton High School (1996)',
+        'A recovered local news broadcast from the 1990s covers the disappearance of teenage student Jenny █████, who was last seen inside the school after classes. Police have searched the building and surrounding area, but no trace of her has been found. The reporter interviews a teacher or administrator who speaks warmly about Jenny before becoming noticeably defensive about the attention surrounding the disappearance. They insist that this tragedy will not define the school or become part of its history.',
+        'Period-accurate local news package. Studio anchor wrap plus field interview.',
+        '3 to 5 minutes', '1990s VHS News Recording',
+        ['Field Reporter', 'Teacher / Administrator', 'Anchor — studio wrap']),
+      drop('ARKIVE 002', 'The Cloverton Report',
+        'Two students investigate a school legend about Jenny Fingers, a supposed ghost that lives behind a hole in the wall of a condemned locker room. According to the ritual, anyone who puts their hand through the hole receives a perfect red manicure, with only one rule: never look behind the wall. Convinced it is an elaborate prank, one student puts her hand through while her friend sneaks into the service crawlspace to discover who is really on the other side. Instead, he finds a grotesque creature delicately coating her nails with its tongue while feeding on her fingers. When Jenny realizes she is being watched, she bites down, taking the girl’s hand with her. The school patches the hole, but by the following morning the warning has returned, carved even deeper into the wall: DON’T LOOK BEHIND THE WALL.',
+        'Jenny Fingers', 'Mutant', '8 to 12 minutes',
+        ['The Skeptic — puts her hand through the wall', 'The Friend — enters the crawlspace', 'Jenny Fingers — entity'])
+    ]
+  },
+  { n: '003', title: 'The Hollow Acre Report', status: 'ACTIVE', entity: 'Skycrow', entityClass: 'Unclassified',
+    logline: '[ LOGLINE PENDING ]' },
+  { n: '004', title: 'The Cursed Painting', status: 'OPEN', entity: '[ REDACTED ]', entityClass: 'Unclassified',
+    logline: '[ LOGLINE PENDING ]' },
+  { n: '005', title: 'Hunting Club', status: 'OPEN', entity: 'Serva Hunting Club', entityClass: 'Organization',
+    logline: '“No Game Like Foxes.” A members-only hunting club with an unusual definition of game.' },
+  { n: '006', title: 'Loop Bend Trail', status: 'OPEN', entity: 'Mimic', entityClass: 'Mimetic',
+    logline: 'A friend who has been missing for a while rejoins her friend on a trail — but she may not be the same person, or a person at all.' },
+  { n: '007', title: 'The Walls Started Sweating', status: 'ACTIVE', entity: 'Matchjaw', entityClass: 'Poltergeist',
+    logline: '[ LOGLINE PENDING ]' },
+  { n: '008', title: 'Bearskin', status: 'OPEN', entity: 'Devil’s Ridge Bear', entityClass: 'Cryptid',
+    logline: '[ LOGLINE PENDING ]' },
+  { n: '009', title: 'The Runner', status: 'ACTIVE', entity: '[ REDACTED ]', entityClass: 'Unclassified',
+    logline: 'A man in an interrogation room, burned over most of his body, wheezes out his story — and catches fire inside the room, smoke pouring from his mouth.' },
+  { n: '010', title: 'The Holy Mountain', status: 'OPEN', entity: '[ REDACTED ]', entityClass: 'Unclassified',
+    logline: 'Hunters stalking an Appalachian legend shoot a young girl instead. Something picks her up, heals her, and turns on them.' },
+  { n: '011', title: 'Honeymoon Rentals', status: 'CLOSED', entity: 'The Ashen Man', entityClass: 'Unclassified',
+    logline: '[ LOGLINE PENDING ]' },
+  { n: '012', title: 'Special Delivery', status: 'LOCKED', entity: 'Tunnel Spider', entityClass: 'Arachnid Anomaly',
+    logline: '[ LOGLINE PENDING ]' }
+];
+
+/* cases without a written breakdown still get the four-slot skeleton */
+CASES.forEach(c => {
+  c.id = 'FSHR-' + c.n;
+  if (c.entries) return;
+  c.entries = [
+    rv(c.n + '.1', 'Recovered Video ' + c.n + '.1'),
+    rv(c.n + '.2', 'Recovered Video ' + c.n + '.2'),
+    rv(c.n + '.3', 'Recovered Video ' + c.n + '.3'),
+    drop('ARKIVE ' + c.n, c.title, null, c.entity, c.entityClass)
+  ];
+});
+
+/* ─────────── HELPERS ─────────── */
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s)
+  .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const REDUCE = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* memo typing — text arrives like it's coming off a slow terminal.
+   Click anywhere in the block to skip to the end. */
+function typeInto(el, text, speed) {
+  if (REDUCE) { el.textContent = text; return; }
+  speed = speed || 9;
+  el.textContent = '';
+  let i = 0, stopped = false;
+  const cur = document.createElement('span');
+  cur.className = 'cursor';
+  el.after(cur);
+  function finish() { stopped = true; el.textContent = text; cur.remove(); }
+  el.closest('.memo')?.addEventListener('click', finish, { once: true });
+  (function step() {
+    if (stopped) return;
+    const chunk = text.slice(i, i + 2);
+    el.textContent += chunk;
+    if (/\S/.test(chunk)) { if (i % 6 === 0) SFX.play('key'); }
+    i += 2;
+    if (i < text.length) setTimeout(step, speed);
+    else { cur.remove(); }
+  })();
+}
+
+/* deterministic placeholder plate — no image files needed */
+function plate(ref, caption) {
+  return '<div class="plate">' +
+    '<div class="noise"></div><div class="lines"></div>' +
+    '<span class="cnr tl"></span><span class="cnr tr"></span><span class="cnr bl"></span><span class="cnr br"></span>' +
+    '<div class="cap">[ IMAGE WITHHELD ]<br>' + esc(caption) + '</div>' +
+    '<div class="ref">' + esc(ref) + '</div>' +
+  '</div>';
+}
+
+/* ─────────── VIEWS ─────────── */
+const MENU = [
+  ['index', 'CASE FILES'], ['entities', 'ENTITIES'], ['bible', 'SERIES BIBLE'],
+  ['incident', 'INCIDENT MAP'], ['evidence', 'EVIDENCE LOCKER'], ['field', 'FIELD REPORTS'],
+  ['interviews', 'INTERVIEWS'], ['audio', 'AUDIO LOGS'], ['video', 'VIDEO REELS'],
+  ['documents', 'DOCUMENTS'], ['logout', 'LOGOUT']
+];
+let view = 'index', gridMode = 'grid', filter = 'ALL';
+
+function renderMenu() {
+  $('#menu').innerHTML = MENU.map(([k, label]) =>
+    '<button data-go="' + k + '"' + (k === view ? ' class="on"' : '') + '>' + label + '</button>').join('');
+}
+
+function stubView(title, note) {
+  return '<div class="crumb"><div class="path">ARCHIVE INDEX <span class="dim">//</span> ' + esc(title) + '</div></div>' +
+    '<div class="briefing"><h3>// SECTION NOT YET POPULATED</h3><p>' + esc(note) +
+    '</p></div>';
+}
+
+function viewIndex() {
+  const list = CASES.filter(c => filter === 'ALL' || c.status === filter);
+  return '' +
+  '<div class="crumb">' +
+    '<div class="path">ARCHIVE INDEX <span class="dim">//</span> CASE FILES <i class="rd" style="width:34px"></i><i class="rd" style="width:22px"></i></div>' +
+    '<div class="tools">' +
+      '<span>VIEW: <span class="seg" id="segView">' +
+        '<button data-mode="grid" class="' + (gridMode === 'grid' ? 'on' : '') + '">GRID</button>' +
+        '<button data-mode="list" class="' + (gridMode === 'list' ? 'on' : '') + '">LIST</button>' +
+      '</span></span>' +
+      '<span>FILTER: <span class="sel" id="filterSel">' + filter + ' <b>&#9660;</b></span></span>' +
+    '</div>' +
+  '</div>' +
+
+  '<div class="briefing">' +
+    '<h3>// PRODUCTION NOTE — PLAIN LANGUAGE</h3>' +
+    '<p><b>What this is:</b> F.S.H.R. is a horror anthology series told as a leaked government archive. ' +
+    'Season one is <b>12 case files</b>. Every case file is a self-contained story with its own entity.</p>' +
+    '<p><b>How each case is released:</b> three short <b>Recovered Videos</b> come out first — found-footage teasers ' +
+    'that look like real uploads: a YouTube clip, an urban-exploration video, an old VHS commercial. They stand alone as ' +
+    'horror shorts, and they seed details that pay off later. The fourth and final release is <b>the File Drop</b> — ' +
+    'the full cinematic episode that reveals what actually happened. Three teasers build the audience; the drop rewards them.</p>' +
+    '<p><b>Why it works:</b> the teasers are cheap to produce, native to how horror already spreads online, ' +
+    'and each one drives traffic to the next. <b>48 pieces of content across season one</b>, from 12 finished episodes.</p>' +
+    '<p style="color:#e8e8e8">Click any folder to open the case file.</p>' +
+  '</div>' +
+
+  '<div class="grid ' + (gridMode === 'list' ? 'list' : '') + '" id="grid">' +
+    list.map(c =>
+      '<div class="folder' + (c.status === 'LOCKED' ? ' locked' : '') + '" data-case="' + c.n + '">' +
+        '<svg class="fout" viewBox="0 0 240 176" preserveAspectRatio="none" aria-hidden="true">' +
+          '<path d="M0.5,175.5 L0.5,0.5 L96,0.5 L112,14 L239.5,14 L239.5,175.5 Z" fill="none" stroke="currentColor" stroke-width="1" vector-effect="non-scaling-stroke"/>' +
+        '</svg>' +
+        '<span class="bkt bl"></span><span class="bkt br"></span>' +
+        '<svg class="wm" viewBox="0 0 120 120" aria-hidden="true">' +
+          '<circle cx="60" cy="60" r="57" fill="none" stroke="#ffffff" stroke-width="1.6"/>' +
+          '<circle cx="60" cy="60" r="50" fill="none" stroke="#ffffff" stroke-width="1"/>' +
+          '<circle cx="60" cy="60" r="33" fill="none" stroke="#ffffff" stroke-width="1"/>' +
+          '<text x="60" y="74" font-family="Roboto Mono,monospace" font-size="34" fill="#ffffff" text-anchor="middle">E</text>' +
+        '</svg>' +
+        '<span class="dots">&#8943;</span>' +
+        '<div class="in">' +
+          '<span class="code">ARKIVE ' + c.n + '</span>' +
+          '<h3>' + esc(c.title) + '</h3>' +
+          '<span class="cls">// ' + (c.status === 'LOCKED' ? 'SEALED' : 'CLASSIFIED') + '</span>' +
+        '</div>' +
+      '</div>').join('') +
+  '</div>';
+}
+
+function viewCase(n) {
+  const c = CASES.find(x => x.n === n);
+  if (!c) return viewIndex();
+  return '' +
+  '<button class="backbtn" data-go="index">&lt; RETURN TO INDEX</button>' +
+  '<div class="doss">' +
+    '<div class="hd">' +
+      '<div class="stamp">' + c.status + '</div>' +
+      '<div class="code">' + c.id + '</div>' +
+      '<h2>' + esc(c.title) + '</h2>' +
+      '<div class="facts">' +
+        '<span>ENTITY: <b>' + esc(c.entity) + '</b></span>' +
+        '<span>CLASSIFICATION: <b>' + esc(c.entityClass) + '</b></span>' +
+        '<span>RELEASES: <b>4</b></span>' +
+      '</div>' +
+    '</div>' +
+    '<div class="memo"><h4>// LOGLINE</h4><div class="txt" data-type="' + esc(c.logline) + '"></div></div>' +
+    '<div class="briefing"><h3>// RELEASE ORDER</h3><p>Three Recovered Videos release first as standalone found-footage teasers. ' +
+      'The File Drop is the fourth and final release — the full cinematic episode.</p></div>' +
+    '<div class="entries">' +
+      c.entries.map((e, i) =>
+        '<div class="ent' + (e.kind === 'FILE DROP' ? ' drop' : '') + '" data-case="' + c.n + '" data-entry="' + i + '">' +
+          '<div class="k">' + (e.kind === 'FILE DROP' ? '▶ ' : '') + e.kind + ' // ' + e.code + '</div>' +
+          '<div class="t">' + esc(e.title) + '</div>' +
+          '<div class="m">' + esc(e.length) + '</div>' +
+        '</div>').join('') +
+    '</div>' +
+    '<div class="memo"><h4>// LOOK BOOK</h4><div class="look">' +
+      plate(c.id + '-LB-01', 'TONE / PALETTE') +
+      plate(c.id + '-LB-02', 'LOCATION') +
+      plate(c.id + '-LB-03', 'ENTITY DESIGN') +
+      plate(c.id + '-LB-04', 'KEY FRAME') +
+    '</div></div>' +
+  '</div>';
+}
+
+function viewEntry(n, idx) {
+  const c = CASES.find(x => x.n === n);
+  const e = c.entries[idx];
+  return '' +
+  '<button class="backbtn" data-go="case:' + c.n + '">&lt; RETURN TO ' + c.id + '</button>' +
+  '<div class="doss">' +
+    '<div class="hd">' +
+      '<div class="stamp">' + (e.kind === 'FILE DROP' ? 'DROP' : 'TEASER') + '</div>' +
+      '<div class="code">' + c.id + ' <span style="color:#565656">//</span> ' + e.kind + ' ' + e.code + '</div>' +
+      '<h2>' + esc(e.title) + '</h2>' +
+      '<div class="facts">' +
+        '<span>RUNTIME: <b>' + esc(e.length) + '</b></span>' +
+        '<span>SOURCE: <b>' + esc(e.source) + '</b></span>' +
+        (e.entity ? '<span>ENTITY: <b>' + esc(e.entity) + '</b></span>' : '') +
+      '</div>' +
+    '</div>' +
+    '<div class="memo"><h4>// SYNOPSIS</h4><div class="txt" data-type="' + esc(e.summary) + '"></div></div>' +
+    '<div class="cols">' +
+      '<div class="memo"><h4>// CHARACTERS</h4><div class="chips">' +
+        e.characters.map(x => '<span class="chip">' + esc(x) + '</span>').join('') +
+      '</div></div>' +
+      '<div class="memo"><h4>// PRODUCTION</h4><div class="kv">' +
+        '<span class="k">FORMAT</span><span class="v">' + esc(e.format) + '</span>' +
+        '<span class="k">RUNTIME</span><span class="v">' + esc(e.length) + '</span>' +
+        '<span class="k">SOURCE</span><span class="v">' + esc(e.source) + '</span>' +
+        '<span class="k">RELEASE</span><span class="v">' + (e.kind === 'FILE DROP' ? 'FOURTH — FULL EPISODE' : 'TEASER — PRE-DROP') + '</span>' +
+      '</div></div>' +
+    '</div>' +
+    '<div class="memo"><h4>// LOOK BOOK</h4><div class="look">' +
+      plate(e.code + '-01', 'FRAME REFERENCE') +
+      plate(e.code + '-02', 'LOCATION') +
+      plate(e.code + '-03', 'CAMERA / MEDIA') +
+    '</div></div>' +
+  '</div>';
+}
+
+function viewEntities() {
+  return '<div class="crumb"><div class="path">ARCHIVE INDEX <span class="dim">//</span> ENTITIES</div></div>' +
+    '<div class="grid list">' + CASES.map(c =>
+      '<div class="folder" data-case="' + c.n + '"><div class="in">' +
+        '<span class="code">' + c.id + '</span>' +
+        '<h3>' + esc(c.entity) + '</h3>' +
+        '<span class="cls">' + esc(c.entityClass) + '</span>' +
+        '<span class="cls">' + c.status + '</span>' +
+      '</div></div>').join('') + '</div>';
+}
+
+function viewBible() {
+  return '<div class="crumb"><div class="path">ARCHIVE INDEX <span class="dim">//</span> SERIES BIBLE</div></div>' +
+  '<div class="doc">' +
+    '<div class="dochd">' +
+      '<div class="t">F.S.H.R.</div>' +
+      '<div class="s">SERIES BIBLE — SEASON ONE — DRAFT</div>' +
+      '<div class="s" style="margin-top:11px;color:#ffffff">CLASSIFIED // EYES ONLY // DO NOT DUPLICATE</div>' +
+    '</div>' +
+    '<h5>01 // PREMISE</h5>' +
+    '<p>The Federal Special Hazard Response is a clandestine division tasked with investigating and documenting anomalous entities and incidents that pose a threat to public safety and national security. The series is presented as its leaked archive.</p>' +
+    '<h5>02 // FORMAT</h5>' +
+    '<p>Season one is twelve case files. Each case file releases as four pieces: three Recovered Videos, then the File Drop.</p>' +
+    '<p>The Recovered Videos are found-footage shorts that pose as genuine uploads — a phone clip, an urban exploration video, an archival VHS rip. Each works alone as a horror short and plants detail that pays off later. The File Drop is the cinematic episode: an FSHR witness statement intercut with dramatised footage, closing with the testimony archived as one of many unexplained cases.</p>' +
+    '<p>Twelve cases × four releases = forty-eight pieces of content in season one.</p>' +
+    '<h5>03 // TONE</h5>' +
+    '<p>Procedural on the surface, folkloric underneath. The horror is in what the paperwork refuses to say. Entities are never fully explained — the archive contains them, it does not solve them.</p>' +
+    '<h5>04 // THE ARCHIVE</h5>' +
+    '<p>Every episode ends the same way: filed, sealed, and shelved. The audience accumulates knowledge the characters never get to keep. Recurring designations, ██████ redactions and case cross-references reward viewers who track them.</p>' +
+    '<h5>05 // SEASON ONE SLATE</h5>' +
+    CASES.map(c => '<p><b style="color:#ffffff;font-weight:400">' + c.id + ' — ' + esc(c.title.toUpperCase()) +
+      '</b><br>Entity: ' + esc(c.entity) + ' · Class: ' + esc(c.entityClass) + ' · Status: ' + c.status + '</p>').join('') +
+    '<h5>06 // NOTES</h5>' +
+    '<p>Placeholder document. Sections will be replaced with the full bible as it is finalised.</p>' +
+  '</div>';
+}
+
+const STUBS = {
+  incident: ['INCIDENT MAP', 'Geographic plotting of all season one incidents. Reserved — will populate once locations are locked.'],
+  evidence: ['EVIDENCE LOCKER', 'Physical props and artefacts recovered per case. Reserved for production design.'],
+  field: ['FIELD REPORTS', 'Written FSHR agent reports supporting each case file. Reserved.'],
+  interviews: ['INTERVIEWS', 'Witness statement transcripts. Reserved.'],
+  audio: ['AUDIO LOGS', 'Recovered audio and score references. Reserved.'],
+  video: ['VIDEO REELS', 'Cut footage, proof-of-concept reels and sizzle material. Reserved.'],
+  documents: ['DOCUMENTS', 'Budget, schedule and distribution paperwork. Reserved.']
+};
+
+/* ─────────── ROUTER ─────────── */
+function render() {
+  const stage = $('#stage');
+  let html;
+  if (view === 'index') html = viewIndex();
+  else if (view === 'entities') html = viewEntities();
+  else if (view === 'bible') html = viewBible();
+  else if (view.startsWith('case:')) html = viewCase(view.split(':')[1]);
+  else if (view.startsWith('entry:')) { const [, n, i] = view.split(':'); html = viewEntry(n, +i); }
+  else if (STUBS[view]) html = stubView(STUBS[view][0], STUBS[view][1]);
+  else html = viewIndex();
+
+  stage.innerHTML = html;
+  stage.scrollTop = 0;
+  $('#sideHead').textContent = view === 'bible' ? 'SERIES BIBLE'
+    : view === 'entities' ? 'ENTITIES' : 'ARCHIVE INDEX';
+  renderMenu();
+  stage.querySelectorAll('[data-type]').forEach(el => typeInto(el, el.getAttribute('data-type')));
+}
+
+function go(v) { view = v; render(); }
+
+/* ─────────── EVENTS ─────────── */
+document.addEventListener('click', e => {
+  const seg = e.target.closest('#segView button');
+  if (seg) { gridMode = seg.dataset.mode; SFX.play('ui'); render(); return; }
+
+  const fs = e.target.closest('#filterSel');
+  if (fs) {
+    const opts = ['ALL', 'OPEN', 'ACTIVE', 'CLOSED', 'LOCKED'];
+    filter = opts[(opts.indexOf(filter) + 1) % opts.length];
+    SFX.play('ui'); render(); return;
+  }
+
+  const ent = e.target.closest('.ent');
+  if (ent) { SFX.play('open'); go('entry:' + ent.dataset.case + ':' + ent.dataset.entry); return; }
+
+  const f = e.target.closest('.folder');
+  if (f) {
+    const c = CASES.find(x => x.n === f.dataset.case);
+    if (c && c.status === 'LOCKED') {
+      SFX.play('locked');
+      f.classList.add('sel');
+      setTimeout(() => f.classList.remove('sel'), 500);
+      return;
+    }
+    f.classList.add('sel'); SFX.play('open'); SFX.play('whir');
+    setTimeout(() => go('case:' + f.dataset.case), 190);
+    return;
+  }
+
+  const b = e.target.closest('[data-go]');
+  if (b) {
+    const t = b.dataset.go;
+    if (t === 'logout') {
+      SFX.play('denied');
+      try { sessionStorage.removeItem(SESSION_FLAG); } catch (_) {}
+      location.reload();
+      return;
+    }
+    SFX.play(t === 'index' || t.startsWith('case:') ? 'back' : 'ui');
+    go(t);
+  }
+});
+document.addEventListener('mouseover', e => {
+  if (e.target.closest('.folder,.ent,.side .menu button')) SFX.play('hover');
+});
+
+$('#sndBtn').addEventListener('click', e => {
+  e.stopPropagation();
+  const on = SFX.toggle();
+  const b = $('#sndBtn');
+  b.textContent = 'AUDIO: ' + (on ? 'ON' : 'OFF');
+  b.classList.toggle('on', on);
+});
+
+/* ─────────── SESSION CLOCK ─────────── */
+let t0 = Date.now();
+function pad(n) { return String(n).padStart(2, '0'); }
+setInterval(() => {
+  const s = Math.floor((Date.now() - t0) / 1000);
+  const el = $('#sess');
+  if (el) el.textContent = pad(Math.floor(s / 3600)) + ':' + pad(Math.floor(s / 60) % 60) + ':' + pad(s % 60);
+  const g = $('#gateClock');
+  if (g) { const d = new Date(); g.textContent = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds()); }
+}, 1000);
+
+/* ─────────── BOOT SEQUENCE ─────────── */
+const BOOT_LINES = [
+  ['dim',  '> ESTABLISHING SECURE TUNNEL ..................... ', 'OK'],
+  ['dim',  '> HANDSHAKE / NODE 7 ............................. ', 'OK'],
+  ['dim',  '> ENCRYPTION AES-256 ............................. ', 'OK'],
+  ['warn', '> WARNING: THIS TERMINAL IS MONITORED', null],
+  ['sp',   '', null],
+  ['hit',  'USERNAME: ', 'ARCHIVIST_17'],
+  ['hit',  'PASSWORD: ', '*********'],
+  ['sp',   '', null],
+  ['dim',  '> VERIFYING CREDENTIALS .......................... ', 'OK'],
+  ['dim',  '> CLEARANCE LEVEL 07 CONFIRMED', null],
+  ['dim',  '> MOUNTING ARCHIVE DATABASE v.1.7.3 .............. ', 'OK'],
+  ['dim',  '> INDEXING 12 CASE FILES ......................... ', 'OK'],
+  ['sp',   '', null],
+  ['ok',   'ACCESS GRANTED. WELCOME BACK, ARCHIVIST_17.', null]
+];
+
+function runBoot() {
+  $('#gate').style.display = 'none';
+  $('#boot').style.display = 'flex';
+  const log = $('#bootLog');
+  let li = 0;
+
+  function line() {
+    if (li >= BOOT_LINES.length) {
+      SFX.play('granted');
+      setTimeout(() => {
+        $('#boot').style.display = 'none';
+        $('#app').classList.add('on');
+        t0 = Date.now();
+        render();
+      }, 900);
+      return;
+    }
+    const [cls, text, tail] = BOOT_LINES[li++];
+    if (cls === 'sp') { log.appendChild(document.createElement('br')); setTimeout(line, 90); return; }
+
+    const row = document.createElement('div');
+    row.className = cls;
+    log.appendChild(row);
+
+    const cur = document.createElement('span');
+    cur.className = 'cursor';
+    row.appendChild(cur);
+
+    let i = 0;
+    /* the credential lines type slowly, like someone is at the keyboard */
+    const slow = cls === 'hit';
+    const step = slow ? 62 : 11;
+
+    (function ch() {
+      if (i < text.length) {
+        cur.insertAdjacentText('beforebegin', text[i]);
+        if (text[i] !== ' ' && text[i] !== '.') SFX.play('key'); else if (text[i] === ' ') SFX.play('space');
+        i++;
+        setTimeout(ch, slow ? step : (text[i - 1] === '.' ? 5 : step));
+        return;
+      }
+      if (tail) {
+        let j = 0;
+        (function ct() {
+          if (j < tail.length) {
+            const s = document.createElement('span');
+            s.style.color = '#ffffff';
+            s.textContent = tail[j];
+            cur.before(s);
+            SFX.play('key');
+            j++;
+            setTimeout(ct, slow ? 70 : 26);
+            return;
+          }
+          cur.remove();
+          setTimeout(line, slow ? 340 : 70);
+        })();
+      } else {
+        cur.remove();
+        setTimeout(line, 130);
+      }
+    })();
+  }
+  setTimeout(line, 260);
+}
+
+/* ─────────── GATE ─────────── */
+$('#gateForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const v = $('#pw').value.trim().toLowerCase();
+  SFX.play('ui');
+  if (v === ACCESS_KEY) {
+    try { sessionStorage.setItem(SESSION_FLAG, '1'); } catch (_) {}
+    $('#gateErr').textContent = '';
+    runBoot();
+  } else {
+    SFX.play('denied');
+    $('#gateErr').textContent = '> ACCESS DENIED. ATTEMPT LOGGED.';
+    $('#pw').value = '';
+    document.body.animate(
+      [{ transform: 'translateX(0)' }, { transform: 'translateX(-7px)' },
+       { transform: 'translateX(7px)' }, { transform: 'translateX(0)' }],
+      { duration: 170 });
+  }
+});
+/* typing in the key field ticks, so audio is already unlocked by the time we boot */
+$('#pw').addEventListener('keydown', e => { if (e.key.length === 1 || e.key === 'Backspace') SFX.play('key'); });
+
+/* the block caret stands in for an empty field and steps aside once you type */
+(function () {
+  const pw = $('#pw'), caret = $('#pwCaret');
+  const sync = () => caret.classList.toggle('off', pw.value.length > 0);
+  pw.addEventListener('input', sync);
+  pw.addEventListener('blur', sync);
+  pw.addEventListener('focus', sync);
+  $('#pwField').addEventListener('click', () => pw.focus());
+  sync();
+})();
+
+/* returning within the same tab skips straight past the gate */
+try {
+  if (sessionStorage.getItem(SESSION_FLAG) === '1') {
+    $('#gate').style.display = 'none';
+    $('#app').classList.add('on');
+    render();
+  } else {
+    $('#pw').focus();
+  }
+} catch (_) { $('#pw').focus(); }
+</script>
+</body>
+</html>

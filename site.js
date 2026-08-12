@@ -3,6 +3,23 @@
    - Page transition (fade-to-black → navigate → fade-from-black)
    - Respects prefers-reduced-motion
    ============================================================ */
+
+/* ——— PLACEHOLDER MODE — content tagged data-placeholder (or .card.placeholder)
+   is demo / coming-soon filler. The site is live, so this is ON for every
+   visitor by default; the admin console (Site Settings) can flip it off in one
+   browser to preview the full demo catalogue. Flip the constant to false to
+   bring the demo content back for everyone. Applied first thing so nothing
+   flashes on screen before it's hidden. ——— */
+window.BPS_HIDE_PLACEHOLDERS_DEFAULT = true;
+(function () {
+  var on = window.BPS_HIDE_PLACEHOLDERS_DEFAULT !== false;
+  try {
+    var saved = localStorage.getItem('bpsHidePlaceholders');
+    if (saved === '1') on = true;
+    else if (saved === '0') on = false;
+  } catch (_) {}
+  if (on) document.documentElement.classList.add('bps-hide-ph');
+})();
 /* ——— LAUNCH CONFIG — fill these in to go live (see ADMIN-ACCESS.md) ———
    formEndpoint:       contact form POST target, e.g. https://formspree.io/f/xxxxxxx
    newsletterEndpoint: email signup POST target (Formspree/Mailchimp/Buttondown)
@@ -481,13 +498,26 @@ window.BPS_HIDDEN = (function () {
     var here = (location.pathname.split('/').pop() || 'index').toLowerCase().replace(/\.html$/, '');
     var hidden = window.BPS_HIDDEN;
 
+    /* The Shop / Product / Cart pages run a white "paper" header. Mark it so the
+       dark drop shadow (which is there to lift text off a photographic hero)
+       doesn't paint a black glow around type on white. */
+    if (nav.querySelector('.inner')) nav.classList.add('bps-nav-light');
+
     var st = document.createElement('style');
     st.textContent =
-      /* shared / desktop */
-      '.nav .links{display:flex;align-items:center}' +
-      '.nav .links a,.nav .links .bps-top{text-shadow:0 1px 3px rgba(0,0,0,.55),0 0 14px rgba(0,0,0,.35)}' +
-      '.bps-nav-item{position:relative;display:inline-block;margin-left:28px}' +
-      '.bps-nav-item > a{margin-left:0 !important;display:inline-flex;align-items:center;gap:6px}' +
+      /* shared / desktop — one gap value drives the spacing so items with a
+         caret don't end up further apart than the plain ones, and every item is
+         a centred flex child so nothing drifts off the baseline */
+      '.nav .links{display:flex;align-items:center;gap:28px}' +
+      '.nav .links > a,.nav .links > .bps-nav-item{margin-left:0 !important;display:inline-flex;align-items:center;line-height:1}' +
+      '.nav:not(.bps-nav-light) .links a,.nav:not(.bps-nav-light) .links .bps-top{text-shadow:0 1px 3px rgba(0,0,0,.55),0 0 14px rgba(0,0,0,.35)}' +
+      '.nav.bps-nav-light .links a,.nav.bps-nav-light .links .bps-top,.nav.bps-nav-light .right a,.nav.bps-nav-light .right button,.nav.bps-nav-light .brand{text-shadow:none !important}' +
+      /* the "(0)" beside CART was superscripted, lifting it off the header grid */
+      '.nav.bps-nav-light .right{align-items:center}' +
+      '.nav.bps-nav-light .right > a,.nav.bps-nav-light .right > button{display:inline-flex;align-items:center;line-height:1}' +
+      '.nav.bps-nav-light .right .cart-btn sup{vertical-align:baseline;position:static;top:0;font-size:10px;line-height:1}' +
+      '.bps-nav-item{position:relative;margin-left:0 !important}' +
+      '.bps-nav-item > a{margin-left:0 !important;display:inline-flex;align-items:center;gap:6px;line-height:1}' +
       '.bps-caret{width:9px;height:6px;flex:none;opacity:.8;transition:transform .3s}' +
       '.bps-nav-item:hover .bps-caret,.bps-nav-item:focus-within .bps-caret{transform:rotate(180deg)}' +
       '.bps-sub{position:absolute;top:100%;left:50%;transform:translateX(-50%) translateY(6px);min-width:186px;background:rgba(2,4,10,.97);border:1px solid #132341;padding:8px 0;opacity:0;visibility:hidden;transition:opacity .3s,transform .3s;z-index:200}' +
@@ -499,6 +529,12 @@ window.BPS_HIDDEN = (function () {
       '.bps-burger svg{width:26px;height:26px;display:block}' +
       '#bpsNavScrim{position:fixed;inset:0;background:rgba(2,4,10,.6);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);opacity:0;visibility:hidden;transition:opacity .3s;z-index:110}' +
       '#bpsNavScrim.on{opacity:1;visibility:visible}' +
+      /* The scrim is a child of <body>, so it sits in the root stacking context.
+         .nav carries z-index:100 and forms its own context — meaning the menu
+         panel inside it can never out-stack the scrim, however high we set it.
+         While the menu is open we lift the whole nav above the scrim, otherwise
+         the blur lands on the menu and the scrim eats every tap. */
+      '.nav.bps-nav-open{z-index:130 !important}' +
       /* mobile */
       '@media (max-width:860px){' +
         '.nav .bps-burger{display:block}' +
@@ -558,6 +594,7 @@ window.BPS_HIDDEN = (function () {
 
     function setOpen(open) {
       links.classList.toggle('bps-open', open);
+      nav.classList.toggle('bps-nav-open', open);   // lift the nav over the scrim
       scrim.classList.toggle('on', open);
       burger.setAttribute('aria-expanded', open ? 'true' : 'false');
       document.documentElement.style.overflow = open ? 'hidden' : '';
@@ -594,11 +631,11 @@ window.BPS_HIDDEN = (function () {
     if (!document.getElementById('bpsCartCss')) {
       var st = document.createElement('style'); st.id = 'bpsCartCss';
       st.textContent =
-        '#bpsNavCart{margin-left:28px;color:#8B929C;display:inline-flex;align-items:center;gap:7px;text-decoration:none;transition:color .5s;position:relative}' +
+        '#bpsNavCart{margin-left:0;color:#8B929C;display:inline-flex;align-items:center;gap:7px;text-decoration:none;transition:color .5s;position:relative}' +
         '#bpsNavCart:hover{color:#CFD9E4}' +
         '#bpsNavCart svg{width:16px;height:16px}' +
         '#bpsNavCart .n{font-size:9px;letter-spacing:.06em;font-weight:600;color:#6BB4E8}' +
-        '@media (max-width:700px){#bpsNavCart{margin-left:14px}}';
+        '@media (max-width:700px){#bpsNavCart{margin-left:0}}';
       document.head.appendChild(st);
     }
     var a = document.createElement('a');
@@ -891,15 +928,21 @@ window.BPS_HIDDEN = (function () {
       '.hero .scroll-cue{display:none!important}' +
       '#bpsScrollV{position:fixed;left:50%;transform:translateX(-50%);bottom:22px;z-index:8400;width:48px;height:48px;display:none;align-items:center;justify-content:center;cursor:pointer;border:0;background:transparent;color:#6BB4E8;opacity:.82;transition:opacity .3s,color .3s,transform .3s}' +
       '#bpsScrollV.show{display:flex}' +
-      '#bpsScrollV svg{width:32px;height:32px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6))}' +
+      '#bpsScrollV svg{width:32px;height:32px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.6));transition:filter .3s}' +
+      /* hover — the arrow lights up blue */
       '#bpsScrollV:hover,#bpsScrollV:focus-visible{opacity:1;color:#9BD1FF;outline:none;transform:translateX(-50%) translateY(3px)}' +
-      '#bpsScrollV:hover svg,#bpsScrollV:focus-visible svg{filter:drop-shadow(0 0 9px rgba(107,180,232,.95))}' +
+      '#bpsScrollV:hover svg,#bpsScrollV:focus-visible svg{filter:drop-shadow(0 0 5px rgba(155,209,255,.95)) drop-shadow(0 0 16px rgba(107,180,232,.75))}' +
+      /* click — one small ring leaves the arrow and it dips a touch */
       '#bpsScrollV .ring{position:absolute;left:50%;top:50%;width:12px;height:12px;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none}' +
-      '#bpsScrollV.pulse .ring{animation:bpsSvPulse .62s ease-out}' +
-      '@keyframes bpsSvPulse{0%{box-shadow:0 0 0 0 rgba(107,180,232,.6)}100%{box-shadow:0 0 0 28px rgba(107,180,232,0)}}' +
+      '#bpsScrollV.pulse .ring{animation:bpsSvPulse .6s cubic-bezier(.2,.7,.2,1)}' +
+      '@keyframes bpsSvPulse{0%{box-shadow:0 0 0 0 rgba(107,180,232,.55)}100%{box-shadow:0 0 0 24px rgba(107,180,232,0)}}' +
       '#bpsScrollV.bounce svg{animation:bpsSvBounce 2s ease-in-out infinite}' +
       '@keyframes bpsSvBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}' +
-      'html.bps-rm #bpsScrollV.bounce svg{animation:none}';
+      /* the tap is declared last so it wins over the idle bounce */
+      '#bpsScrollV.pulse svg{animation:bpsSvTap .34s cubic-bezier(.2,.7,.2,1)}' +
+      '@keyframes bpsSvTap{0%{transform:scale(1)}45%{transform:scale(.86) translateY(2px)}100%{transform:scale(1)}}' +
+      'html.bps-rm #bpsScrollV.bounce svg,html.bps-rm #bpsScrollV.pulse svg{animation:none}' +
+      '@media(prefers-reduced-motion:reduce){#bpsScrollV.bounce svg,#bpsScrollV.pulse svg,#bpsScrollV.pulse .ring{animation:none}}';
     document.head.appendChild(css);
 
     var btn = document.createElement('button');
@@ -916,7 +959,9 @@ window.BPS_HIDDEN = (function () {
       return out;
     }
     function atBottom() { return (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 130); }
-    function tall() { return document.documentElement.scrollHeight > window.innerHeight * 1.4; }
+    /* anything with meaningfully more than one screen gets the cue — the old
+       1.4x bar hid the arrow on the shorter, tighter pages */
+    function tall() { return document.documentElement.scrollHeight > window.innerHeight + 220; }
     function update() {
       var cookie = document.getElementById('bpsCookie');
       if (cookie && cookie.offsetParent !== null) { btn.classList.remove('show'); return; }
@@ -961,9 +1006,19 @@ window.BPS_HIDDEN = (function () {
       '.proj-tabs a.on{color:#CFD9E4;border-bottom-color:#6BB4E8}' +
       '@media(max-width:700px){.proj-head{padding:96px 24px 0}}' +
       '.bpc-item{position:absolute;top:50%;left:50%;width:min(300px,58vw);aspect-ratio:2/3;margin:0;text-decoration:none;color:inherit;' +
-        'transition:transform .75s cubic-bezier(.22,.7,.2,1),opacity .75s,filter .75s;will-change:transform;cursor:pointer}' +
+        'transition:transform .85s cubic-bezier(.22,.7,.2,1),opacity .85s,filter .85s;will-change:transform;cursor:pointer}' +
       '.bpc-item .bpc-art{position:absolute;inset:0;overflow:hidden;background:linear-gradient(150deg,#0d1a2e,#050a14);border:1px solid #132341;box-shadow:0 30px 70px rgba(0,0,0,.6)}' +
       '.bpc-item .bpc-art img{width:100%;height:100%;object-fit:cover;display:block}' +
+      /* logo mode — the slate shows each project's mark rather than a poster */
+      '.bps-carousel.is-logo .bpc-item{width:min(430px,78vw);aspect-ratio:16/10}' +
+      '.bps-carousel.is-logo .bpc-art{background:radial-gradient(120% 100% at 50% 20%,#12294b 0%,#060d1a 70%)}' +
+      '.bps-carousel.is-logo .bpc-art img{object-fit:contain;padding:12% 11%;filter:drop-shadow(0 14px 34px rgba(0,0,0,.55))}' +
+      /* click pulse — a ring leaves the card before the page changes */
+      '.bpc-item.bpc-fire .bpc-art{animation:bpcFire .42s cubic-bezier(.2,.7,.2,1)}' +
+      '@keyframes bpcFire{0%{transform:scale(1)}45%{transform:scale(1.045)}100%{transform:scale(1)}}' +
+      '.bpc-ring{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;' +
+        'border:1.5px solid #6BB4E8;pointer-events:none;z-index:30;animation:bpcRing .62s cubic-bezier(.2,.7,.2,1) forwards}' +
+      '@keyframes bpcRing{0%{transform:scale(1);opacity:.85}100%{transform:scale(34);opacity:0}}' +
       '.bpc-item .bpc-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:22px;' +
         "font-family:Fraunces,Georgia,serif;font-style:italic;font-size:15px;color:#6BB4E8;opacity:.75}" +
       '.bpc-item.is-active{z-index:5}' +
@@ -981,14 +1036,21 @@ window.BPS_HIDDEN = (function () {
       '.bpc-dots{display:flex;gap:9px;justify-content:center;margin-top:22px}' +
       '.bpc-dots button{width:7px;height:7px;border-radius:50%;border:0;padding:0;background:#243352;cursor:pointer;transition:background .3s,transform .3s}' +
       '.bpc-dots button.on{background:#6BB4E8;transform:scale(1.4)}' +
-      '@media(max-width:700px){.bpc-stage{height:min(54vh,430px)}.bpc-item{width:min(230px,62vw)}.bpc-nav{top:min(26vh,210px)}}';
+      '@media(max-width:700px){.bpc-stage{height:min(54vh,430px)}.bpc-item{width:min(230px,62vw)}.bps-carousel.is-logo .bpc-item{width:min(300px,80vw)}.bpc-nav{top:min(26vh,210px)}}' +
+      '@media(prefers-reduced-motion:reduce){.bpc-item{transition:none}.bpc-item.bpc-fire .bpc-art{animation:none}.bpc-ring{display:none}}';
     document.head.appendChild(css);
+
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     mounts.forEach(function (mount) {
       var items = [];
       try { items = JSON.parse(mount.getAttribute('data-items') || '[]'); } catch (_) {}
       items = items.filter(function (it) { return !window.BPS_HIDDEN.isHidden(it.href); });
       if (!items.length) { mount.style.display = 'none'; return; }
+
+      /* logo slates rather than posters — set data-shape="logo" on the mount */
+      var isLogo = mount.getAttribute('data-shape') === 'logo';
+      if (isLogo) mount.classList.add('is-logo');
 
       var stage = document.createElement('div'); stage.className = 'bpc-stage';
       var meta = document.createElement('div'); meta.className = 'bpc-meta';
@@ -1021,13 +1083,14 @@ window.BPS_HIDDEN = (function () {
       mount.appendChild(stage); mount.appendChild(nav); mount.appendChild(meta); mount.appendChild(dots);
 
       var cur = 0;
+      var spread = isLogo ? 66 : 58;
       function layout() {
         els.forEach(function (el, i) {
           var d = i - cur;
           var n = items.length;
           if (d > n / 2) d -= n; if (d < -n / 2) d += n;   // shortest way round
           var abs = Math.abs(d);
-          var x = d * 58, sc = d === 0 ? 1 : 0.72 - (abs - 1) * 0.06, rot = d === 0 ? 0 : (d > 0 ? -16 : 16);
+          var x = d * spread, sc = d === 0 ? 1 : 0.72 - (abs - 1) * 0.06, rot = d === 0 ? 0 : (d > 0 ? -16 : 16);
           el.style.transform = 'translate(-50%,-50%) translateX(' + x + '%) scale(' + Math.max(sc, 0.4) + ') rotateY(' + rot + 'deg)';
           el.style.opacity = abs > 2 ? 0 : 1;
           el.style.zIndex = String(20 - abs);
@@ -1043,25 +1106,254 @@ window.BPS_HIDDEN = (function () {
       }
       function go(i) { cur = (i + items.length) % items.length; layout(); }
 
+      /* ——— keeps turning on its own; any hand on the wheel stops it ——— */
+      var timer = null, resume = null;
+      var CYCLE = 5200, RESUME_AFTER = 9000;
+      function spin() { if (!timer && items.length > 1 && !reduce) timer = setInterval(function () { go(cur + 1); }, CYCLE); }
+      function halt() { if (timer) { clearInterval(timer); timer = null; } }
+      function nudge(fn) {                       // a manual move pauses the spin
+        halt(); clearTimeout(resume); fn();
+        resume = setTimeout(spin, RESUME_AFTER);
+      }
+      mount.addEventListener('mouseenter', halt);
+      mount.addEventListener('mouseleave', function () { clearTimeout(resume); resume = setTimeout(spin, 1200); });
+      mount.addEventListener('focusin', halt);
+      document.addEventListener('visibilitychange', function () { document.hidden ? halt() : spin(); });
+
+      /* ——— clicking the front slate pulses, then travels to the project ——— */
+      function fire(el, href, ev) {
+        if (reduce) { location.href = href; return; }
+        var art = el.querySelector('.bpc-art') || el;
+        var ring = document.createElement('span');
+        ring.className = 'bpc-ring';
+        var r = art.getBoundingClientRect();
+        if (ev && ev.clientX) {
+          ring.style.left = ((ev.clientX - r.left) / r.width * 100) + '%';
+          ring.style.top = ((ev.clientY - r.top) / r.height * 100) + '%';
+        }
+        art.appendChild(ring);
+        el.classList.add('bpc-fire');
+        setTimeout(function () { location.href = href; }, 430);
+      }
+
       nav.addEventListener('click', function (e) {
         var b = e.target.closest('button'); if (!b) return;
-        go(cur + (+b.getAttribute('data-d')));
+        nudge(function () { go(cur + (+b.getAttribute('data-d'))); });
+      });
+      meta.addEventListener('click', function (e) {
+        var a = e.target.closest('a.go'); if (!a) return;
+        e.preventDefault(); e.stopPropagation();   // the pulse owns this navigation
+        halt();
+        fire(els[cur], a.getAttribute('href'), e);
       });
       els.forEach(function (el, i) {
-        el.addEventListener('click', function (e) { if (i !== cur) { e.preventDefault(); go(i); } });
+        el.addEventListener('click', function (e) {
+          e.preventDefault(); e.stopPropagation();
+          if (i !== cur) { nudge(function () { go(i); }); return; }
+          halt();
+          fire(el, el.getAttribute('href'), e);
+        });
       });
       /* swipe */
       var sx = null;
-      stage.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; }, { passive: true });
+      stage.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; halt(); }, { passive: true });
       stage.addEventListener('touchend', function (e) {
         if (sx === null) return;
         var dx = e.changedTouches[0].clientX - sx;
-        if (Math.abs(dx) > 40) go(cur + (dx < 0 ? 1 : -1));
+        if (Math.abs(dx) > 40) nudge(function () { go(cur + (dx < 0 ? 1 : -1)); });
         sx = null;
       });
       layout();
+      spin();
     });
   });
+})();
+
+/* ——— FEATURED PRODUCT — which piece leads the Shop. Set in the admin "Shop"
+   tab; the id must match a key in products.js. ——— */
+window.BPS_FEATURED_DEFAULT = 'bps-tee';
+window.BPS_FEATURED = {
+  KEY: 'bpsFeatured',
+  get: function () {
+    try {
+      var v = localStorage.getItem(this.KEY);
+      if (v && window.PRODUCTS && window.PRODUCTS[v]) return v;
+    } catch (_) {}
+    return window.BPS_FEATURED_DEFAULT;
+  },
+  set: function (id) { try { localStorage.setItem(this.KEY, id); } catch (_) {} },
+  clear: function () { try { localStorage.removeItem(this.KEY); } catch (_) {} }
+};
+
+/* ——— SELECT — turns a native <select class="bps-select"> into a menu that
+   matches the Projects / Studio nav dropdowns. The real <select> stays in the
+   DOM (and in the form data), just visually hidden, so validation, keyboard
+   use and assistive tech all keep working. ——— */
+(function () {
+  document.addEventListener('DOMContentLoaded', function () {
+    var sels = document.querySelectorAll('select.bps-select');
+    if (!sels.length) return;
+
+    var st = document.createElement('style');
+    st.textContent =
+      '.bps-sel{position:relative;font-family:Inter,sans-serif}' +
+      '.bps-sel select{position:absolute;opacity:0;pointer-events:none;width:100%;height:100%;left:0;top:0}' +
+      '.bps-sel .bps-sel-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px;' +
+        'background:transparent;border:0;border-bottom:1px solid #132341;color:#CFD9E4;cursor:pointer;' +
+        'font-family:Inter,sans-serif;font-size:13.5px;letter-spacing:.02em;text-align:left;padding:13px 2px;transition:border-color .35s,color .35s}' +
+      '.bps-sel .bps-sel-btn:hover,.bps-sel.open .bps-sel-btn{border-bottom-color:#6BB4E8;color:#fff}' +
+      '.bps-sel .bps-sel-btn.is-ph{color:#8B929C}' +
+      '.bps-sel .bps-sel-car{width:10px;height:6px;flex:none;opacity:.8;transition:transform .3s}' +
+      '.bps-sel.open .bps-sel-car{transform:rotate(180deg)}' +
+      '.bps-sel-menu{position:absolute;top:calc(100% + 6px);left:0;right:0;background:rgba(2,4,10,.97);border:1px solid #132341;' +
+        'padding:8px 0;opacity:0;visibility:hidden;transform:translateY(6px);transition:opacity .28s,transform .28s;z-index:400;max-height:300px;overflow:auto}' +
+      '.bps-sel.open .bps-sel-menu{opacity:1;visibility:visible;transform:none}' +
+      '.bps-sel-menu button{display:block;width:100%;text-align:left;background:none;border:0;cursor:pointer;' +
+        'padding:11px 20px;color:#8B929C;font-family:Inter,sans-serif;font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;' +
+        'transition:color .28s,background .28s}' +
+      '.bps-sel-menu button:hover,.bps-sel-menu button:focus-visible{color:#CFD9E4;background:rgba(29,95,184,.12);outline:none}' +
+      '.bps-sel-menu button.on{color:#6BB4E8}';
+    document.head.appendChild(st);
+
+    var CAR = '<svg class="bps-sel-car" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 1.5 5 5 9 1.5"/></svg>';
+
+    sels.forEach(function (sel) {
+      var wrap = document.createElement('div');
+      wrap.className = 'bps-sel';
+      sel.parentNode.insertBefore(wrap, sel);
+      wrap.appendChild(sel);
+
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'bps-sel-btn';
+      btn.setAttribute('aria-haspopup', 'listbox');
+      btn.setAttribute('aria-expanded', 'false');
+      if (sel.id) btn.setAttribute('aria-labelledby', sel.id + '-label');
+
+      var menu = document.createElement('div');
+      menu.className = 'bps-sel-menu';
+      menu.setAttribute('role', 'listbox');
+
+      var opts = Array.prototype.slice.call(sel.options);
+      opts.forEach(function (o, i) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.textContent = o.textContent;
+        b.setAttribute('role', 'option');
+        b.addEventListener('click', function () {
+          sel.selectedIndex = i;
+          sel.dispatchEvent(new Event('change', { bubbles: true }));
+          paint(); open(false); btn.focus();
+        });
+        menu.appendChild(b);
+      });
+
+      wrap.appendChild(btn); wrap.appendChild(menu);
+
+      function paint() {
+        var o = sel.options[sel.selectedIndex];
+        btn.innerHTML = '<span>' + (o ? o.textContent : '') + '</span>' + CAR;
+        /* an empty value is the "Choose one" prompt — keep it muted */
+        btn.classList.toggle('is-ph', !(o && o.value));
+        Array.prototype.forEach.call(menu.children, function (b, i) {
+          b.classList.toggle('on', i === sel.selectedIndex);
+          b.setAttribute('aria-selected', i === sel.selectedIndex ? 'true' : 'false');
+        });
+      }
+      function open(on) {
+        wrap.classList.toggle('open', on);
+        btn.setAttribute('aria-expanded', on ? 'true' : 'false');
+      }
+
+      btn.addEventListener('click', function () { open(!wrap.classList.contains('open')); });
+      btn.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          sel.selectedIndex = Math.min(Math.max(sel.selectedIndex + (e.key === 'ArrowDown' ? 1 : -1), 0), sel.options.length - 1);
+          sel.dispatchEvent(new Event('change', { bubbles: true }));
+          paint();
+        } else if (e.key === 'Escape') { open(false); }
+      });
+      document.addEventListener('click', function (e) { if (!wrap.contains(e.target)) open(false); });
+      sel.addEventListener('change', paint);
+      paint();
+    });
+  });
+})();
+
+/* ——— TEAM — the leadership roster behind the About page. Edited in the admin
+   "Team" tab (add people, set roles, bios and social links); the saved roster
+   lives in localStorage as a preview, and "Copy for launch" hands back a
+   BPS_TEAM_DEFAULT block to paste here so it's live for everyone. ——— */
+window.BPS_TEAM_DEFAULT = [
+  {
+    name: 'Raphael Arkera', role: 'Founder', photo: 'assets/raphael-arkera.jpg',
+    bio: 'Raphael Arkera founded Blue Pulse Studios and sets its creative direction across film, television, books, and games.',
+    instagram: '', linkedin: '', imdb: ''
+  },
+  {
+    name: 'Michael DePiro', role: 'Co-Founder', photo: 'assets/michael-depiro.jpg',
+    bio: 'Michael DePiro helps steer the studio’s slate and productions from development through delivery.',
+    instagram: '', linkedin: '', imdb: ''
+  },
+  {
+    name: 'Jamie Van Buren', role: 'Co-Founder', photo: 'assets/jamie-van-buren.jpg',
+    bio: 'Jamie Van Buren shapes the studio’s stories and long-term creative development.',
+    instagram: '', linkedin: '', imdb: ''
+  }
+];
+
+window.BPS_TEAM = (function () {
+  var KEY = 'bpsTeam';
+  function list() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) { var a = JSON.parse(raw); if (Array.isArray(a) && a.length) return a; }
+    } catch (_) {}
+    return window.BPS_TEAM_DEFAULT.slice();
+  }
+  function save(arr) { try { localStorage.setItem(KEY, JSON.stringify(arr)); } catch (_) {} }
+  function clear() { try { localStorage.removeItem(KEY); } catch (_) {} }
+  function initials(name) {
+    return String(name || '').trim().split(/\s+/).slice(0, 2)
+      .map(function (w) { return w.charAt(0).toUpperCase(); }).join('');
+  }
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  var IG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>';
+  var LI = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.75V21h-4v-5.6c0-1.34-.02-3.06-1.9-3.06-1.9 0-2.2 1.45-2.2 2.96V21H9z"/></svg>';
+
+  /* only render an icon when there's somewhere for it to go */
+  function socials(m) {
+    var out = '';
+    if (m.instagram) out += '<a href="' + esc(m.instagram) + '" target="_blank" rel="noopener" aria-label="' + esc(m.name) + ' on Instagram" title="Instagram">' + IG + '</a>';
+    if (m.linkedin) out += '<a href="' + esc(m.linkedin) + '" target="_blank" rel="noopener" aria-label="' + esc(m.name) + ' on LinkedIn" title="LinkedIn">' + LI + '</a>';
+    if (m.imdb) out += '<a href="' + esc(m.imdb) + '" target="_blank" rel="noopener" aria-label="' + esc(m.name) + ' on IMDb" title="IMDb"><span class="imdb">IMDb</span></a>';
+    return out ? '<div class="socials">' + out + '</div>' : '';
+  }
+
+  function card(m) {
+    return '<div class="lead-card reveal" role="button" tabindex="0"' +
+      ' data-name="' + esc(m.name) + '" data-role="' + esc(m.role) + '" data-bio="' + esc(m.bio) + '">' +
+      '<div class="photo"><span class="initials" aria-hidden="true">' + esc(initials(m.name)) + '</span>' +
+      (m.photo ? '<img src="' + esc(m.photo) + '" alt="' + esc(m.name) + '" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
+      '</div><div class="grad"></div>' +
+      '<div class="cap"><div class="name">' + esc(m.name) + '</div>' +
+      '<div class="role">' + esc(m.role) + '</div>' +
+      '<div class="more">Read bio &rarr;</div></div>' +
+      socials(m) + '</div>';
+  }
+
+  /* the grid widens or wraps to whatever the roster happens to be */
+  function render(mount) {
+    var team = list();
+    mount.innerHTML = team.map(card).join('');
+    mount.setAttribute('data-count', String(team.length));
+    return team;
+  }
+
+  return { list: list, save: save, clear: clear, card: card, render: render, initials: initials, KEY: KEY };
 })();
 
 /* ——— BANNERS — layered hero art (background / logo / foreground), positionable
@@ -1487,15 +1779,7 @@ window.BPS_BANNERS = (function () {
   }
 })();
 
-/* Placeholder mode — flag is set from the admin console (Site Settings).
-   When on, content tagged data-placeholder is hidden sitewide. */
-(function () {
-  try {
-    if (localStorage.getItem('bpsHidePlaceholders') === '1') {
-      document.documentElement.classList.add('bps-hide-ph');
-    }
-  } catch (_) {}
-})();
+/* Placeholder mode is applied at the top of this file so nothing flashes. */
 
 (function () {
   const overlay = document.getElementById('pageTransition');
